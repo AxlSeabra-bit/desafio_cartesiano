@@ -251,81 +251,408 @@ h2 {
     background: #aaa;
 }
 
-.flor {
+/* =====================================================
+   FLOR DE 5 PÉTALAS (MINI-GAME 1)
+===================================================== */
+
+.flor-container {
     display: flex;
     justify-content: center;
-    gap: 5px;
-    font-size: 48px;
-    margin: 10px;
+    align-items: center;
+    margin: 10px auto 20px auto;
+}
+
+.flor-svg {
+    overflow: visible;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
 
 .petala {
-    transition: .4s;
+    transform-origin: 90px 90px;
+    transition: transform 0.8s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.8s ease, filter 0.8s ease;
+    cursor: default;
 }
 
+.petala-1 { transform: rotate(0deg); }
+.petala-2 { transform: rotate(72deg); }
+.petala-3 { transform: rotate(144deg); }
+.petala-4 { transform: rotate(216deg); }
+.petala-5 { transform: rotate(288deg); }
+
+/* Animação de queda suave ao errar letra */
 .petala.caida {
-    transform: translateY(25px) rotate(40deg);
-    opacity: .2;
-    filter: grayscale(1);
+    opacity: 0;
+    filter: grayscale(1) blur(1px);
+    pointer-events: none;
+}
+
+.petala-1.caida {
+    transform: rotate(0deg) translate(0, 95px) rotate(45deg) scale(0.65);
+}
+.petala-2.caida {
+    transform: rotate(72deg) translate(0, 95px) rotate(35deg) scale(0.65);
+}
+.petala-3.caida {
+    transform: rotate(144deg) translate(0, 95px) rotate(-40deg) scale(0.65);
+}
+.petala-4.caida {
+    transform: rotate(216deg) translate(0, 95px) rotate(40deg) scale(0.65);
+}
+.petala-5.caida {
+    transform: rotate(288deg) translate(0, 95px) rotate(-35deg) scale(0.65);
 }
 
 /* =====================================================
-   PLANO
+   MINI-GAME 2: ONDE ESTÁ NO PARQUE? (PLANO CARTESIANO)
 ===================================================== */
 
-.plano {
-    width: 520px;
+.card-fase2 {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.instrucoes-fase {
+    font-size: 16px;
+    color: #e2e8f0;
+    margin-bottom: 12px;
+}
+
+.missoes-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: rgba(15, 20, 44, 0.7);
+    padding: 10px 18px;
+    border-radius: 14px;
+    margin: 10px auto 16px auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.missoes-contador {
+    font-weight: bold;
+    font-size: 15px;
+    color: #ffd166;
+    letter-spacing: 0.5px;
+}
+
+.missoes-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.missao-badge {
+    padding: 5px 12px;
+    border-radius: 18px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.missao-badge.ativa {
+    background: linear-gradient(135deg, #ffd166, #ff9f1c);
+    color: #1a1a2e;
+    font-weight: bold;
+    border-color: #ffd166;
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(255, 209, 102, 0.45);
+}
+
+.missao-badge.concluida {
+    background: rgba(6, 214, 160, 0.25);
+    border-color: #06d6a0;
+    color: #06d6a0;
+    font-weight: bold;
+}
+
+.pergunta-parque-card {
+    background: linear-gradient(135deg, rgba(39, 52, 105, 0.9), rgba(23, 28, 69, 0.95));
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin: 12px auto 18px auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+.pergunta-enunciado {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    width: 100%;
+}
+
+.pergunta-icone {
+    font-size: 38px;
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffd166, #f57f17);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+    border: 2px solid white;
+}
+
+.pergunta-texto h3 {
+    margin: 0 0 4px 0;
+    font-size: 19px;
+    color: #ffffff;
+}
+
+.pergunta-texto p {
+    margin: 0;
+    font-size: 14px;
+    color: #b8c1ec;
+}
+
+.form-coordenadas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.input-coordenada-grupo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 20, 44, 0.85);
+    padding: 8px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(108, 99, 255, 0.5);
+}
+
+.coord-parentese {
+    font-size: 32px;
+    font-weight: 300;
+    color: #ffd166;
+    user-select: none;
+}
+
+.coord-virgula {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffd166;
+    user-select: none;
+    margin: 0 2px;
+}
+
+.coord-campo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.coord-campo label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #a0aec0;
+}
+
+.coord-campo input {
+    width: 64px;
+    height: 46px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    border: 2px solid #6c63ff;
+    background: #171c45;
+    color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.coord-campo input:focus {
+    border-color: #ffd166;
+    box-shadow: 0 0 12px rgba(255, 209, 102, 0.5);
+    background: #202758;
+}
+
+.btn-confirmar-coord {
+    background: linear-gradient(135deg, #06d6a0, #059669);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 13px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(6, 214, 160, 0.4);
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-confirmar-coord:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(6, 214, 160, 0.6);
+    background: linear-gradient(135deg, #10b981, #047857);
+}
+
+.btn-confirmar-coord:active {
+    transform: translateY(0);
+}
+
+/* Container do Mapa Cartesiano */
+.parque-container {
+    position: relative;
+    width: 500px;
     max-width: 100%;
     aspect-ratio: 1;
-    margin: 25px auto;
+    margin: 18px auto;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    user-select: none;
+}
+
+.parque-img-fundo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9) contrast(1.08);
+}
+
+.parque-svg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.parque-interativo-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
     display: grid;
-    grid-template-columns: repeat(11,1fr);
-    background:
-        linear-gradient(
-            to right,
-            transparent 49.5%,
-            #333 49.5%,
-            #333 50.5%,
-            transparent 50.5%
-        ),
-        linear-gradient(
-            to bottom,
-            transparent 49.5%,
-            #333 49.5%,
-            #333 50.5%,
-            transparent 50.5%
-        ),
-        repeating-linear-gradient(
-            to right,
-            #ddd 0,
-            #ddd calc(9.09% - 1px),
-            #bbb calc(9.09% - 1px),
-            #bbb 9.09%
-        ),
-        repeating-linear-gradient(
-            to bottom,
-            #ddd 0,
-            #ddd calc(9.09% - 1px),
-            #bbb calc(9.09% - 1px),
-            #bbb 9.09%
-        );
+    grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: repeat(11, 1fr);
 }
 
-.ponto {
-    border: 1px solid rgba(0,0,0,.1);
+.ponto-clicavel {
+    border: 1px solid transparent;
     background: transparent;
-    min-width: 0;
-    padding: 0;
-}
-
-.ponto:active {
-    background: rgba(108,99,255,.5);
-}
-
-.ponto.correto {
-    background: #06d6a0;
+    cursor: pointer;
     border-radius: 50%;
+    transition: background 0.2s, transform 0.2s;
+    padding: 0;
+    margin: 0;
+    outline: none;
 }
+
+.ponto-clicavel:hover {
+    background: rgba(255, 209, 102, 0.5);
+    box-shadow: 0 0 12px rgba(255, 209, 102, 0.9);
+    transform: scale(1.35);
+    z-index: 5;
+}
+
+/* Marcadores dos Elementos no Mapa */
+.parque-marcadores {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.marcador-elemento {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.marcador-pin {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    background: #273469;
+    border: 2px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.marcador-elemento:hover .marcador-pin {
+    transform: scale(1.15);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.marcador-elemento.alvo .marcador-pin {
+    animation: pulsoAlvo 1.4s infinite alternate;
+    background: #ffd166;
+    border-color: #ff9f1c;
+}
+
+.marcador-elemento.concluido .marcador-pin {
+    background: #06d6a0;
+    border-color: white;
+}
+
+.marcador-tag {
+    background: rgba(15, 20, 44, 0.85);
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-top: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+@keyframes pulsoAlvo {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.8);
+    }
+    100% {
+        transform: scale(1.22);
+        box-shadow: 0 0 0 12px rgba(255, 209, 102, 0);
+    }
+}
+
 
 /* =====================================================
    QUADRANTES
@@ -337,99 +664,240 @@ h2 {
     margin-bottom: 20px;
 }
 
-.cartas {
+/* =====================================================
+   MINI-GAME 3: AGRUPE NOS QUADRANTES (MOBILE-FIRST)
+===================================================== */
+
+.card-fase3 {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.progresso-quadrantes-wrapper {
+    background: rgba(15, 20, 44, 0.7);
+    border-radius: 12px;
+    padding: 8px 16px;
+    margin: 10px auto 14px auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 500px;
+}
+
+.progresso-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffd166;
+}
+
+.barra-progresso-trilho {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.barra-progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd166, #06d6a0);
+    transition: width 0.35s ease;
+}
+
+.area-ponto-ativo {
+    margin: 10px auto 16px auto;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px auto;
-    max-width: 850px;
 }
 
-.carta {
-    background: #273469;
-    color: white;
-    padding: 14px 18px;
-    border-radius: 10px;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-    min-width: 90px;
+.card-ponto-ativo {
+    background: linear-gradient(135deg, #1f295b, #12183a);
+    border: 3px solid #ffd166;
+    border-radius: 18px;
+    padding: 14px 22px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 209, 102, 0.25);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    max-width: 360px;
+    transition: transform 0.25s ease;
 }
 
-.carta.selecionada {
-    background: #ffd166;
-    color: #222;
-    transform: scale(1.05);
+.tag-ponto-ativo {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffd166;
 }
 
-.carta.correta {
-    background: #06a77d;
-    color: white;
+.coordenada-destaque {
+    font-size: 34px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.5px;
+    padding: 2px 0;
 }
 
-.carta.errada {
-    animation: erro .4s;
-    background: #ef476f;
+.instrucao-toque {
+    font-size: 12px;
+    color: #cbd5e1;
 }
 
-@keyframes erro {
-
-    0%,100% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-6px);
-    }
-
-    75% {
-        transform: translateX(6px);
-    }
-
-}
-
-.quadrantes {
+.quadrantes-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    max-width: 750px;
-    margin: 25px auto;
+    gap: 12px;
+    max-width: 680px;
+    margin: 12px auto;
 }
 
 .quadrante {
+    border-radius: 16px;
+    padding: 12px 10px;
     min-height: 145px;
-    border: 4px dashed #aaa;
-    border-radius: 18px;
-    padding: 15px;
-    color: #333;
-    background: #f4f4f4;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    transition: .2s;
+    border: 3px dashed;
+    background: rgba(18, 24, 58, 0.88);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .quadrante:active {
-    transform: scale(.98);
+    transform: scale(0.96);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.quadrante-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quadrante-sigla {
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 6px;
 }
 
 .quadrante h3 {
-    margin-top: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
 }
 
+.quadrante-regra {
+    font-size: 12px;
+    margin: 2px 0 6px 0;
+    font-weight: 600;
+}
+
+.pontos-salvos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+    min-height: 42px;
+    align-content: flex-start;
+}
+
+.chip-ponto-salvo {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 12px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-flex;
+    align-items: center;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.4); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.quadrante.erro-shake {
+    animation: erroShake 0.4s ease-in-out;
+    border-color: #ef476f !important;
+}
+
+@keyframes erroShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.quadrante.acerto-pulse {
+    animation: acertoPulse 0.35s ease-in-out;
+}
+
+@keyframes acertoPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Cores específicas de cada quadrante */
 .q1 {
-    border-color: #06a77d;
+    border-color: #06d6a0;
+}
+.q1 .quadrante-sigla {
+    background: #06d6a0;
+    color: #0f172a;
+}
+.q1 .quadrante-regra {
+    color: #6ee7b7;
 }
 
 .q2 {
     border-color: #118ab2;
 }
+.q2 .quadrante-sigla {
+    background: #118ab2;
+    color: #ffffff;
+}
+.q2 .quadrante-regra {
+    color: #7dd3fc;
+}
 
 .q3 {
-    border-color: #8338ec;
+    border-color: #a855f7;
+}
+.q3 .quadrante-sigla {
+    background: #a855f7;
+    color: #ffffff;
+}
+.q3 .quadrante-regra {
+    color: #d8b4fe;
 }
 
 .q4 {
-    border-color: #f77f00;
+    border-color: #f97316;
+}
+.q4 .quadrante-sigla {
+    background: #f97316;
+    color: #ffffff;
+}
+.q4 .quadrante-regra {
+    color: #fdba74;
 }
 
 /* =====================================================
@@ -768,26 +1236,30 @@ h2 {
         font-size: 24px;
     }
 
-    .quadrantes {
+    .quadrantes-grid {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 
     .quadrante {
-        min-height: 125px;
-        padding: 10px 5px;
+        min-height: 130px;
+        padding: 8px 6px;
     }
 
     .quadrante h3 {
-        font-size: 16px;
+        font-size: 13px;
     }
 
-    .quadrante p {
-        font-size: 12px;
+    .quadrante-regra {
+        font-size: 11px;
     }
 
-    .carta {
-        padding: 12px 14px;
+    .coordenada-destaque {
+        font-size: 28px;
+    }
+
+    .card-ponto-ativo {
+        padding: 10px 16px;
     }
 
     .pistas-cruzadinha {
@@ -942,14 +1414,53 @@ h2 {
                 Cada letra errada faz uma pétala cair.
             </p>
 
-            <div class="flor">
+            <div class="flor-container">
+                <svg class="flor-svg" viewBox="0 0 180 200" width="160" height="180">
+                    <defs>
+                        <!-- Gradiente das pétalas: Rosa vibrante a Magenta -->
+                        <linearGradient id="grad-petala" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ff7eb3" />
+                            <stop offset="50%" stop-color="#ff4b72" />
+                            <stop offset="100%" stop-color="#d81b60" />
+                        </linearGradient>
 
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
+                        <!-- Gradiente do Miolo da flor: Dourado vivo -->
+                        <radialGradient id="grad-miolo" cx="35%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="#fff59d" />
+                            <stop offset="45%" stop-color="#fbc02d" />
+                            <stop offset="100%" stop-color="#e65100" />
+                        </radialGradient>
+                    </defs>
 
+                    <!-- Sombra no chão -->
+                    <ellipse cx="90" cy="192" rx="35" ry="5" fill="rgba(0, 0, 0, 0.25)" />
+
+                    <!-- Caule e Folhas -->
+                    <path d="M 90 90 Q 86 140 90 190" stroke="#4caf50" stroke-width="7" stroke-linecap="round" fill="none" />
+                    <path d="M 88 140 Q 55 125 50 146 Q 76 154 88 140 Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="1.5" />
+                    <path d="M 92 155 Q 122 142 126 162 Q 102 168 92 155 Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="1.5" />
+
+                    <!-- Grupo das 5 Pétalas individuais (72° de separação cada) -->
+                    <g id="petalas-grupo">
+                        <!-- Pétala 1 (Topo - 0°) -->
+                        <path class="petala petala-1" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 2 (72°) -->
+                        <path class="petala petala-2" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 3 (144°) -->
+                        <path class="petala petala-3" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 4 (216°) -->
+                        <path class="petala petala-4" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 5 (288°) -->
+                        <path class="petala petala-5" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                    </g>
+
+                    <!-- Miolo da Flor com feições simpáticas -->
+                    <circle cx="90" cy="90" r="22" fill="url(#grad-miolo)" stroke="#bf360c" stroke-width="2.5" />
+                    <circle cx="90" cy="90" r="16" fill="none" stroke="#f57f17" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />
+                    <circle cx="84" cy="86" r="2.5" fill="#3e2723" opacity="0.5" />
+                    <circle cx="96" cy="86" r="2.5" fill="#3e2723" opacity="0.5" />
+                    <path d="M 86 93 Q 90 97 94 93" fill="none" stroke="#3e2723" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                </svg>
             </div>
 
             <p>
@@ -974,29 +1485,68 @@ h2 {
 
     <div id="fase2" class="fase">
 
-        <div class="card-fase">
+        <div class="card-fase card-fase2">
 
             <h2 class="titulo-fase">
-                🗺️ Mini-game 2 — Onde está?
+                🗺️ Mini-game 2 — Onde está no Parque?
             </h2>
 
-            <p>
-                A praça da cidade está representada
-                por um plano cartesiano.
+            <p class="instrucoes-fase">
+                A praça da cidade foi mapeada sobre um <strong>Plano Cartesiano</strong>.
+                Localize os elementos no mapa e descubra suas coordenadas <strong>(x, y)</strong>!
             </p>
 
-            <p>
-                <strong>
-                    A fonte está localizada no ponto
-                    (4, 3).
-                </strong>
-            </p>
+            <!-- Barra de Progresso das Missões -->
+            <div class="missoes-status">
+                <span class="missoes-contador" id="missoes-contador">Missão 1 de 5</span>
+                <div class="missoes-badges" id="missoes-badges"></div>
+            </div>
 
-            <p>
-                Clique no ponto correspondente.
-            </p>
+            <!-- Painel da Pergunta e Entrada de Coordenadas -->
+            <div class="pergunta-parque-card">
+                <div class="pergunta-enunciado">
+                    <span class="pergunta-icone" id="pergunta-icone">⛲</span>
+                    <div class="pergunta-texto">
+                        <h3 id="pergunta-titulo">Onde está a Fonte de Água?</h3>
+                        <p id="pergunta-dica">Observe o mapa e insira o par ordenado (x, y):</p>
+                    </div>
+                </div>
 
-            <div id="plano" class="plano"></div>
+                <!-- Formulário de Entrada (x, y) -->
+                <form id="form-coordenadas" class="form-coordenadas" onsubmit="event.preventDefault(); submeterCoordenada();">
+                    <div class="input-coordenada-grupo">
+                        <span class="coord-parentese">(</span>
+                        <div class="coord-campo">
+                            <label for="input-coord-x">Eixo X</label>
+                            <input type="number" id="input-coord-x" min="-5" max="5" placeholder="X" required />
+                        </div>
+                        <span class="coord-virgula">,</span>
+                        <div class="coord-campo">
+                            <label for="input-coord-y">Eixo Y</label>
+                            <input type="number" id="input-coord-y" min="-5" max="5" placeholder="Y" required />
+                        </div>
+                        <span class="coord-parentese">)</span>
+                    </div>
+                    <button type="submit" class="btn-confirmar-coord" id="btn-confirmar-coord">
+                        Confirmar Coordenadas 🚀
+                    </button>
+                </form>
+            </div>
+
+            <!-- Mapa Cartesiano do Parque -->
+            <div class="parque-container" id="parque-container">
+                <!-- Imagem do Parque de Fundo -->
+                <img src="mapa_parque.jpg" alt="Mapa do Parque" class="parque-img-fundo" />
+
+                <!-- Overlay SVG com Linhas, Eixos, Números e Setas -->
+                <svg class="parque-svg-grid" id="parque-svg-grid" viewBox="0 0 500 500"></svg>
+
+                <!-- Grid interativo de pontos -->
+                <div class="parque-interativo-layer" id="parque-interativo-layer"></div>
+
+                <!-- Marcadores dos Elementos no Parque -->
+                <div class="parque-marcadores" id="parque-marcadores"></div>
+            </div>
 
         </div>
 
@@ -1009,73 +1559,77 @@ h2 {
 
     <div id="fase3" class="fase">
 
-        <div class="card-fase">
+        <div class="card-fase card-fase3">
 
             <h2 class="titulo-fase">
                 🧩 Mini-game 3 — Agrupe nos Quadrantes
             </h2>
 
             <p class="instrucoes">
-
-                Toque em uma carta e depois
-                escolha o quadrante correto.
-
+                Observe o ponto em destaque e <strong>toque no quadrante correto</strong> para arquivá-lo!
             </p>
 
-            <div id="cartas" class="cartas"></div>
+            <!-- Barra de Progresso Mobile -->
+            <div class="progresso-quadrantes-wrapper">
+                <div class="progresso-info">
+                    <span id="contador-quadrantes" class="contador-quadrantes">Ponto 1 de 16</span>
+                    <span id="porcentagem-quadrantes" class="porcentagem-quadrantes">0%</span>
+                </div>
+                <div class="barra-progresso-trilho">
+                    <div id="barra-progresso-fill" class="barra-progresso-fill" style="width: 0%;"></div>
+                </div>
+            </div>
 
+            <!-- Card da Coordenada Ativa (Uma por vez, em destaque) -->
+            <div class="area-ponto-ativo">
+                <div class="card-ponto-ativo" id="card-ponto-ativo">
+                    <span class="tag-ponto-ativo">Ponto Atual</span>
+                    <div class="coordenada-destaque" id="coordenada-destaque">( 3 , 5 )</div>
+                    <span class="instrucao-toque">👇 Toque no quadrante correspondente abaixo:</span>
+                </div>
+            </div>
 
-            <div class="quadrantes">
+            <!-- Grade 2x2 dos 4 Quadrantes Cartesianos -->
+            <div class="quadrantes-grid">
 
-                <div
-                    class="quadrante q2"
-                    data-quadrante="2">
-
-                    <h3>2º QUADRANTE</h3>
-
-                    <p>
-                        x negativo / y positivo
-                    </p>
-
+                <!-- 2º Quadrante (Superior Esquerdo) -->
+                <div class="quadrante q2" data-quadrante="2">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q2</span>
+                        <h3>2º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(-x , +y)</p>
+                    <div class="pontos-salvos" id="pontos-q2"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q1"
-                    data-quadrante="1">
-
-                    <h3>1º QUADRANTE</h3>
-
-                    <p>
-                        x positivo / y positivo
-                    </p>
-
+                <!-- 1º Quadrante (Superior Direito) -->
+                <div class="quadrante q1" data-quadrante="1">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q1</span>
+                        <h3>1º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(+x , +y)</p>
+                    <div class="pontos-salvos" id="pontos-q1"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q3"
-                    data-quadrante="3">
-
-                    <h3>3º QUADRANTE</h3>
-
-                    <p>
-                        x negativo / y negativo
-                    </p>
-
+                <!-- 3º Quadrante (Inferior Esquerdo) -->
+                <div class="quadrante q3" data-quadrante="3">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q3</span>
+                        <h3>3º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(-x , -y)</p>
+                    <div class="pontos-salvos" id="pontos-q3"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q4"
-                    data-quadrante="4">
-
-                    <h3>4º QUADRANTE</h3>
-
-                    <p>
-                        x positivo / y negativo
-                    </p>
-
+                <!-- 4º Quadrante (Inferior Direito) -->
+                <div class="quadrante q4" data-quadrante="4">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q4</span>
+                        <h3>4º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(+x , -y)</p>
+                    <div class="pontos-salvos" id="pontos-q4"></div>
                 </div>
 
             </div>
@@ -1957,10 +2511,21 @@ function escolherLetra(letra, botao) {
         }
 
 
-        feedback(
-            "❌ Essa letra não faz parte da palavra.",
-            "erro"
-        );
+        if (errosPalavra >= 5) {
+            feedback(
+                "🥀 Todas as 5 pétalas caíram! Reiniciando a flor...",
+                "erro"
+            );
+            setTimeout(function() {
+                iniciarPalavra();
+            }, 1800);
+        } else {
+            const restantes = 5 - errosPalavra;
+            feedback(
+                `❌ Letra incorreta! Uma pétala caiu (restam ${restantes}).`,
+                "erro"
+            );
+        }
 
     }
 
@@ -2010,131 +2575,346 @@ function verificarPalavra() {
 
 
 /* =====================================================
-   MINI-GAME 2
+   MINI-GAME 2: ONDE ESTÁ NO PARQUE?
 ===================================================== */
 
-function iniciarLocalizacao() {
-
-    const plano =
-        document.getElementById("plano");
-
-
-    plano.innerHTML = "";
-
-
-    for (
-        let y = 5;
-        y >= -5;
-        y--
-    ) {
-
-        for (
-            let x = -5;
-            x <= 5;
-            x++
-        ) {
-
-            const ponto =
-                document.createElement("button");
-
-
-            ponto.className =
-                "ponto";
-
-
-            ponto.dataset.x =
-                x;
-
-
-            ponto.dataset.y =
-                y;
-
-
-            ponto.addEventListener(
-                "click",
-                function() {
-
-                    verificarLocalizacao(
-                        x,
-                        y,
-                        ponto
-                    );
-
-                }
-            );
-
-
-            plano.appendChild(ponto);
-
-        }
-
+const elementosParque = [
+    {
+        id: "fonte",
+        nome: "Fonte de Água",
+        icone: "⛲",
+        x: 4,
+        y: 3,
+        pergunta: "Onde está a Fonte de Água ⛲ no parque?",
+        dica: "Dica: A fonte está no 1º Quadrante (à direita do eixo Y e acima do eixo X)."
+    },
+    {
+        id: "cachorro",
+        nome: "Cachorro",
+        icone: "🐶",
+        x: -2,
+        y: 4,
+        pergunta: "Onde está o Cachorro 🐶 brincando no gramado?",
+        dica: "Dica: O cachorro está no 2º Quadrante (à esquerda do eixo Y e acima do eixo X)."
+    },
+    {
+        id: "gato",
+        nome: "Gato",
+        icone: "🐱",
+        x: 3,
+        y: -2,
+        pergunta: "Onde está o Gato 🐱 perto dos caminhos?",
+        dica: "Dica: O gato está no 4º Quadrante (à direita do eixo Y e abaixo do eixo X)."
+    },
+    {
+        id: "mulher",
+        nome: "Mulher",
+        icone: "🚶‍♀️",
+        x: -3,
+        y: -3,
+        pergunta: "Onde está a Mulher 🚶‍♀️ caminhando na praça?",
+        dica: "Dica: A mulher está no 3º Quadrante (à esquerda do eixo Y e abaixo do eixo X)."
+    },
+    {
+        id: "bicicleta",
+        nome: "Bicicleta",
+        icone: "🚲",
+        x: -4,
+        y: 1,
+        pergunta: "Onde está a Bicicleta 🚲 estacionada?",
+        dica: "Dica: Observe no 2º Quadrante (4 unidades para a esquerda e 1 para cima)."
     }
+];
 
+let indiceMissaoAtual = 0;
+
+function iniciarLocalizacao() {
+    indiceMissaoAtual = 0;
+
+    renderizarGridParque();
+    renderizarMarcadoresParque();
+    renderizarBadgesMissoes();
+    atualizarMissaoAtiva();
 }
 
+function renderizarGridParque() {
+    const svg = document.getElementById("parque-svg-grid");
+    const containerClicavel = document.getElementById("parque-interativo-layer");
 
-function verificarLocalizacao(
-    x,
-    y,
-    elemento
-) {
+    if (!svg) return;
+
+    let svgHtml = `
+        <defs>
+            <marker id="seta-x" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+                <path d="M 0 0 L 8 4 L 0 8 Z" fill="#ffd166" />
+            </marker>
+            <marker id="seta-y" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
+                <path d="M 0 0 L 8 4 L 0 8 Z" fill="#ffd166" />
+            </marker>
+        </defs>
+    `;
+
+    // Linhas secundárias da grade (-5 a 5)
+    for (let i = -5; i <= 5; i++) {
+        const px = 250 + i * 40;
+
+        // Linha vertical (se não for o eixo Y)
+        if (i !== 0) {
+            svgHtml += `<line x1="${px}" y1="35" x2="${px}" y2="465" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-dasharray="3,3" />`;
+            // Número no eixo X com fundo legível
+            svgHtml += `
+                <rect x="${px - 10}" y="258" width="20" height="16" rx="4" fill="rgba(15,20,44,0.92)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
+                <text x="${px}" y="270" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">${i}</text>
+            `;
+        }
+
+        // Linha horizontal (se não for o eixo X)
+        if (i !== 0) {
+            const py = 250 - i * 40;
+            svgHtml += `<line x1="35" y1="${py}" x2="465" y2="${py}" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-dasharray="3,3" />`;
+            // Número no eixo Y com fundo legível
+            svgHtml += `
+                <rect x="222" y="${py - 8}" width="20" height="16" rx="4" fill="rgba(15,20,44,0.92)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
+                <text x="232" y="${py + 4}" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">${i}</text>
+            `;
+        }
+    }
+
+    // Eixo Y principal (Vertical com sombra e seta)
+    svgHtml += `
+        <line x1="250" y1="465" x2="250" y2="25" stroke="#ffffff" stroke-width="3" marker-end="url(#seta-y)" />
+        <rect x="238" y="10" width="24" height="20" rx="5" fill="#171c45" stroke="#ffd166" stroke-width="1.5" />
+        <text x="250" y="24" fill="#ffd166" font-size="13" font-weight="bold" text-anchor="middle">Y</text>
+    `;
+
+    // Eixo X principal (Horizontal com sombra e seta)
+    svgHtml += `
+        <line x1="35" y1="250" x2="475" y2="250" stroke="#ffffff" stroke-width="3" marker-end="url(#seta-x)" />
+        <rect x="478" y="239" width="20" height="22" rx="5" fill="#171c45" stroke="#ffd166" stroke-width="1.5" />
+        <text x="488" y="255" fill="#ffd166" font-size="13" font-weight="bold" text-anchor="middle">X</text>
+    `;
+
+    // Origem (0, 0)
+    svgHtml += `
+        <circle cx="250" cy="250" r="5" fill="#ffd166" stroke="#c2410c" stroke-width="2" />
+        <rect x="236" y="258" width="16" height="16" rx="4" fill="rgba(15,20,44,0.92)" stroke="#ffd166" stroke-width="1" />
+        <text x="244" y="270" fill="#ffd166" font-size="11" font-weight="bold" text-anchor="middle">0</text>
+    `;
+
+    svg.innerHTML = svgHtml;
+
+    // Grid interativo de pontos clicáveis
+    if (containerClicavel) {
+        containerClicavel.innerHTML = "";
+        for (let y = 5; y >= -5; y--) {
+            for (let x = -5; x <= 5; x++) {
+                const btnPonto = document.createElement("button");
+                btnPonto.type = "button";
+                btnPonto.className = "ponto-clicavel";
+                btnPonto.dataset.x = x;
+                btnPonto.dataset.y = y;
+                btnPonto.title = `Ponto (${x}, ${y})`;
+
+                btnPonto.addEventListener("click", function() {
+                    selecionarPontoMapa(x, y);
+                });
+
+                containerClicavel.appendChild(btnPonto);
+            }
+        }
+    }
+}
+
+function renderizarMarcadoresParque() {
+    const container = document.getElementById("parque-marcadores");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    elementosParque.forEach((elem, index) => {
+        const leftPercent = ((250 + elem.x * 40) / 500) * 100;
+        const topPercent = ((250 - elem.y * 40) / 500) * 100;
+
+        const marcador = document.createElement("div");
+        marcador.className = "marcador-elemento";
+        marcador.id = `marcador-${elem.id}`;
+        marcador.style.left = `${leftPercent}%`;
+        marcador.style.top = `${topPercent}%`;
+
+        if (index === indiceMissaoAtual) {
+            marcador.classList.add("alvo");
+        }
+
+        marcador.innerHTML = `
+            <div class="marcador-pin">
+                <span>${elem.icone}</span>
+            </div>
+            <div class="marcador-tag">${elem.nome}</div>
+        `;
+
+        marcador.addEventListener("click", function() {
+            selecionarPontoMapa(elem.x, elem.y);
+        });
+
+        container.appendChild(marcador);
+    });
+}
+
+function renderizarBadgesMissoes() {
+    const container = document.getElementById("missoes-badges");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    elementosParque.forEach((elem, index) => {
+        const badge = document.createElement("div");
+        badge.className = "missao-badge";
+        badge.id = `badge-${elem.id}`;
+        if (index === indiceMissaoAtual) {
+            badge.classList.add("ativa");
+        }
+        badge.innerHTML = `<span>${elem.icone}</span> <span>${elem.nome}</span>`;
+        container.appendChild(badge);
+    });
+}
+
+function atualizarMissaoAtiva() {
+    if (indiceMissaoAtual >= elementosParque.length) {
+        finalizarFase2();
+        return;
+    }
+
+    const elem = elementosParque[indiceMissaoAtual];
+
+    // Atualiza contador
+    const contador = document.getElementById("missoes-contador");
+    if (contador) {
+        contador.textContent = `Missão ${indiceMissaoAtual + 1} de ${elementosParque.length}`;
+    }
+
+    // Atualiza enunciado
+    const icone = document.getElementById("pergunta-icone");
+    if (icone) icone.textContent = elem.icone;
+
+    const titulo = document.getElementById("pergunta-titulo");
+    if (titulo) titulo.textContent = elem.pergunta;
+
+    const dica = document.getElementById("pergunta-dica");
+    if (dica) dica.textContent = elem.dica;
+
+    // Limpa os campos de entrada
+    const inputX = document.getElementById("input-coord-x");
+    const inputY = document.getElementById("input-coord-y");
+    if (inputX) {
+        inputX.value = "";
+        inputX.focus();
+    }
+    if (inputY) inputY.value = "";
+
+    // Atualiza destaques nas badges e marcadores
+    elementosParque.forEach((e, idx) => {
+        const badge = document.getElementById(`badge-${e.id}`);
+        const marcador = document.getElementById(`marcador-${e.id}`);
+
+        if (badge) {
+            badge.classList.remove("ativa");
+            if (idx < indiceMissaoAtual) badge.classList.add("concluida");
+            else if (idx === indiceMissaoAtual) badge.classList.add("ativa");
+        }
+
+        if (marcador) {
+            marcador.classList.remove("alvo");
+            if (idx === indiceMissaoAtual) marcador.classList.add("alvo");
+        }
+    });
+}
+
+function selecionarPontoMapa(x, y) {
+    const inputX = document.getElementById("input-coord-x");
+    const inputY = document.getElementById("input-coord-y");
+
+    if (inputX && inputY) {
+        inputX.value = x;
+        inputY.value = y;
+    }
+
+    feedback(`📍 Coordenadas selecionadas: (${x}, ${y}). Clique em Confirmar ou aperte Enter!`, "aviso");
+}
+
+function submeterCoordenada() {
+    const inputX = document.getElementById("input-coord-x");
+    const inputY = document.getElementById("input-coord-y");
+
+    if (!inputX || !inputY || inputX.value === "" || inputY.value === "") {
+        feedback("⚠️ Por favor, informe as coordenadas X e Y.", "erro");
+        return;
+    }
+
+    const x = parseInt(inputX.value, 10);
+    const y = parseInt(inputY.value, 10);
+
+    const elem = elementosParque[indiceMissaoAtual];
 
     tentativa();
 
+    if (x === elem.x && y === elem.y) {
+        // Acerto da coordenada
+        adicionarPontos(100);
 
-    if (
-        x === 4 &&
-        y === 3
-    ) {
+        const marcador = document.getElementById(`marcador-${elem.id}`);
+        if (marcador) {
+            marcador.classList.remove("alvo");
+            marcador.classList.add("concluido");
+        }
 
-        elemento.classList.add(
-            "correto"
-        );
+        const badge = document.getElementById(`badge-${elem.id}`);
+        if (badge) {
+            badge.classList.remove("ativa");
+            badge.classList.add("concluida");
+        }
 
+        feedback(`🎉 Excelente! Você localizou ${elem.nome} em (${elem.x}, ${elem.y})! +100 pontos!`, "sucesso");
 
-        adicionarPontos(150);
-
-
-        game.progresso.localizacao =
-            true;
-
-
-        feedback(
-            "🎯 Localização correta! +150 pontos!",
-            "sucesso"
-        );
-
+        indiceMissaoAtual++;
 
         setTimeout(function() {
+            atualizarMissaoAtiva();
+        }, 1300);
 
-            iniciarFase(3);
-
-        }, 1500);
-
-    }
-
-    else {
-
+    } else {
+        // Erro com dica orientadora
         erro(15);
 
+        let msgErro = `❌ Não é o ponto (${x}, ${y}). `;
+        if (x !== elem.x && y !== elem.y) {
+            msgErro += `Revise a posição nos eixos horizontal (X) e vertical (Y).`;
+        } else if (x !== elem.x) {
+            msgErro += `A coordenada Y (${y}) está certa! Verifique o valor no eixo X.`;
+        } else {
+            msgErro += `A coordenada X (${x}) está certa! Verifique o valor no eixo Y.`;
+        }
 
-        feedback(
-            "❌ Não é esse ponto. Tente novamente.",
-            "erro"
-        );
-
+        feedback(msgErro, "erro");
     }
+}
 
+function finalizarFase2() {
+    game.progresso.localizacao = true;
+    adicionarPontos(150);
+
+    feedback("🏆 Fantástico! Você dominou o mapa cartesiano do parque! +150 pontos bônus!", "sucesso");
+
+    setTimeout(function() {
+        iniciarFase(3);
+    }, 2000);
 }
 
 
 /* =====================================================
-   MINI-GAME 3
-   FUNCIONA POR TOQUE
+   MINI-GAME 3: AGRUPE NOS QUADRANTES
 ===================================================== */
 
 const cartas = [
-
     { id:1, x:3, y:5, q:1 },
     { id:2, x:2, y:1, q:1 },
     { id:3, x:6, y:4, q:1 },
@@ -2154,254 +2934,141 @@ const cartas = [
     { id:14, x:3, y:-5, q:4 },
     { id:15, x:7, y:-1, q:4 },
     { id:16, x:2, y:-6, q:4 }
-
 ];
 
-
+let cartasEmbaralhadas = [];
+let indiceCartaAtual = 0;
 let cartasCorretas = 0;
 
-let cartaSelecionada = null;
-
-
 function iniciarQuadrantes() {
+    // 1. Embaralha aleatoriamente as coordenadas (Fisher-Yates)
+    cartasEmbaralhadas = [...cartas];
+    for (let i = cartasEmbaralhadas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cartasEmbaralhadas[i], cartasEmbaralhadas[j]] = [cartasEmbaralhadas[j], cartasEmbaralhadas[i]];
+    }
 
+    indiceCartaAtual = 0;
     cartasCorretas = 0;
 
-    cartaSelecionada = null;
+    // Limpa os pontos salvos dentro dos 4 quadrantes
+    for (let q = 1; q <= 4; q++) {
+        const containerQ = document.getElementById(`pontos-q${q}`);
+        if (containerQ) containerQ.innerHTML = "";
+    }
 
-
-    const container =
-        document.getElementById("cartas");
-
-
-    container.innerHTML = "";
-
-
-    cartas.forEach(function(carta) {
-
-        const elemento =
-            document.createElement("button");
-
-
-        elemento.className =
-            "carta";
-
-
-        elemento.dataset.id =
-            carta.id;
-
-
-        elemento.textContent =
-            `(${carta.x}, ${carta.y})`;
-
-
-        elemento.addEventListener(
-            "click",
-            function() {
-
-                selecionarCarta(
-                    carta.id
-                );
-
-            }
-        );
-
-
-        container.appendChild(
-            elemento
-        );
-
+    // Vincula os cliques diretamente aos 4 quadrantes
+    document.querySelectorAll(".quadrante").forEach(area => {
+        area.onclick = function() {
+            const quadranteEscolhido = Number(area.dataset.quadrante);
+            processarEscolhaQuadrante(quadranteEscolhido, area);
+        };
     });
 
-
-    document
-        .querySelectorAll(".quadrante")
-        .forEach(area => {
-
-            area.onclick =
-                function() {
-
-                    if (
-                        cartaSelecionada === null
-                    ) {
-
-                        feedback(
-                            "👆 Primeiro escolha uma carta.",
-                            "aviso"
-                        );
-
-                        return;
-
-                    }
-
-
-                    verificarCarta(
-                        cartaSelecionada,
-                        Number(
-                            area.dataset.quadrante
-                        ),
-                        area
-                    );
-
-                };
-
-        });
-
+    // Exibe o primeiro ponto sorteado
+    exibirCartaAtual();
 }
 
-
-function selecionarCarta(id) {
-
-    const elemento =
-        document.querySelector(
-            `.carta[data-id="${id}"]`
-        );
-
-
-    if (
-        elemento.classList.contains(
-            "correta"
-        )
-    ) {
-
+function exibirCartaAtual() {
+    if (indiceCartaAtual >= cartasEmbaralhadas.length) {
+        finalizarFase3();
         return;
-
     }
 
+    const carta = cartasEmbaralhadas[indiceCartaAtual];
 
-    document
-        .querySelectorAll(".carta")
-        .forEach(carta => {
+    // Atualiza a coordenada em destaque
+    const elCoordenada = document.getElementById("coordenada-destaque");
+    if (elCoordenada) {
+        elCoordenada.textContent = `( ${carta.x} , ${carta.y} )`;
+        elCoordenada.style.animation = "none";
+        void elCoordenada.offsetWidth;
+        elCoordenada.style.animation = "popIn 0.3s ease-out";
+    }
 
-            carta.classList.remove(
-                "selecionada"
-            );
+    // Atualiza contador e progresso
+    const elContador = document.getElementById("contador-quadrantes");
+    if (elContador) {
+        elContador.textContent = `Ponto ${indiceCartaAtual + 1} de ${cartasEmbaralhadas.length}`;
+    }
 
-        });
-
-
-    cartaSelecionada =
-        id;
-
-
-    elemento.classList.add(
-        "selecionada"
-    );
-
-
-    feedback(
-        "🎯 Agora toque no quadrante correto.",
-        "aviso"
-    );
-
+    const elPorcentagem = document.getElementById("porcentagem-quadrantes");
+    const elBarra = document.getElementById("barra-progresso-fill");
+    const pct = Math.round((indiceCartaAtual / cartasEmbaralhadas.length) * 100);
+    if (elPorcentagem) elPorcentagem.textContent = `${pct}%`;
+    if (elBarra) elBarra.style.width = `${pct}%`;
 }
 
+function processarEscolhaQuadrante(quadranteEscolhido, areaElemento) {
+    if (indiceCartaAtual >= cartasEmbaralhadas.length) return;
 
-function verificarCarta(
-    id,
-    quadrante,
-    area
-) {
-
-    const carta =
-        cartas.find(
-            item =>
-                item.id === id
-        );
-
-
-    const elemento =
-        document.querySelector(
-            `.carta[data-id="${id}"]`
-        );
-
-
+    const carta = cartasEmbaralhadas[indiceCartaAtual];
     tentativa();
 
-
-    if (
-        carta.q === quadrante
-    ) {
-
+    if (carta.q === quadranteEscolhido) {
+        // Acerto!
         cartasCorretas++;
-
-
         adicionarPontos(20);
 
+        // Feedback de pulso no quadrante correto
+        areaElemento.classList.add("acerto-pulse");
+        setTimeout(() => areaElemento.classList.remove("acerto-pulse"), 350);
 
-        elemento.classList.remove(
-            "selecionada"
-        );
-
-
-        elemento.classList.add(
-            "correta"
-        );
-
-
-        cartaSelecionada =
-            null;
-
-
-        feedback(
-            "✅ Correto! +20 pontos.",
-            "sucesso"
-        );
-
-
-        if (
-            cartasCorretas === 16
-        ) {
-
-            adicionarPontos(100);
-
-
-            game.progresso.quadrantes =
-                true;
-
-
-            feedback(
-                "🏆 Todos classificados! +100 bônus!",
-                "sucesso"
-            );
-
-
-            setTimeout(function() {
-
-                iniciarFase(4);
-
-            }, 1800);
-
+        // Salva o ponto dentro do quadrante escolhido
+        const containerSalvos = document.getElementById(`pontos-q${quadranteEscolhido}`);
+        if (containerSalvos) {
+            const badge = document.createElement("span");
+            badge.className = "chip-ponto-salvo";
+            badge.textContent = `(${carta.x}, ${carta.y})`;
+            containerSalvos.appendChild(badge);
         }
 
-    }
+        feedback(`✅ Muito bem! (${carta.x}, ${carta.y}) pertence ao ${carta.q}º Quadrante! +20 pontos`, "sucesso");
 
-    else {
+        // Passa automaticamente para o próximo ponto
+        indiceCartaAtual++;
 
+        if (indiceCartaAtual >= cartasEmbaralhadas.length) {
+            setTimeout(finalizarFase3, 700);
+        } else {
+            setTimeout(exibirCartaAtual, 350);
+        }
+
+    } else {
+        // Erro
         erro(10);
 
+        // Efeito de tremor no quadrante incorreto
+        areaElemento.classList.add("erro-shake");
+        setTimeout(() => areaElemento.classList.remove("erro-shake"), 450);
 
-        elemento.classList.add(
-            "errada"
-        );
+        let explicacao = "";
+        if (carta.x > 0 && carta.y > 0) explicacao = "x é positivo e y é positivo (1º Quadrante)";
+        else if (carta.x < 0 && carta.y > 0) explicacao = "x é negativo e y é positivo (2º Quadrante)";
+        else if (carta.x < 0 && carta.y < 0) explicacao = "x é negativo e y é negativo (3º Quadrante)";
+        else if (carta.x > 0 && carta.y < 0) explicacao = "x é positivo e y é negativo (4º Quadrante)";
 
-
-        feedback(
-            "❌ Quadrante incorreto. Tente novamente.",
-            "erro"
-        );
-
-
-        setTimeout(function() {
-
-            elemento.classList.remove(
-                "errada"
-            );
-
-        }, 600);
-
+        feedback(`❌ Atenção! Em (${carta.x}, ${carta.y}), ${explicacao}. Toque no quadrante correto!`, "erro");
     }
+}
 
+function finalizarFase3() {
+    game.progresso.quadrantes = true;
+    adicionarPontos(100);
+
+    const elPorcentagem = document.getElementById("porcentagem-quadrantes");
+    const elBarra = document.getElementById("barra-progresso-fill");
+    if (elPorcentagem) elPorcentagem.textContent = "100%";
+    if (elBarra) elBarra.style.width = "100%";
+
+    const elCoordenada = document.getElementById("coordenada-destaque");
+    if (elCoordenada) elCoordenada.textContent = "🎉 Concluído!";
+
+    feedback("🏆 Excelente! Todos os 16 pontos foram corretamente classificados nos quadrantes! +100 bônus!", "sucesso");
+
+    setTimeout(function() {
+        iniciarFase(4);
+    }, 2000);
 }
 
 
