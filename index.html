@@ -17,6 +17,7 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100%;
+    overscroll-behavior-y: contain; /* Evita recarregar página acidentalmente no celular por pull-to-refresh */
 }
 
 body {
@@ -1371,6 +1372,199 @@ h2 {
 }
 
 /* =====================================================
+   BARRA DO TOPO (CONTROLE E REINÍCIO)
+===================================================== */
+
+.barra-topo-jogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 2px 6px;
+}
+
+.grupo-identificacao {
+    font-size: 15px;
+    color: #ffd166;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.grupo-identificacao strong {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 3px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+.btn-reiniciar-jogo {
+    background: rgba(255, 92, 92, 0.15);
+    color: #ff9999;
+    border: 1.5px solid rgba(255, 92, 92, 0.35);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn-reiniciar-jogo:hover {
+    background: rgba(255, 92, 92, 0.3);
+    color: #ffffff;
+    border-color: #ff5c5c;
+    transform: translateY(-1px);
+}
+
+.btn-reiniciar-jogo:active {
+    transform: translateY(0);
+}
+
+/* =====================================================
+   MODAL DE BLOQUEIO DE REINÍCIO ACIDENTAL
+===================================================== */
+
+.modal-bloqueio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 12, 28, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    padding: 20px;
+    animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: linear-gradient(145deg, #1b2347, #131835);
+    border: 2.5px solid rgba(255, 92, 92, 0.65);
+    border-radius: 22px;
+    max-width: 460px;
+    width: 100%;
+    padding: 28px 24px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 92, 92, 0.25);
+    animation: scaleUpModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleUpModal {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-icone-alerta {
+    font-size: 54px;
+    line-height: 1;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 10px rgba(255, 92, 92, 0.5));
+    animation: pulsoAlertaModal 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes pulsoAlertaModal {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15); }
+}
+
+.modal-titulo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #ff5c5c;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.3px;
+}
+
+.modal-descricao {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #cbd5e1;
+    margin: 0 0 24px 0;
+}
+
+.modal-destaque-pontos {
+    display: inline-block;
+    background: rgba(255, 92, 92, 0.25);
+    color: #ffd166;
+    font-weight: 800;
+    padding: 2px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 209, 102, 0.4);
+    font-size: 16px;
+}
+
+.modal-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-modal-cancelar {
+    background: linear-gradient(135deg, #06d6a0, #05b586);
+    color: #0b132b;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(6, 214, 160, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+.btn-modal-cancelar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(6, 214, 160, 0.5);
+}
+
+.btn-modal-cancelar:active {
+    transform: translateY(0);
+}
+
+.btn-modal-confirmar {
+    background: rgba(255, 92, 92, 0.12);
+    color: #ff9999;
+    border: 1.5px solid rgba(255, 92, 92, 0.4);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.btn-modal-confirmar:hover {
+    background: rgba(255, 92, 92, 0.28);
+    color: #ffffff;
+    border-color: #ff5c5c;
+}
+
+/* =====================================================
    RESPONSIVO
 ===================================================== */
 
@@ -1556,6 +1750,13 @@ h2 {
 
 <div class="container">
 
+    <!-- Barra do Topo com Nome do Grupo e Botão de Reinício Protegido -->
+    <div class="barra-topo-jogo">
+        <span class="grupo-identificacao">👥 Grupo: <strong id="painelNomeGrupo">-</strong></span>
+        <button type="button" class="btn-reiniciar-jogo" onclick="solicitarReiniciarJogo()" title="Reiniciar a missão">
+            🔄 Reiniciar Jogo
+        </button>
+    </div>
 
     <div class="painel">
 
@@ -2076,7 +2277,7 @@ h2 {
 
         <button
             class="btn"
-            onclick="location.reload()">
+            onclick="solicitarReiniciarJogo(true)">
 
             NOVO GRUPO
 
@@ -2090,6 +2291,28 @@ h2 {
 <div
     id="feedback"
     class="feedback">
+</div>
+
+<!-- =====================================================
+     MODAL DE CONFIRMAÇÃO / BLOQUEIO DE REINÍCIO ACIDENTAL
+===================================================== -->
+<div id="modal-confirmar-reiniciar" class="modal-bloqueio" style="display: none;" onclick="if(event.target === this) fecharModalReiniciar()">
+    <div class="modal-card">
+        <div class="modal-icone-alerta">⚠️</div>
+        <h3 class="modal-titulo">Deseja reiniciar a missão?</h3>
+        <p class="modal-descricao">
+            Atenção: Se você reiniciar o jogo agora, todo o progresso atual do grupo será cancelado e a sua pontuação de 
+            <span class="modal-destaque-pontos" id="modal-pontos-perdidos">0 pontos</span> será totalmente perdida!
+        </p>
+        <div class="modal-acoes">
+            <button type="button" class="btn-modal-cancelar" onclick="fecharModalReiniciar()">
+                🟢 Não, continuar jogando
+            </button>
+            <button type="button" class="btn-modal-confirmar" onclick="confirmarReiniciarJogo()">
+                🔴 Sim, reiniciar e zerar pontos
+            </button>
+        </div>
+    </div>
 </div>
 
 
@@ -2184,6 +2407,11 @@ function iniciarJogo() {
     game.grupo = nome;
 
     game.inicio = Date.now();
+
+    const elNomeGrupo = document.getElementById("painelNomeGrupo");
+    if (elNomeGrupo) {
+        elNomeGrupo.textContent = nome;
+    }
 
 
     document
@@ -3941,6 +4169,59 @@ function mostrarResultado(dados) {
         dados.dicas;
 
 }
+
+
+/* =====================================================
+   BLOQUEIO E CONFIRMAÇÃO DE REINÍCIO DE JOGO
+===================================================== */
+
+function solicitarReiniciarJogo(diretoSemPerguntar = false) {
+    // Se o jogo nem iniciou ou se foi chamado na tela final sem pontos ativos
+    if (!game.inicio || game.finalizado || diretoSemPerguntar) {
+        confirmarReiniciarJogo();
+        return;
+    }
+
+    // Atualiza a quantidade atual de pontos na mensagem de alerta
+    const elPontos = document.getElementById("modal-pontos-perdidos");
+    if (elPontos) {
+        elPontos.textContent = `${game.pontuacao} pontos`;
+    }
+
+    const modal = document.getElementById("modal-confirmar-reiniciar");
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+function fecharModalReiniciar() {
+    const modal = document.getElementById("modal-confirmar-reiniciar");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+function confirmarReiniciarJogo() {
+    // Remove o interceptador para permitir o reload imediato sem alerta extra
+    window.onbeforeunload = null;
+    location.reload();
+}
+
+// Fechar modal caso o aluno aperte ESC no teclado
+window.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+        fecharModalReiniciar();
+    }
+});
+
+// Prevenção contra recarregamento ou fechamento acidental da aba no navegador
+window.addEventListener("beforeunload", function (e) {
+    if (game.inicio && !game.finalizado && game.pontuacao > 0) {
+        e.preventDefault();
+        e.returnValue = "Atenção: Ao sair ou recarregar a página, todos os seus pontos serão perdidos!";
+        return e.returnValue;
+    }
+});
 
 </script>
 
