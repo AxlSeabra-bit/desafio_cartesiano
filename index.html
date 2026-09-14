@@ -927,9 +927,10 @@ h2 {
     background-size: cover;
     background-position: center;
     user-select: none;
+    pointer-events: none; /* Imagem meramente ilustrativa de consulta */
 }
 
-/* 4 Zonas de Quadrantes interativas no Mapa */
+/* 4 Zonas de Quadrantes no Mapa (Referência visual estática) */
 .mapa-quadrantes-overlay {
     position: absolute;
     top: 0;
@@ -940,18 +941,16 @@ h2 {
     grid-template-columns: 49% 51%;
     grid-template-rows: 50% 50%;
     z-index: 2;
+    pointer-events: none;
 }
 
 .zona-mapa-quadrante {
     position: relative;
-    cursor: pointer;
+    cursor: default;
+    pointer-events: none;
     transition: background 0.3s ease;
     display: flex;
     padding: 8px;
-}
-
-.zona-mapa-quadrante:hover {
-    background: rgba(255, 255, 255, 0.12);
 }
 
 .zona-mapa-quadrante.q1 {
@@ -1063,7 +1062,7 @@ h2 {
     transform: translateY(-50%);
 }
 
-/* Marcador do Brasil */
+/* Marcador do Brasil (Visual de referência, sem cliques) */
 .marcador-brasil {
     position: absolute;
     left: 31%;
@@ -1073,12 +1072,8 @@ h2 {
     flex-direction: column;
     align-items: center;
     z-index: 5;
-    cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.marcador-brasil:hover {
-    transform: translate(-50%, -50%) scale(1.15);
+    pointer-events: none;
+    cursor: default;
 }
 
 .brasil-pin {
@@ -1870,28 +1865,28 @@ h2 {
                 <span class="tag-eixo tag-norte">+y (Norte)</span>
                 <span class="tag-eixo tag-sul">-y (Sul)</span>
 
-                <!-- 4 Zonas Interativas de Quadrantes (Dispostas cartesianamente) -->
+                <!-- 4 Zonas de Quadrantes no Mapa (Referência visual estática) -->
                 <div class="mapa-quadrantes-overlay">
                     <!-- 2º Quadrante (Superior Esquerdo) -->
-                    <div class="zona-mapa-quadrante q2" id="zona-q2" onclick="responderMapa(2)" title="Tocar no 2º Quadrante">
+                    <div class="zona-mapa-quadrante q2" id="zona-q2">
                         <span class="badge-quadrante-mapa">2º Quadrante (-x, +y)</span>
                     </div>
                     <!-- 1º Quadrante (Superior Direito) -->
-                    <div class="zona-mapa-quadrante q1" id="zona-q1" onclick="responderMapa(1)" title="Tocar no 1º Quadrante">
+                    <div class="zona-mapa-quadrante q1" id="zona-q1">
                         <span class="badge-quadrante-mapa">1º Quadrante (+x, +y)</span>
                     </div>
                     <!-- 3º Quadrante (Inferior Esquerdo) -->
-                    <div class="zona-mapa-quadrante q3" id="zona-q3" onclick="responderMapa(3)" title="Tocar no 3º Quadrante">
+                    <div class="zona-mapa-quadrante q3" id="zona-q3">
                         <span class="badge-quadrante-mapa">3º Quadrante (-x, -y)</span>
                     </div>
                     <!-- 4º Quadrante (Inferior Direito) -->
-                    <div class="zona-mapa-quadrante q4" id="zona-q4" onclick="responderMapa(4)" title="Tocar no 4º Quadrante">
+                    <div class="zona-mapa-quadrante q4" id="zona-q4">
                         <span class="badge-quadrante-mapa">4º Quadrante (+x, -y)</span>
                     </div>
                 </div>
 
-                <!-- Destaque do Brasil com Marcador Animado -->
-                <div class="marcador-brasil" id="marcador-brasil" onclick="responderMapa(3)" title="Brasil localizado no 3º Quadrante">
+                <!-- Destaque do Brasil com Marcador Animado (Apenas visual) -->
+                <div class="marcador-brasil" id="marcador-brasil">
                     <div class="brasil-pin">
                         <span class="brasil-bandeira">🇧🇷</span>
                     </div>
@@ -1899,8 +1894,11 @@ h2 {
                 </div>
             </div>
 
-            <p style="text-align:center; font-size:18px; margin-top:14px;">
+            <p style="text-align:center; font-size:18px; margin-top:14px; margin-bottom:4px;">
                 <strong>Em qual quadrante do plano cartesiano o Brasil fica?</strong>
+            </p>
+            <p style="text-align:center; font-size:14px; color:#ffd166; margin-top:0; margin-bottom:14px;">
+                👇 Observe o mapa acima e selecione o quadrante correto nos botões abaixo:
             </p>
 
             <!-- Botões de Escolha em Grade 2x2 correspondendo aos quadrantes -->
@@ -3260,6 +3258,12 @@ function iniciarMapaFinal() {
     for (let q = 1; q <= 4; q++) {
         const zona = document.getElementById(`zona-q${q}`);
         if (zona) zona.classList.remove("acerto-destaque");
+        const btn = document.querySelector(`.btn-quadrante-escolha.btn-q${q}`);
+        if (btn) {
+            btn.style.background = "";
+            btn.style.borderColor = "";
+            btn.style.color = "";
+        }
     }
 }
 
@@ -3273,6 +3277,14 @@ function responderMapa(resposta) {
         const zonaQ3 = document.getElementById("zona-q3");
         if (zonaQ3) {
             zonaQ3.classList.add("acerto-destaque");
+        }
+
+        // Destaca visualmente o botão do 3º Quadrante selecionado embaixo
+        const btnQ3 = document.querySelector(".btn-quadrante-escolha.btn-q3");
+        if (btnQ3) {
+            btnQ3.style.background = "#06d6a0";
+            btnQ3.style.borderColor = "#ffffff";
+            btnQ3.style.color = "#0f172a";
         }
 
         feedback(
