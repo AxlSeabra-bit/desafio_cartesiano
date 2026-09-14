@@ -251,22 +251,55 @@ h2 {
     background: #aaa;
 }
 
-.flor {
+/* =====================================================
+   FLOR DE 5 PÉTALAS (MINI-GAME 1)
+===================================================== */
+
+.flor-container {
     display: flex;
     justify-content: center;
-    gap: 5px;
-    font-size: 48px;
-    margin: 10px;
+    align-items: center;
+    margin: 10px auto 20px auto;
+}
+
+.flor-svg {
+    overflow: visible;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
 
 .petala {
-    transition: .4s;
+    transform-origin: 90px 90px;
+    transition: transform 0.8s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.8s ease, filter 0.8s ease;
+    cursor: default;
 }
 
+.petala-1 { transform: rotate(0deg); }
+.petala-2 { transform: rotate(72deg); }
+.petala-3 { transform: rotate(144deg); }
+.petala-4 { transform: rotate(216deg); }
+.petala-5 { transform: rotate(288deg); }
+
+/* Animação de queda suave ao errar letra */
 .petala.caida {
-    transform: translateY(25px) rotate(40deg);
-    opacity: .2;
-    filter: grayscale(1);
+    opacity: 0;
+    filter: grayscale(1) blur(1px);
+    pointer-events: none;
+}
+
+.petala-1.caida {
+    transform: rotate(0deg) translate(0, 95px) rotate(45deg) scale(0.65);
+}
+.petala-2.caida {
+    transform: rotate(72deg) translate(0, 95px) rotate(35deg) scale(0.65);
+}
+.petala-3.caida {
+    transform: rotate(144deg) translate(0, 95px) rotate(-40deg) scale(0.65);
+}
+.petala-4.caida {
+    transform: rotate(216deg) translate(0, 95px) rotate(40deg) scale(0.65);
+}
+.petala-5.caida {
+    transform: rotate(288deg) translate(0, 95px) rotate(-35deg) scale(0.65);
 }
 
 /* =====================================================
@@ -942,14 +975,53 @@ h2 {
                 Cada letra errada faz uma pétala cair.
             </p>
 
-            <div class="flor">
+            <div class="flor-container">
+                <svg class="flor-svg" viewBox="0 0 180 200" width="160" height="180">
+                    <defs>
+                        <!-- Gradiente das pétalas: Rosa vibrante a Magenta -->
+                        <linearGradient id="grad-petala" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ff7eb3" />
+                            <stop offset="50%" stop-color="#ff4b72" />
+                            <stop offset="100%" stop-color="#d81b60" />
+                        </linearGradient>
 
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
-                <span class="petala">🌸</span>
+                        <!-- Gradiente do Miolo da flor: Dourado vivo -->
+                        <radialGradient id="grad-miolo" cx="35%" cy="35%" r="65%">
+                            <stop offset="0%" stop-color="#fff59d" />
+                            <stop offset="45%" stop-color="#fbc02d" />
+                            <stop offset="100%" stop-color="#e65100" />
+                        </radialGradient>
+                    </defs>
 
+                    <!-- Sombra no chão -->
+                    <ellipse cx="90" cy="192" rx="35" ry="5" fill="rgba(0, 0, 0, 0.25)" />
+
+                    <!-- Caule e Folhas -->
+                    <path d="M 90 90 Q 86 140 90 190" stroke="#4caf50" stroke-width="7" stroke-linecap="round" fill="none" />
+                    <path d="M 88 140 Q 55 125 50 146 Q 76 154 88 140 Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="1.5" />
+                    <path d="M 92 155 Q 122 142 126 162 Q 102 168 92 155 Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="1.5" />
+
+                    <!-- Grupo das 5 Pétalas individuais (72° de separação cada) -->
+                    <g id="petalas-grupo">
+                        <!-- Pétala 1 (Topo - 0°) -->
+                        <path class="petala petala-1" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 2 (72°) -->
+                        <path class="petala petala-2" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 3 (144°) -->
+                        <path class="petala petala-3" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 4 (216°) -->
+                        <path class="petala petala-4" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                        <!-- Pétala 5 (288°) -->
+                        <path class="petala petala-5" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
+                    </g>
+
+                    <!-- Miolo da Flor com feições simpáticas -->
+                    <circle cx="90" cy="90" r="22" fill="url(#grad-miolo)" stroke="#bf360c" stroke-width="2.5" />
+                    <circle cx="90" cy="90" r="16" fill="none" stroke="#f57f17" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />
+                    <circle cx="84" cy="86" r="2.5" fill="#3e2723" opacity="0.5" />
+                    <circle cx="96" cy="86" r="2.5" fill="#3e2723" opacity="0.5" />
+                    <path d="M 86 93 Q 90 97 94 93" fill="none" stroke="#3e2723" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+                </svg>
             </div>
 
             <p>
@@ -1957,10 +2029,21 @@ function escolherLetra(letra, botao) {
         }
 
 
-        feedback(
-            "❌ Essa letra não faz parte da palavra.",
-            "erro"
-        );
+        if (errosPalavra >= 5) {
+            feedback(
+                "🥀 Todas as 5 pétalas caíram! Reiniciando a flor...",
+                "erro"
+            );
+            setTimeout(function() {
+                iniciarPalavra();
+            }, 1800);
+        } else {
+            const restantes = 5 - errosPalavra;
+            feedback(
+                `❌ Letra incorreta! Uma pétala caiu (restam ${restantes}).`,
+                "erro"
+            );
+        }
 
     }
 
