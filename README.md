@@ -19,7 +19,7 @@ O **Desafio Cartesiano** é uma aplicação web educacional e gamificada desenvo
 
 Por ser construído inteiramente em tecnologias web puras (HTML5, CSS3 e JavaScript), não é necessária nenhuma instalação de servidor ou dependências:
 
-1. Abra o arquivo [`index.html`](index.html) diretamente no seu navegador de preferência (Google Chrome, Edge, Firefox, Safari ou Opera).
+1. Abra o arquivo [`desafio_cartesiano.html`](desafio_cartesiano.html) ou [`index.html`](index.html) diretamente no seu navegador de preferência (Google Chrome, Edge, Firefox, Safari ou Opera).
 2. O jogo também é totalmente compatível com navegadores móveis (smartphones e tablets).
 
 ---
@@ -28,10 +28,10 @@ Por ser construído inteiramente em tecnologias web puras (HTML5, CSS3 e JavaScr
 
 ```text
 jogo_do_jefserson/
-├── index.html                     # Aplicação web principal do jogo
-├── novo jogo - Copia (2).html     # Cópia de trabalho original
-├── jogo_do_jefferson_backup.html  # Cópia de segurança
-└── README.md                      # Documentação do projeto
+├── desafio_cartesiano.html         # Aplicação principal do jogo
+├── index.html                      # Ponto de entrada padrão para publicação web (GitHub Pages)
+├── desafio_cartesiano_backup.html  # Cópia de segurança do jogo
+└── README.md                       # Documentação do projeto
 ```
 
 ---
