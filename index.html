@@ -17,6 +17,7 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100%;
+    overscroll-behavior-y: contain; /* Evita recarregar página acidentalmente no celular por pull-to-refresh */
 }
 
 body {
@@ -904,95 +905,271 @@ h2 {
    MAPA
 ===================================================== */
 
-.mapa-simulado {
-    max-width: 750px;
-    margin: 25px auto;
-    padding: 20px;
-    background: #dff3ff;
-    border-radius: 18px;
+/* =====================================================
+   MINI-GAME 4: MAPA DOS QUADRANTES (MUNDIAL)
+===================================================== */
+
+.card-fase4 {
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+.mapa-mundo-container {
     position: relative;
-    height: 350px;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+    margin: 18px auto;
+    border-radius: 18px;
     overflow: hidden;
-    color: #273469;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    background-image: url('mapa_mundo.jpg');
+    background-size: cover;
+    background-position: center;
+    user-select: none;
+    pointer-events: none; /* Imagem meramente ilustrativa de consulta */
 }
 
-.mapa-simulado::before {
-    content: "";
+/* 4 Zonas de Quadrantes no Mapa (Referência visual estática) */
+.mapa-quadrantes-overlay {
     position: absolute;
-    left: 50%;
     top: 0;
-    bottom: 0;
-    width: 3px;
-    background: rgba(39,52,105,.7);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 49% 51%;
+    grid-template-rows: 50% 50%;
+    z-index: 2;
+    pointer-events: none;
 }
 
-.mapa-simulado::after {
-    content: "";
+.zona-mapa-quadrante {
+    position: relative;
+    cursor: default;
+    pointer-events: none;
+    transition: background 0.3s ease;
+    display: flex;
+    padding: 8px;
+}
+
+.zona-mapa-quadrante.q1 {
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+.zona-mapa-quadrante.q2 {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.zona-mapa-quadrante.q3 {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+.zona-mapa-quadrante.q4 {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.badge-quadrante-mapa {
+    background: rgba(15, 20, 44, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    pointer-events: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.zona-mapa-quadrante.q1 .badge-quadrante-mapa { border-color: #06d6a0; color: #6ee7b7; }
+.zona-mapa-quadrante.q2 .badge-quadrante-mapa { border-color: #118ab2; color: #7dd3fc; }
+.zona-mapa-quadrante.q3 .badge-quadrante-mapa { border-color: #a855f7; color: #d8b4fe; }
+.zona-mapa-quadrante.q4 .badge-quadrante-mapa { border-color: #f97316; color: #fdba74; }
+
+.zona-mapa-quadrante.acerto-destaque {
+    background: rgba(6, 214, 160, 0.35) !important;
+    animation: pulsoAcertoMapa 0.8s infinite alternate;
+}
+
+@keyframes pulsoAcertoMapa {
+    0% { background: rgba(6, 214, 160, 0.25); }
+    100% { background: rgba(6, 214, 160, 0.45); }
+}
+
+/* Eixos Cartesiano sobre o Planisfério */
+.eixo-mapa-x {
     position: absolute;
     top: 50%;
     left: 0;
     right: 0;
     height: 3px;
-    background: rgba(39,52,105,.7);
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 4px #ffd166;
+    z-index: 3;
+    pointer-events: none;
+    transform: translateY(-50%);
 }
 
-.continente {
+.eixo-mapa-y {
     position: absolute;
-    font-size: 48px;
-    opacity: .9;
-    z-index: 2;
+    left: 49%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 4px #ffd166;
+    z-index: 3;
+    pointer-events: none;
+    transform: translateX(-50%);
 }
 
-.america-norte {
-    left: 12%;
-    top: 15%;
-}
-
-.america-sul {
-    left: 31%;
-    top: 55%;
-}
-
-.europa {
-    left: 57%;
-    top: 24%;
-}
-
-.africa {
-    left: 57%;
-    top: 53%;
-}
-
-.asia {
-    right: 10%;
-    top: 25%;
-}
-
-.brasil {
+.tag-eixo {
     position: absolute;
-    left: 40%;
-    top: 61%;
-    font-size: 42px;
-    z-index: 4;
-    filter: drop-shadow(0 0 5px #ffd166);
-}
-
-.eixos-legenda {
-    position: absolute;
-    z-index: 5;
+    background: rgba(15, 20, 44, 0.9);
+    color: #ffd166;
+    font-size: 10px;
     font-weight: bold;
-    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 209, 102, 0.4);
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
 }
 
-.eixo-x {
-    right: 8px;
-    top: calc(50% + 7px);
+.tag-norte {
+    top: 6px;
+    left: 49%;
+    transform: translateX(-50%);
 }
 
-.eixo-y {
-    left: calc(50% + 7px);
-    top: 5px;
+.tag-sul {
+    bottom: 6px;
+    left: 49%;
+    transform: translateX(-50%);
 }
+
+.tag-oeste {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tag-leste {
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Marcador do Brasil (Visual de referência, sem cliques) */
+.marcador-brasil {
+    position: absolute;
+    left: 31%;
+    top: 64%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    pointer-events: none;
+    cursor: default;
+}
+
+.brasil-pin {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffd166, #009c3b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 209, 102, 0.8);
+    border: 2.5px solid #ffffff;
+    animation: pulsoBrasil 1.4s infinite alternate;
+}
+
+.brasil-bandeira {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.brasil-badge {
+    background: #009c3b;
+    color: #ffdf00;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-top: 3px;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+}
+
+@keyframes pulsoBrasil {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 223, 0, 0.85);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 0 12px rgba(255, 223, 0, 0);
+        transform: scale(1.12);
+    }
+}
+
+/* Grade de Botões de Resposta */
+.botoes-quadrantes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 580px;
+    margin: 16px auto;
+}
+
+.btn-quadrante-escolha {
+    background: #273469;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.btn-quadrante-escolha small {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.btn-quadrante-escolha:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.btn-quadrante-escolha:active {
+    transform: translateY(0);
+}
+
+.btn-quadrante-escolha.btn-q1 { border-color: #06d6a0; }
+.btn-quadrante-escolha.btn-q1:hover { background: #06d6a0; color: #0f172a; }
+
+.btn-quadrante-escolha.btn-q2 { border-color: #118ab2; }
+.btn-quadrante-escolha.btn-q2:hover { background: #118ab2; }
+
+.btn-quadrante-escolha.btn-q3 { border-color: #a855f7; }
+.btn-quadrante-escolha.btn-q3:hover { background: #a855f7; }
+
+.btn-quadrante-escolha.btn-q4 { border-color: #f97316; }
+.btn-quadrante-escolha.btn-q4:hover { background: #f97316; }
 
 /* =====================================================
    CRUZADINHA
@@ -1195,6 +1372,199 @@ h2 {
 }
 
 /* =====================================================
+   BARRA DO TOPO (CONTROLE E REINÍCIO)
+===================================================== */
+
+.barra-topo-jogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 2px 6px;
+}
+
+.grupo-identificacao {
+    font-size: 15px;
+    color: #ffd166;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.grupo-identificacao strong {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 3px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+.btn-reiniciar-jogo {
+    background: rgba(255, 92, 92, 0.15);
+    color: #ff9999;
+    border: 1.5px solid rgba(255, 92, 92, 0.35);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn-reiniciar-jogo:hover {
+    background: rgba(255, 92, 92, 0.3);
+    color: #ffffff;
+    border-color: #ff5c5c;
+    transform: translateY(-1px);
+}
+
+.btn-reiniciar-jogo:active {
+    transform: translateY(0);
+}
+
+/* =====================================================
+   MODAL DE BLOQUEIO DE REINÍCIO ACIDENTAL
+===================================================== */
+
+.modal-bloqueio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 12, 28, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    padding: 20px;
+    animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: linear-gradient(145deg, #1b2347, #131835);
+    border: 2.5px solid rgba(255, 92, 92, 0.65);
+    border-radius: 22px;
+    max-width: 460px;
+    width: 100%;
+    padding: 28px 24px;
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 92, 92, 0.25);
+    animation: scaleUpModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleUpModal {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-icone-alerta {
+    font-size: 54px;
+    line-height: 1;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 10px rgba(255, 92, 92, 0.5));
+    animation: pulsoAlertaModal 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes pulsoAlertaModal {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15); }
+}
+
+.modal-titulo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #ff5c5c;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.3px;
+}
+
+.modal-descricao {
+    font-size: 15px;
+    line-height: 1.55;
+    color: #cbd5e1;
+    margin: 0 0 24px 0;
+}
+
+.modal-destaque-pontos {
+    display: inline-block;
+    background: rgba(255, 92, 92, 0.25);
+    color: #ffd166;
+    font-weight: 800;
+    padding: 2px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 209, 102, 0.4);
+    font-size: 16px;
+}
+
+.modal-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-modal-cancelar {
+    background: linear-gradient(135deg, #06d6a0, #05b586);
+    color: #0b132b;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(6, 214, 160, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+.btn-modal-cancelar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(6, 214, 160, 0.5);
+}
+
+.btn-modal-cancelar:active {
+    transform: translateY(0);
+}
+
+.btn-modal-confirmar {
+    background: rgba(255, 92, 92, 0.12);
+    color: #ff9999;
+    border: 1.5px solid rgba(255, 92, 92, 0.4);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.btn-modal-confirmar:hover {
+    background: rgba(255, 92, 92, 0.28);
+    color: #ffffff;
+    border-color: #ff5c5c;
+}
+
+/* =====================================================
    RESPONSIVO
 ===================================================== */
 
@@ -1286,16 +1656,37 @@ h2 {
         font-size: 7px;
     }
 
-    .mapa-simulado {
-        height: 280px;
+    .mapa-mundo-container {
+        aspect-ratio: 16 / 10;
+        border-radius: 14px;
     }
 
-    .continente {
-        font-size: 35px;
+    .botoes-quadrantes-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
     }
 
-    .brasil {
-        font-size: 34px;
+    .btn-quadrante-escolha {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .btn-quadrante-escolha small {
+        font-size: 10px;
+    }
+
+    .brasil-pin {
+        width: 38px;
+        height: 38px;
+    }
+
+    .brasil-bandeira {
+        font-size: 20px;
+    }
+
+    .brasil-badge {
+        font-size: 9px;
+        padding: 1px 5px;
     }
 
     .final-card {
@@ -1359,6 +1750,13 @@ h2 {
 
 <div class="container">
 
+    <!-- Barra do Topo com Nome do Grupo e Botão de Reinício Protegido -->
+    <div class="barra-topo-jogo">
+        <span class="grupo-identificacao">👥 Grupo: <strong id="painelNomeGrupo">-</strong></span>
+        <button type="button" class="btn-reiniciar-jogo" onclick="solicitarReiniciarJogo()" title="Reiniciar a missão">
+            🔄 Reiniciar Jogo
+        </button>
+    </div>
 
     <div class="painel">
 
@@ -1645,102 +2043,83 @@ h2 {
 
     <div id="fase4" class="fase">
 
-        <div class="card-fase">
+        <div class="card-fase card-fase4">
 
             <h2 class="titulo-fase">
-                🌎 Mini-game 4 — Mapa dos Quadrantes
+                🌎 Mini-game 4 — O Brasil no Plano Cartesiano
             </h2>
 
-            <p>
-                Observe a posição aproximada do Brasil
-                no mapa.
+            <p class="instrucoes-fase">
+                Imagine o <strong>Planisfério Mundial</strong> mapeado como um plano cartesiano,
+                onde o <strong>Eixo X é a Linha do Equador</strong> e o <strong>Eixo Y é o Meridiano de Greenwich</strong>.
             </p>
 
-            <p>
-                As linhas representam os eixos do
-                plano cartesiano.
-            </p>
+            <!-- Container do Mapa do Mundo com Plano Cartesiano -->
+            <div class="mapa-mundo-container" id="mapa-mundo-container">
+                <!-- Eixo X (Linha do Equador) -->
+                <div class="eixo-mapa-x"></div>
+                <span class="tag-eixo tag-oeste">-x (Oeste)</span>
+                <span class="tag-eixo tag-leste">+x (Leste)</span>
 
+                <!-- Eixo Y (Meridiano de Greenwich) -->
+                <div class="eixo-mapa-y"></div>
+                <span class="tag-eixo tag-norte">+y (Norte)</span>
+                <span class="tag-eixo tag-sul">-y (Sul)</span>
 
-            <div class="mapa-simulado">
-
-                <div class="eixos-legenda eixo-x">
-                    +x
+                <!-- 4 Zonas de Quadrantes no Mapa (Referência visual estática) -->
+                <div class="mapa-quadrantes-overlay">
+                    <!-- 2º Quadrante (Superior Esquerdo) -->
+                    <div class="zona-mapa-quadrante q2" id="zona-q2">
+                        <span class="badge-quadrante-mapa">2º Quadrante (-x, +y)</span>
+                    </div>
+                    <!-- 1º Quadrante (Superior Direito) -->
+                    <div class="zona-mapa-quadrante q1" id="zona-q1">
+                        <span class="badge-quadrante-mapa">1º Quadrante (+x, +y)</span>
+                    </div>
+                    <!-- 3º Quadrante (Inferior Esquerdo) -->
+                    <div class="zona-mapa-quadrante q3" id="zona-q3">
+                        <span class="badge-quadrante-mapa">3º Quadrante (-x, -y)</span>
+                    </div>
+                    <!-- 4º Quadrante (Inferior Direito) -->
+                    <div class="zona-mapa-quadrante q4" id="zona-q4">
+                        <span class="badge-quadrante-mapa">4º Quadrante (+x, -y)</span>
+                    </div>
                 </div>
 
-                <div class="eixos-legenda eixo-y">
-                    +y
+                <!-- Destaque do Brasil com Marcador Animado (Apenas visual) -->
+                <div class="marcador-brasil" id="marcador-brasil">
+                    <div class="brasil-pin">
+                        <span class="brasil-bandeira">🇧🇷</span>
+                    </div>
+                    <div class="brasil-badge">BRASIL</div>
                 </div>
-
-
-                <div class="continente america-norte">
-                    🌎
-                </div>
-
-                <div class="continente america-sul">
-                    🌎
-                </div>
-
-                <div class="continente europa">
-                    🌍
-                </div>
-
-                <div class="continente africa">
-                    🌍
-                </div>
-
-                <div class="continente asia">
-                    🌏
-                </div>
-
-
-                <div class="brasil">
-                    🇧🇷
-                </div>
-
             </div>
 
-
-            <p style="text-align:center">
-
-                <strong>
-                    Em qual quadrante está o Brasil?
-                </strong>
-
+            <p style="text-align:center; font-size:18px; margin-top:14px; margin-bottom:4px;">
+                <strong>Em qual quadrante do plano cartesiano o Brasil fica?</strong>
+            </p>
+            <p style="text-align:center; font-size:14px; color:#ffd166; margin-top:0; margin-bottom:14px;">
+                👇 Observe o mapa acima e selecione o quadrante correto nos botões abaixo:
             </p>
 
-
-            <div style="
-                display:flex;
-                justify-content:center;
-                gap:10px;
-                flex-wrap:wrap;
-            ">
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(1)">
-                    1º QUADRANTE
+            <!-- Botões de Escolha em Grade 2x2 correspondendo aos quadrantes -->
+            <div class="botoes-quadrantes-grid">
+                <button class="btn-quadrante-escolha btn-q2" onclick="responderMapa(2)">
+                    <span>2º QUADRANTE</span>
+                    <small>Oeste / Norte (-x, +y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(2)">
-                    2º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q1" onclick="responderMapa(1)">
+                    <span>1º QUADRANTE</span>
+                    <small>Leste / Norte (+x, +y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(3)">
-                    3º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q3" onclick="responderMapa(3)">
+                    <span>3º QUADRANTE</span>
+                    <small>Oeste / Sul (-x, -y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(4)">
-                    4º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q4" onclick="responderMapa(4)">
+                    <span>4º QUADRANTE</span>
+                    <small>Leste / Sul (+x, -y)</small>
                 </button>
-
             </div>
 
         </div>
@@ -1898,7 +2277,7 @@ h2 {
 
         <button
             class="btn"
-            onclick="location.reload()">
+            onclick="solicitarReiniciarJogo(true)">
 
             NOVO GRUPO
 
@@ -1912,6 +2291,28 @@ h2 {
 <div
     id="feedback"
     class="feedback">
+</div>
+
+<!-- =====================================================
+     MODAL DE CONFIRMAÇÃO / BLOQUEIO DE REINÍCIO ACIDENTAL
+===================================================== -->
+<div id="modal-confirmar-reiniciar" class="modal-bloqueio" style="display: none;" onclick="if(event.target === this) fecharModalReiniciar()">
+    <div class="modal-card">
+        <div class="modal-icone-alerta">⚠️</div>
+        <h3 class="modal-titulo">Deseja reiniciar a missão?</h3>
+        <p class="modal-descricao">
+            Atenção: Se você reiniciar o jogo agora, todo o progresso atual do grupo será cancelado e a sua pontuação de 
+            <span class="modal-destaque-pontos" id="modal-pontos-perdidos">0 pontos</span> será totalmente perdida!
+        </p>
+        <div class="modal-acoes">
+            <button type="button" class="btn-modal-cancelar" onclick="fecharModalReiniciar()">
+                🟢 Não, continuar jogando
+            </button>
+            <button type="button" class="btn-modal-confirmar" onclick="confirmarReiniciarJogo()">
+                🔴 Sim, reiniciar e zerar pontos
+            </button>
+        </div>
+    </div>
 </div>
 
 
@@ -2006,6 +2407,11 @@ function iniciarJogo() {
     game.grupo = nome;
 
     game.inicio = Date.now();
+
+    const elNomeGrupo = document.getElementById("painelNomeGrupo");
+    if (elNomeGrupo) {
+        elNomeGrupo.textContent = nome;
+    }
 
 
     document
@@ -3073,61 +3479,65 @@ function finalizarFase3() {
 
 
 /* =====================================================
-   MINI-GAME 4
+   MINI-GAME 4: O BRASIL NO PLANO CARTESIANO
 ===================================================== */
 
 function iniciarMapaFinal() {
-
-    /*
-       O mapa é propositalmente simples neste protótipo.
-       O Brasil está no 3º quadrante.
-    */
-
+    for (let q = 1; q <= 4; q++) {
+        const zona = document.getElementById(`zona-q${q}`);
+        if (zona) zona.classList.remove("acerto-destaque");
+        const btn = document.querySelector(`.btn-quadrante-escolha.btn-q${q}`);
+        if (btn) {
+            btn.style.background = "";
+            btn.style.borderColor = "";
+            btn.style.color = "";
+        }
+    }
 }
 
-
 function responderMapa(resposta) {
-
     tentativa();
 
-
-    if (
-        resposta === 3
-    ) {
-
+    if (resposta === 3) {
         adicionarPontos(200);
+        game.progresso.mapa = true;
 
+        const zonaQ3 = document.getElementById("zona-q3");
+        if (zonaQ3) {
+            zonaQ3.classList.add("acerto-destaque");
+        }
 
-        game.progresso.mapa =
-            true;
-
+        // Destaca visualmente o botão do 3º Quadrante selecionado embaixo
+        const btnQ3 = document.querySelector(".btn-quadrante-escolha.btn-q3");
+        if (btnQ3) {
+            btnQ3.style.background = "#06d6a0";
+            btnQ3.style.borderColor = "#ffffff";
+            btnQ3.style.color = "#0f172a";
+        }
 
         feedback(
-            "🌎 Correto! +200 pontos!",
+            "🎉 Parabéns! O Brasil fica a Oeste de Greenwich (x < 0) e ao Sul do Equador (y < 0), portanto fica no 3º QUADRANTE! +200 pontos!",
             "sucesso"
         );
 
-
         setTimeout(function() {
-
             iniciarFase(5);
+        }, 2200);
 
-        }, 1500);
+    } else {
+        erro(15);
 
+        let dicaGeografica = "";
+        if (resposta === 1) {
+            dicaGeografica = "❌ No 1º Quadrante (+x, +y) ficam a Europa e a Ásia (Leste e Norte). O Brasil fica a Oeste e ao Sul!";
+        } else if (resposta === 2) {
+            dicaGeografica = "❌ No 2º Quadrante (-x, +y) fica a América do Norte. O Brasil fica abaixo da linha do Equador (Sul)!";
+        } else if (resposta === 4) {
+            dicaGeografica = "❌ No 4º Quadrante (+x, -y) ficam a Oceania e o Sul da África. O Brasil fica a Oeste de Greenwich (-x)!";
+        }
+
+        feedback(dicaGeografica, "erro");
     }
-
-    else {
-
-        erro(20);
-
-
-        feedback(
-            "❌ Não é esse quadrante. Tente novamente.",
-            "erro"
-        );
-
-    }
-
 }
 
 
@@ -3759,6 +4169,59 @@ function mostrarResultado(dados) {
         dados.dicas;
 
 }
+
+
+/* =====================================================
+   BLOQUEIO E CONFIRMAÇÃO DE REINÍCIO DE JOGO
+===================================================== */
+
+function solicitarReiniciarJogo(diretoSemPerguntar = false) {
+    // Se o jogo nem iniciou ou se foi chamado na tela final sem pontos ativos
+    if (!game.inicio || game.finalizado || diretoSemPerguntar) {
+        confirmarReiniciarJogo();
+        return;
+    }
+
+    // Atualiza a quantidade atual de pontos na mensagem de alerta
+    const elPontos = document.getElementById("modal-pontos-perdidos");
+    if (elPontos) {
+        elPontos.textContent = `${game.pontuacao} pontos`;
+    }
+
+    const modal = document.getElementById("modal-confirmar-reiniciar");
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+function fecharModalReiniciar() {
+    const modal = document.getElementById("modal-confirmar-reiniciar");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+function confirmarReiniciarJogo() {
+    // Remove o interceptador para permitir o reload imediato sem alerta extra
+    window.onbeforeunload = null;
+    location.reload();
+}
+
+// Fechar modal caso o aluno aperte ESC no teclado
+window.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+        fecharModalReiniciar();
+    }
+});
+
+// Prevenção contra recarregamento ou fechamento acidental da aba no navegador
+window.addEventListener("beforeunload", function (e) {
+    if (game.inicio && !game.finalizado && game.pontuacao > 0) {
+        e.preventDefault();
+        e.returnValue = "Atenção: Ao sair ou recarregar a página, todos os seus pontos serão perdidos!";
+        return e.returnValue;
+    }
+});
 
 </script>
 
