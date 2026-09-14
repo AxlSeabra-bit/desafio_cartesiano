@@ -1,0 +1,9 @@
+# Arquivos de sistema operacional
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Temporários e backups de editores
+*.tmp
+*~
