@@ -664,194 +664,516 @@ h2 {
     margin-bottom: 20px;
 }
 
-.cartas {
+/* =====================================================
+   MINI-GAME 3: AGRUPE NOS QUADRANTES (MOBILE-FIRST)
+===================================================== */
+
+.card-fase3 {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.progresso-quadrantes-wrapper {
+    background: rgba(15, 20, 44, 0.7);
+    border-radius: 12px;
+    padding: 8px 16px;
+    margin: 10px auto 14px auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 500px;
+}
+
+.progresso-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffd166;
+}
+
+.barra-progresso-trilho {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.barra-progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd166, #06d6a0);
+    transition: width 0.35s ease;
+}
+
+.area-ponto-ativo {
+    margin: 10px auto 16px auto;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px auto;
-    max-width: 850px;
 }
 
-.carta {
-    background: #273469;
-    color: white;
-    padding: 14px 18px;
-    border-radius: 10px;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-    min-width: 90px;
+.card-ponto-ativo {
+    background: linear-gradient(135deg, #1f295b, #12183a);
+    border: 3px solid #ffd166;
+    border-radius: 18px;
+    padding: 14px 22px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 209, 102, 0.25);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    max-width: 360px;
+    transition: transform 0.25s ease;
 }
 
-.carta.selecionada {
-    background: #ffd166;
-    color: #222;
-    transform: scale(1.05);
+.tag-ponto-ativo {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffd166;
 }
 
-.carta.correta {
-    background: #06a77d;
-    color: white;
+.coordenada-destaque {
+    font-size: 34px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.5px;
+    padding: 2px 0;
 }
 
-.carta.errada {
-    animation: erro .4s;
-    background: #ef476f;
+.instrucao-toque {
+    font-size: 12px;
+    color: #cbd5e1;
 }
 
-@keyframes erro {
-
-    0%,100% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-6px);
-    }
-
-    75% {
-        transform: translateX(6px);
-    }
-
-}
-
-.quadrantes {
+.quadrantes-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    max-width: 750px;
-    margin: 25px auto;
+    gap: 12px;
+    max-width: 680px;
+    margin: 12px auto;
 }
 
 .quadrante {
+    border-radius: 16px;
+    padding: 12px 10px;
     min-height: 145px;
-    border: 4px dashed #aaa;
-    border-radius: 18px;
-    padding: 15px;
-    color: #333;
-    background: #f4f4f4;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    transition: .2s;
+    border: 3px dashed;
+    background: rgba(18, 24, 58, 0.88);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .quadrante:active {
-    transform: scale(.98);
+    transform: scale(0.96);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.quadrante-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quadrante-sigla {
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 6px;
 }
 
 .quadrante h3 {
-    margin-top: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
 }
 
+.quadrante-regra {
+    font-size: 12px;
+    margin: 2px 0 6px 0;
+    font-weight: 600;
+}
+
+.pontos-salvos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+    min-height: 42px;
+    align-content: flex-start;
+}
+
+.chip-ponto-salvo {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 12px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-flex;
+    align-items: center;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.4); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.quadrante.erro-shake {
+    animation: erroShake 0.4s ease-in-out;
+    border-color: #ef476f !important;
+}
+
+@keyframes erroShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.quadrante.acerto-pulse {
+    animation: acertoPulse 0.35s ease-in-out;
+}
+
+@keyframes acertoPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Cores específicas de cada quadrante */
 .q1 {
-    border-color: #06a77d;
+    border-color: #06d6a0;
+}
+.q1 .quadrante-sigla {
+    background: #06d6a0;
+    color: #0f172a;
+}
+.q1 .quadrante-regra {
+    color: #6ee7b7;
 }
 
 .q2 {
     border-color: #118ab2;
 }
+.q2 .quadrante-sigla {
+    background: #118ab2;
+    color: #ffffff;
+}
+.q2 .quadrante-regra {
+    color: #7dd3fc;
+}
 
 .q3 {
-    border-color: #8338ec;
+    border-color: #a855f7;
+}
+.q3 .quadrante-sigla {
+    background: #a855f7;
+    color: #ffffff;
+}
+.q3 .quadrante-regra {
+    color: #d8b4fe;
 }
 
 .q4 {
-    border-color: #f77f00;
+    border-color: #f97316;
+}
+.q4 .quadrante-sigla {
+    background: #f97316;
+    color: #ffffff;
+}
+.q4 .quadrante-regra {
+    color: #fdba74;
 }
 
 /* =====================================================
    MAPA
 ===================================================== */
 
-.mapa-simulado {
-    max-width: 750px;
-    margin: 25px auto;
-    padding: 20px;
-    background: #dff3ff;
-    border-radius: 18px;
+/* =====================================================
+   MINI-GAME 4: MAPA DOS QUADRANTES (MUNDIAL)
+===================================================== */
+
+.card-fase4 {
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+.mapa-mundo-container {
     position: relative;
-    height: 350px;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+    margin: 18px auto;
+    border-radius: 18px;
     overflow: hidden;
-    color: #273469;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    background-image: url('mapa_mundo.jpg');
+    background-size: cover;
+    background-position: center;
+    user-select: none;
 }
 
-.mapa-simulado::before {
-    content: "";
+/* 4 Zonas de Quadrantes interativas no Mapa */
+.mapa-quadrantes-overlay {
     position: absolute;
-    left: 50%;
     top: 0;
-    bottom: 0;
-    width: 3px;
-    background: rgba(39,52,105,.7);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 49% 51%;
+    grid-template-rows: 50% 50%;
+    z-index: 2;
 }
 
-.mapa-simulado::after {
-    content: "";
+.zona-mapa-quadrante {
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: flex;
+    padding: 8px;
+}
+
+.zona-mapa-quadrante:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.zona-mapa-quadrante.q1 {
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+.zona-mapa-quadrante.q2 {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.zona-mapa-quadrante.q3 {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+.zona-mapa-quadrante.q4 {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.badge-quadrante-mapa {
+    background: rgba(15, 20, 44, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    pointer-events: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.zona-mapa-quadrante.q1 .badge-quadrante-mapa { border-color: #06d6a0; color: #6ee7b7; }
+.zona-mapa-quadrante.q2 .badge-quadrante-mapa { border-color: #118ab2; color: #7dd3fc; }
+.zona-mapa-quadrante.q3 .badge-quadrante-mapa { border-color: #a855f7; color: #d8b4fe; }
+.zona-mapa-quadrante.q4 .badge-quadrante-mapa { border-color: #f97316; color: #fdba74; }
+
+.zona-mapa-quadrante.acerto-destaque {
+    background: rgba(6, 214, 160, 0.35) !important;
+    animation: pulsoAcertoMapa 0.8s infinite alternate;
+}
+
+@keyframes pulsoAcertoMapa {
+    0% { background: rgba(6, 214, 160, 0.25); }
+    100% { background: rgba(6, 214, 160, 0.45); }
+}
+
+/* Eixos Cartesiano sobre o Planisfério */
+.eixo-mapa-x {
     position: absolute;
     top: 50%;
     left: 0;
     right: 0;
     height: 3px;
-    background: rgba(39,52,105,.7);
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 4px #ffd166;
+    z-index: 3;
+    pointer-events: none;
+    transform: translateY(-50%);
 }
 
-.continente {
+.eixo-mapa-y {
     position: absolute;
-    font-size: 48px;
-    opacity: .9;
-    z-index: 2;
+    left: 49%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 4px #ffd166;
+    z-index: 3;
+    pointer-events: none;
+    transform: translateX(-50%);
 }
 
-.america-norte {
-    left: 12%;
-    top: 15%;
-}
-
-.america-sul {
-    left: 31%;
-    top: 55%;
-}
-
-.europa {
-    left: 57%;
-    top: 24%;
-}
-
-.africa {
-    left: 57%;
-    top: 53%;
-}
-
-.asia {
-    right: 10%;
-    top: 25%;
-}
-
-.brasil {
+.tag-eixo {
     position: absolute;
-    left: 40%;
-    top: 61%;
-    font-size: 42px;
-    z-index: 4;
-    filter: drop-shadow(0 0 5px #ffd166);
-}
-
-.eixos-legenda {
-    position: absolute;
-    z-index: 5;
+    background: rgba(15, 20, 44, 0.9);
+    color: #ffd166;
+    font-size: 10px;
     font-weight: bold;
-    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 209, 102, 0.4);
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
 }
 
-.eixo-x {
-    right: 8px;
-    top: calc(50% + 7px);
+.tag-norte {
+    top: 6px;
+    left: 49%;
+    transform: translateX(-50%);
 }
 
-.eixo-y {
-    left: calc(50% + 7px);
-    top: 5px;
+.tag-sul {
+    bottom: 6px;
+    left: 49%;
+    transform: translateX(-50%);
 }
+
+.tag-oeste {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tag-leste {
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Marcador do Brasil */
+.marcador-brasil {
+    position: absolute;
+    left: 31%;
+    top: 64%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.marcador-brasil:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+}
+
+.brasil-pin {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffd166, #009c3b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 209, 102, 0.8);
+    border: 2.5px solid #ffffff;
+    animation: pulsoBrasil 1.4s infinite alternate;
+}
+
+.brasil-bandeira {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.brasil-badge {
+    background: #009c3b;
+    color: #ffdf00;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-top: 3px;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+}
+
+@keyframes pulsoBrasil {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 223, 0, 0.85);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 0 12px rgba(255, 223, 0, 0);
+        transform: scale(1.12);
+    }
+}
+
+/* Grade de Botões de Resposta */
+.botoes-quadrantes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 580px;
+    margin: 16px auto;
+}
+
+.btn-quadrante-escolha {
+    background: #273469;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.btn-quadrante-escolha small {
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.btn-quadrante-escolha:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.btn-quadrante-escolha:active {
+    transform: translateY(0);
+}
+
+.btn-quadrante-escolha.btn-q1 { border-color: #06d6a0; }
+.btn-quadrante-escolha.btn-q1:hover { background: #06d6a0; color: #0f172a; }
+
+.btn-quadrante-escolha.btn-q2 { border-color: #118ab2; }
+.btn-quadrante-escolha.btn-q2:hover { background: #118ab2; }
+
+.btn-quadrante-escolha.btn-q3 { border-color: #a855f7; }
+.btn-quadrante-escolha.btn-q3:hover { background: #a855f7; }
+
+.btn-quadrante-escolha.btn-q4 { border-color: #f97316; }
+.btn-quadrante-escolha.btn-q4:hover { background: #f97316; }
 
 /* =====================================================
    CRUZADINHA
@@ -1095,26 +1417,30 @@ h2 {
         font-size: 24px;
     }
 
-    .quadrantes {
+    .quadrantes-grid {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
     }
 
     .quadrante {
-        min-height: 125px;
-        padding: 10px 5px;
+        min-height: 130px;
+        padding: 8px 6px;
     }
 
     .quadrante h3 {
-        font-size: 16px;
+        font-size: 13px;
     }
 
-    .quadrante p {
-        font-size: 12px;
+    .quadrante-regra {
+        font-size: 11px;
     }
 
-    .carta {
-        padding: 12px 14px;
+    .coordenada-destaque {
+        font-size: 28px;
+    }
+
+    .card-ponto-ativo {
+        padding: 10px 16px;
     }
 
     .pistas-cruzadinha {
@@ -1141,16 +1467,37 @@ h2 {
         font-size: 7px;
     }
 
-    .mapa-simulado {
-        height: 280px;
+    .mapa-mundo-container {
+        aspect-ratio: 16 / 10;
+        border-radius: 14px;
     }
 
-    .continente {
-        font-size: 35px;
+    .botoes-quadrantes-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
     }
 
-    .brasil {
-        font-size: 34px;
+    .btn-quadrante-escolha {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .btn-quadrante-escolha small {
+        font-size: 10px;
+    }
+
+    .brasil-pin {
+        width: 38px;
+        height: 38px;
+    }
+
+    .brasil-bandeira {
+        font-size: 20px;
+    }
+
+    .brasil-badge {
+        font-size: 9px;
+        padding: 1px 5px;
     }
 
     .final-card {
@@ -1414,73 +1761,77 @@ h2 {
 
     <div id="fase3" class="fase">
 
-        <div class="card-fase">
+        <div class="card-fase card-fase3">
 
             <h2 class="titulo-fase">
                 🧩 Mini-game 3 — Agrupe nos Quadrantes
             </h2>
 
             <p class="instrucoes">
-
-                Toque em uma carta e depois
-                escolha o quadrante correto.
-
+                Observe o ponto em destaque e <strong>toque no quadrante correto</strong> para arquivá-lo!
             </p>
 
-            <div id="cartas" class="cartas"></div>
+            <!-- Barra de Progresso Mobile -->
+            <div class="progresso-quadrantes-wrapper">
+                <div class="progresso-info">
+                    <span id="contador-quadrantes" class="contador-quadrantes">Ponto 1 de 16</span>
+                    <span id="porcentagem-quadrantes" class="porcentagem-quadrantes">0%</span>
+                </div>
+                <div class="barra-progresso-trilho">
+                    <div id="barra-progresso-fill" class="barra-progresso-fill" style="width: 0%;"></div>
+                </div>
+            </div>
 
+            <!-- Card da Coordenada Ativa (Uma por vez, em destaque) -->
+            <div class="area-ponto-ativo">
+                <div class="card-ponto-ativo" id="card-ponto-ativo">
+                    <span class="tag-ponto-ativo">Ponto Atual</span>
+                    <div class="coordenada-destaque" id="coordenada-destaque">( 3 , 5 )</div>
+                    <span class="instrucao-toque">👇 Toque no quadrante correspondente abaixo:</span>
+                </div>
+            </div>
 
-            <div class="quadrantes">
+            <!-- Grade 2x2 dos 4 Quadrantes Cartesianos -->
+            <div class="quadrantes-grid">
 
-                <div
-                    class="quadrante q2"
-                    data-quadrante="2">
-
-                    <h3>2º QUADRANTE</h3>
-
-                    <p>
-                        x negativo / y positivo
-                    </p>
-
+                <!-- 2º Quadrante (Superior Esquerdo) -->
+                <div class="quadrante q2" data-quadrante="2">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q2</span>
+                        <h3>2º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(-x , +y)</p>
+                    <div class="pontos-salvos" id="pontos-q2"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q1"
-                    data-quadrante="1">
-
-                    <h3>1º QUADRANTE</h3>
-
-                    <p>
-                        x positivo / y positivo
-                    </p>
-
+                <!-- 1º Quadrante (Superior Direito) -->
+                <div class="quadrante q1" data-quadrante="1">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q1</span>
+                        <h3>1º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(+x , +y)</p>
+                    <div class="pontos-salvos" id="pontos-q1"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q3"
-                    data-quadrante="3">
-
-                    <h3>3º QUADRANTE</h3>
-
-                    <p>
-                        x negativo / y negativo
-                    </p>
-
+                <!-- 3º Quadrante (Inferior Esquerdo) -->
+                <div class="quadrante q3" data-quadrante="3">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q3</span>
+                        <h3>3º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(-x , -y)</p>
+                    <div class="pontos-salvos" id="pontos-q3"></div>
                 </div>
 
-
-                <div
-                    class="quadrante q4"
-                    data-quadrante="4">
-
-                    <h3>4º QUADRANTE</h3>
-
-                    <p>
-                        x positivo / y negativo
-                    </p>
-
+                <!-- 4º Quadrante (Inferior Direito) -->
+                <div class="quadrante q4" data-quadrante="4">
+                    <div class="quadrante-header">
+                        <span class="quadrante-sigla">Q4</span>
+                        <h3>4º QUADRANTE</h3>
+                    </div>
+                    <p class="quadrante-regra">(+x , -y)</p>
+                    <div class="pontos-salvos" id="pontos-q4"></div>
                 </div>
 
             </div>
@@ -1496,102 +1847,80 @@ h2 {
 
     <div id="fase4" class="fase">
 
-        <div class="card-fase">
+        <div class="card-fase card-fase4">
 
             <h2 class="titulo-fase">
-                🌎 Mini-game 4 — Mapa dos Quadrantes
+                🌎 Mini-game 4 — O Brasil no Plano Cartesiano
             </h2>
 
-            <p>
-                Observe a posição aproximada do Brasil
-                no mapa.
+            <p class="instrucoes-fase">
+                Imagine o <strong>Planisfério Mundial</strong> mapeado como um plano cartesiano,
+                onde o <strong>Eixo X é a Linha do Equador</strong> e o <strong>Eixo Y é o Meridiano de Greenwich</strong>.
             </p>
 
-            <p>
-                As linhas representam os eixos do
-                plano cartesiano.
-            </p>
+            <!-- Container do Mapa do Mundo com Plano Cartesiano -->
+            <div class="mapa-mundo-container" id="mapa-mundo-container">
+                <!-- Eixo X (Linha do Equador) -->
+                <div class="eixo-mapa-x"></div>
+                <span class="tag-eixo tag-oeste">-x (Oeste)</span>
+                <span class="tag-eixo tag-leste">+x (Leste)</span>
 
+                <!-- Eixo Y (Meridiano de Greenwich) -->
+                <div class="eixo-mapa-y"></div>
+                <span class="tag-eixo tag-norte">+y (Norte)</span>
+                <span class="tag-eixo tag-sul">-y (Sul)</span>
 
-            <div class="mapa-simulado">
-
-                <div class="eixos-legenda eixo-x">
-                    +x
+                <!-- 4 Zonas Interativas de Quadrantes (Dispostas cartesianamente) -->
+                <div class="mapa-quadrantes-overlay">
+                    <!-- 2º Quadrante (Superior Esquerdo) -->
+                    <div class="zona-mapa-quadrante q2" id="zona-q2" onclick="responderMapa(2)" title="Tocar no 2º Quadrante">
+                        <span class="badge-quadrante-mapa">2º Quadrante (-x, +y)</span>
+                    </div>
+                    <!-- 1º Quadrante (Superior Direito) -->
+                    <div class="zona-mapa-quadrante q1" id="zona-q1" onclick="responderMapa(1)" title="Tocar no 1º Quadrante">
+                        <span class="badge-quadrante-mapa">1º Quadrante (+x, +y)</span>
+                    </div>
+                    <!-- 3º Quadrante (Inferior Esquerdo) -->
+                    <div class="zona-mapa-quadrante q3" id="zona-q3" onclick="responderMapa(3)" title="Tocar no 3º Quadrante">
+                        <span class="badge-quadrante-mapa">3º Quadrante (-x, -y)</span>
+                    </div>
+                    <!-- 4º Quadrante (Inferior Direito) -->
+                    <div class="zona-mapa-quadrante q4" id="zona-q4" onclick="responderMapa(4)" title="Tocar no 4º Quadrante">
+                        <span class="badge-quadrante-mapa">4º Quadrante (+x, -y)</span>
+                    </div>
                 </div>
 
-                <div class="eixos-legenda eixo-y">
-                    +y
+                <!-- Destaque do Brasil com Marcador Animado -->
+                <div class="marcador-brasil" id="marcador-brasil" onclick="responderMapa(3)" title="Brasil localizado no 3º Quadrante">
+                    <div class="brasil-pin">
+                        <span class="brasil-bandeira">🇧🇷</span>
+                    </div>
+                    <div class="brasil-badge">BRASIL</div>
                 </div>
-
-
-                <div class="continente america-norte">
-                    🌎
-                </div>
-
-                <div class="continente america-sul">
-                    🌎
-                </div>
-
-                <div class="continente europa">
-                    🌍
-                </div>
-
-                <div class="continente africa">
-                    🌍
-                </div>
-
-                <div class="continente asia">
-                    🌏
-                </div>
-
-
-                <div class="brasil">
-                    🇧🇷
-                </div>
-
             </div>
 
-
-            <p style="text-align:center">
-
-                <strong>
-                    Em qual quadrante está o Brasil?
-                </strong>
-
+            <p style="text-align:center; font-size:18px; margin-top:14px;">
+                <strong>Em qual quadrante do plano cartesiano o Brasil fica?</strong>
             </p>
 
-
-            <div style="
-                display:flex;
-                justify-content:center;
-                gap:10px;
-                flex-wrap:wrap;
-            ">
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(1)">
-                    1º QUADRANTE
+            <!-- Botões de Escolha em Grade 2x2 correspondendo aos quadrantes -->
+            <div class="botoes-quadrantes-grid">
+                <button class="btn-quadrante-escolha btn-q2" onclick="responderMapa(2)">
+                    <span>2º QUADRANTE</span>
+                    <small>Oeste / Norte (-x, +y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(2)">
-                    2º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q1" onclick="responderMapa(1)">
+                    <span>1º QUADRANTE</span>
+                    <small>Leste / Norte (+x, +y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(3)">
-                    3º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q3" onclick="responderMapa(3)">
+                    <span>3º QUADRANTE</span>
+                    <small>Oeste / Sul (-x, -y)</small>
                 </button>
-
-                <button
-                    class="btn btn-secundario"
-                    onclick="responderMapa(4)">
-                    4º QUADRANTE
+                <button class="btn-quadrante-escolha btn-q4" onclick="responderMapa(4)">
+                    <span>4º QUADRANTE</span>
+                    <small>Leste / Sul (+x, -y)</small>
                 </button>
-
             </div>
 
         </div>
@@ -2762,12 +3091,10 @@ function finalizarFase2() {
 
 
 /* =====================================================
-   MINI-GAME 3
-   FUNCIONA POR TOQUE
+   MINI-GAME 3: AGRUPE NOS QUADRANTES
 ===================================================== */
 
 const cartas = [
-
     { id:1, x:3, y:5, q:1 },
     { id:2, x:2, y:1, q:1 },
     { id:3, x:6, y:4, q:1 },
@@ -2787,313 +3114,190 @@ const cartas = [
     { id:14, x:3, y:-5, q:4 },
     { id:15, x:7, y:-1, q:4 },
     { id:16, x:2, y:-6, q:4 }
-
 ];
 
-
+let cartasEmbaralhadas = [];
+let indiceCartaAtual = 0;
 let cartasCorretas = 0;
 
-let cartaSelecionada = null;
-
-
 function iniciarQuadrantes() {
+    // 1. Embaralha aleatoriamente as coordenadas (Fisher-Yates)
+    cartasEmbaralhadas = [...cartas];
+    for (let i = cartasEmbaralhadas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cartasEmbaralhadas[i], cartasEmbaralhadas[j]] = [cartasEmbaralhadas[j], cartasEmbaralhadas[i]];
+    }
 
+    indiceCartaAtual = 0;
     cartasCorretas = 0;
 
-    cartaSelecionada = null;
+    // Limpa os pontos salvos dentro dos 4 quadrantes
+    for (let q = 1; q <= 4; q++) {
+        const containerQ = document.getElementById(`pontos-q${q}`);
+        if (containerQ) containerQ.innerHTML = "";
+    }
 
-
-    const container =
-        document.getElementById("cartas");
-
-
-    container.innerHTML = "";
-
-
-    cartas.forEach(function(carta) {
-
-        const elemento =
-            document.createElement("button");
-
-
-        elemento.className =
-            "carta";
-
-
-        elemento.dataset.id =
-            carta.id;
-
-
-        elemento.textContent =
-            `(${carta.x}, ${carta.y})`;
-
-
-        elemento.addEventListener(
-            "click",
-            function() {
-
-                selecionarCarta(
-                    carta.id
-                );
-
-            }
-        );
-
-
-        container.appendChild(
-            elemento
-        );
-
+    // Vincula os cliques diretamente aos 4 quadrantes
+    document.querySelectorAll(".quadrante").forEach(area => {
+        area.onclick = function() {
+            const quadranteEscolhido = Number(area.dataset.quadrante);
+            processarEscolhaQuadrante(quadranteEscolhido, area);
+        };
     });
 
-
-    document
-        .querySelectorAll(".quadrante")
-        .forEach(area => {
-
-            area.onclick =
-                function() {
-
-                    if (
-                        cartaSelecionada === null
-                    ) {
-
-                        feedback(
-                            "👆 Primeiro escolha uma carta.",
-                            "aviso"
-                        );
-
-                        return;
-
-                    }
-
-
-                    verificarCarta(
-                        cartaSelecionada,
-                        Number(
-                            area.dataset.quadrante
-                        ),
-                        area
-                    );
-
-                };
-
-        });
-
+    // Exibe o primeiro ponto sorteado
+    exibirCartaAtual();
 }
 
-
-function selecionarCarta(id) {
-
-    const elemento =
-        document.querySelector(
-            `.carta[data-id="${id}"]`
-        );
-
-
-    if (
-        elemento.classList.contains(
-            "correta"
-        )
-    ) {
-
+function exibirCartaAtual() {
+    if (indiceCartaAtual >= cartasEmbaralhadas.length) {
+        finalizarFase3();
         return;
-
     }
 
+    const carta = cartasEmbaralhadas[indiceCartaAtual];
 
-    document
-        .querySelectorAll(".carta")
-        .forEach(carta => {
+    // Atualiza a coordenada em destaque
+    const elCoordenada = document.getElementById("coordenada-destaque");
+    if (elCoordenada) {
+        elCoordenada.textContent = `( ${carta.x} , ${carta.y} )`;
+        elCoordenada.style.animation = "none";
+        void elCoordenada.offsetWidth;
+        elCoordenada.style.animation = "popIn 0.3s ease-out";
+    }
 
-            carta.classList.remove(
-                "selecionada"
-            );
+    // Atualiza contador e progresso
+    const elContador = document.getElementById("contador-quadrantes");
+    if (elContador) {
+        elContador.textContent = `Ponto ${indiceCartaAtual + 1} de ${cartasEmbaralhadas.length}`;
+    }
 
-        });
-
-
-    cartaSelecionada =
-        id;
-
-
-    elemento.classList.add(
-        "selecionada"
-    );
-
-
-    feedback(
-        "🎯 Agora toque no quadrante correto.",
-        "aviso"
-    );
-
+    const elPorcentagem = document.getElementById("porcentagem-quadrantes");
+    const elBarra = document.getElementById("barra-progresso-fill");
+    const pct = Math.round((indiceCartaAtual / cartasEmbaralhadas.length) * 100);
+    if (elPorcentagem) elPorcentagem.textContent = `${pct}%`;
+    if (elBarra) elBarra.style.width = `${pct}%`;
 }
 
+function processarEscolhaQuadrante(quadranteEscolhido, areaElemento) {
+    if (indiceCartaAtual >= cartasEmbaralhadas.length) return;
 
-function verificarCarta(
-    id,
-    quadrante,
-    area
-) {
-
-    const carta =
-        cartas.find(
-            item =>
-                item.id === id
-        );
-
-
-    const elemento =
-        document.querySelector(
-            `.carta[data-id="${id}"]`
-        );
-
-
+    const carta = cartasEmbaralhadas[indiceCartaAtual];
     tentativa();
 
-
-    if (
-        carta.q === quadrante
-    ) {
-
+    if (carta.q === quadranteEscolhido) {
+        // Acerto!
         cartasCorretas++;
-
-
         adicionarPontos(20);
 
+        // Feedback de pulso no quadrante correto
+        areaElemento.classList.add("acerto-pulse");
+        setTimeout(() => areaElemento.classList.remove("acerto-pulse"), 350);
 
-        elemento.classList.remove(
-            "selecionada"
-        );
-
-
-        elemento.classList.add(
-            "correta"
-        );
-
-
-        cartaSelecionada =
-            null;
-
-
-        feedback(
-            "✅ Correto! +20 pontos.",
-            "sucesso"
-        );
-
-
-        if (
-            cartasCorretas === 16
-        ) {
-
-            adicionarPontos(100);
-
-
-            game.progresso.quadrantes =
-                true;
-
-
-            feedback(
-                "🏆 Todos classificados! +100 bônus!",
-                "sucesso"
-            );
-
-
-            setTimeout(function() {
-
-                iniciarFase(4);
-
-            }, 1800);
-
+        // Salva o ponto dentro do quadrante escolhido
+        const containerSalvos = document.getElementById(`pontos-q${quadranteEscolhido}`);
+        if (containerSalvos) {
+            const badge = document.createElement("span");
+            badge.className = "chip-ponto-salvo";
+            badge.textContent = `(${carta.x}, ${carta.y})`;
+            containerSalvos.appendChild(badge);
         }
 
-    }
+        feedback(`✅ Muito bem! (${carta.x}, ${carta.y}) pertence ao ${carta.q}º Quadrante! +20 pontos`, "sucesso");
 
-    else {
+        // Passa automaticamente para o próximo ponto
+        indiceCartaAtual++;
 
+        if (indiceCartaAtual >= cartasEmbaralhadas.length) {
+            setTimeout(finalizarFase3, 700);
+        } else {
+            setTimeout(exibirCartaAtual, 350);
+        }
+
+    } else {
+        // Erro
         erro(10);
 
+        // Efeito de tremor no quadrante incorreto
+        areaElemento.classList.add("erro-shake");
+        setTimeout(() => areaElemento.classList.remove("erro-shake"), 450);
 
-        elemento.classList.add(
-            "errada"
-        );
+        let explicacao = "";
+        if (carta.x > 0 && carta.y > 0) explicacao = "x é positivo e y é positivo (1º Quadrante)";
+        else if (carta.x < 0 && carta.y > 0) explicacao = "x é negativo e y é positivo (2º Quadrante)";
+        else if (carta.x < 0 && carta.y < 0) explicacao = "x é negativo e y é negativo (3º Quadrante)";
+        else if (carta.x > 0 && carta.y < 0) explicacao = "x é positivo e y é negativo (4º Quadrante)";
 
-
-        feedback(
-            "❌ Quadrante incorreto. Tente novamente.",
-            "erro"
-        );
-
-
-        setTimeout(function() {
-
-            elemento.classList.remove(
-                "errada"
-            );
-
-        }, 600);
-
+        feedback(`❌ Atenção! Em (${carta.x}, ${carta.y}), ${explicacao}. Toque no quadrante correto!`, "erro");
     }
+}
 
+function finalizarFase3() {
+    game.progresso.quadrantes = true;
+    adicionarPontos(100);
+
+    const elPorcentagem = document.getElementById("porcentagem-quadrantes");
+    const elBarra = document.getElementById("barra-progresso-fill");
+    if (elPorcentagem) elPorcentagem.textContent = "100%";
+    if (elBarra) elBarra.style.width = "100%";
+
+    const elCoordenada = document.getElementById("coordenada-destaque");
+    if (elCoordenada) elCoordenada.textContent = "🎉 Concluído!";
+
+    feedback("🏆 Excelente! Todos os 16 pontos foram corretamente classificados nos quadrantes! +100 bônus!", "sucesso");
+
+    setTimeout(function() {
+        iniciarFase(4);
+    }, 2000);
 }
 
 
 /* =====================================================
-   MINI-GAME 4
+   MINI-GAME 4: O BRASIL NO PLANO CARTESIANO
 ===================================================== */
 
 function iniciarMapaFinal() {
-
-    /*
-       O mapa é propositalmente simples neste protótipo.
-       O Brasil está no 3º quadrante.
-    */
-
+    for (let q = 1; q <= 4; q++) {
+        const zona = document.getElementById(`zona-q${q}`);
+        if (zona) zona.classList.remove("acerto-destaque");
+    }
 }
 
-
 function responderMapa(resposta) {
-
     tentativa();
 
-
-    if (
-        resposta === 3
-    ) {
-
+    if (resposta === 3) {
         adicionarPontos(200);
+        game.progresso.mapa = true;
 
-
-        game.progresso.mapa =
-            true;
-
+        const zonaQ3 = document.getElementById("zona-q3");
+        if (zonaQ3) {
+            zonaQ3.classList.add("acerto-destaque");
+        }
 
         feedback(
-            "🌎 Correto! +200 pontos!",
+            "🎉 Parabéns! O Brasil fica a Oeste de Greenwich (x < 0) e ao Sul do Equador (y < 0), portanto fica no 3º QUADRANTE! +200 pontos!",
             "sucesso"
         );
 
-
         setTimeout(function() {
-
             iniciarFase(5);
+        }, 2200);
 
-        }, 1500);
+    } else {
+        erro(15);
 
+        let dicaGeografica = "";
+        if (resposta === 1) {
+            dicaGeografica = "❌ No 1º Quadrante (+x, +y) ficam a Europa e a Ásia (Leste e Norte). O Brasil fica a Oeste e ao Sul!";
+        } else if (resposta === 2) {
+            dicaGeografica = "❌ No 2º Quadrante (-x, +y) fica a América do Norte. O Brasil fica abaixo da linha do Equador (Sul)!";
+        } else if (resposta === 4) {
+            dicaGeografica = "❌ No 4º Quadrante (+x, -y) ficam a Oceania e o Sul da África. O Brasil fica a Oeste de Greenwich (-x)!";
+        }
+
+        feedback(dicaGeografica, "erro");
     }
-
-    else {
-
-        erro(20);
-
-
-        feedback(
-            "❌ Não é esse quadrante. Tente novamente.",
-            "erro"
-        );
-
-    }
-
 }
 
 
