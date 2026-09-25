@@ -1766,6 +1766,15 @@ h2 {
             ACESSAR BRIEFING DA MISSÃO ➡️
         </button>
 
+        <a
+            id="btnVerPlacarAntes"
+            href="placar.html"
+            target="_blank"
+            class="btn"
+            style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 700; border-radius: 12px; padding: 11px 16px; cursor: pointer; transition: all 0.2s;">
+            🏆 VER PLACAR DA TURMA
+        </a>
+
     </div>
 
 </section>
@@ -2325,7 +2334,7 @@ h2 {
             </button>
             <a
                 id="linkVerPlacarHost"
-                href="host.html#ranking"
+                href="placar.html"
                 target="_blank"
                 class="btn"
                 style="display: none; background: linear-gradient(135deg, #f59e0b, #d97706); text-decoration: none; align-items: center;">
@@ -2412,6 +2421,7 @@ function avancarParaNarrativa() {
     }
 
     game.grupo = nome;
+    try { localStorage.setItem("desafioNomeGrupo", nome); } catch(e) {}
 
     const elNarrativaGrupo = document.getElementById("narrativaNomeGrupo");
     if (elNarrativaGrupo) elNarrativaGrupo.textContent = nome;
@@ -3701,7 +3711,8 @@ function salvarResultado(dados) {
                     elStatus.style.borderColor = "#10b981";
                     elTexto.innerHTML = `🎉 <strong>Tempo registrado no Placar da Sala ${salaCompeticaoAtual}!</strong>`;
                     if (elLinkPlacar) {
-                        elLinkPlacar.href = `host.html?sala=${salaCompeticaoAtual}`;
+                        const nomeEq = encodeURIComponent(dados.grupo || "");
+                        elLinkPlacar.href = `placar.html?sala=${salaCompeticaoAtual || "9A"}&equipe=${nomeEq}`;
                         elLinkPlacar.style.display = "inline-flex";
                     }
                 } catch {}
@@ -3729,7 +3740,8 @@ function salvarResultado(dados) {
             elStatus.style.borderColor = "#10b981";
             elTexto.innerHTML = `🎉 <strong>Registrado no Placar da Sala!</strong><br>Sua equipe está em <strong>#${info.posicao}º lugar</strong>!`;
             if (elLinkPlacar) {
-                if (salaCompeticaoAtual) elLinkPlacar.href = `host.html?sala=${salaCompeticaoAtual}`;
+                const nomeEq = encodeURIComponent(dados.grupo || "");
+                elLinkPlacar.href = `placar.html?sala=${salaCompeticaoAtual || "9A"}&equipe=${nomeEq}`;
                 elLinkPlacar.style.display = "inline-flex";
             }
         })
@@ -3779,6 +3791,11 @@ function inicializarSalaOnline() {
         if (badge && label) {
             label.textContent = salaCompeticaoAtual;
             badge.style.display = "block";
+        }
+
+        const btnPlacarAntes = document.getElementById("btnVerPlacarAntes");
+        if (btnPlacarAntes) {
+            btnPlacarAntes.href = `placar.html?sala=${salaCompeticaoAtual}`;
         }
 
         conectarMqttJogo();

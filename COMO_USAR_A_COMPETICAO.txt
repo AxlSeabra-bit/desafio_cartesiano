@@ -36,6 +36,9 @@ PASSO A PASSO PARA APLICAR NA SALA:
      entram AUTOMATICAMENTE no Placar da sua tela!
    - Há um Pódio de 1º, 2º e 3º lugar com coroa e medalhas, além de
      uma fanfarra sonora a cada equipe que conclui.
+   - Os alunos contam com uma TELA EXCLUSIVA DE PLACAR ("placar.html"),
+     que eles podem acessar pelo celular antes de começar e logo após
+     concluir o jogo, 100% livre de controles do professor!
 
 6. FINALIZAÇÃO E EXPORTAÇÃO:
    - Ao fim da aula, clique no botão "📥 Exportar CSV" no painel para
