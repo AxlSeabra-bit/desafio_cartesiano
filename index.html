@@ -1747,6 +1747,10 @@ h2 {
             e recuperem os dados do sistema cartesiano!
         </p>
 
+        <div id="badgeSalaOnline" style="display:none; margin: 12px auto; padding: 6px 16px; border-radius: 20px; background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; font-size: 13px; font-weight: 700; width: fit-content;">
+            🌐 Sala da Competição: <span id="labelSalaOnline">9A</span>
+        </div>
+
         <input
             id="nomeGrupo"
             type="text"
@@ -2347,6 +2351,7 @@ h2 {
 </div>
 
 
+<script src="mqtt.min.js"></script>
 <script>
 
 /* =====================================================
@@ -3675,7 +3680,7 @@ function salvarResultado(dados) {
     resultados.push(dados);
     localStorage.setItem(chave, JSON.stringify(resultados));
 
-    // Envio automático para o Placar da Sala (Modo Competição Host LAN)
+    // Envio automático para o Placar da Competição (Modo Internet / MQTT e LAN)
     const elStatus = document.getElementById("statusPlacarHost");
     const elTexto = document.getElementById("textoPlacarHost");
     const elLinkPlacar = document.getElementById("linkVerPlacarHost");
@@ -3684,6 +3689,40 @@ function salvarResultado(dados) {
         elStatus.style.display = "block";
         elTexto.textContent = "📡 Enviando seu tempo para o Placar da Sala...";
 
+        // 1. Envio em Tempo Real via MQTT (Nuvem / Internet)
+        if (salaCompeticaoAtual && clientMqttJogo) {
+            const payload = {
+                grupo: dados.grupo,
+                pontuacao: dados.pontuacao,
+                tempo: dados.tempo,
+                erros: dados.erros,
+                dicas: dados.dicas,
+                sala: salaCompeticaoAtual,
+                hora: new Date().toLocaleTimeString("pt-BR").slice(0, 5)
+            };
+            const topico = `desafio_cartesiano/v1/sala_${salaCompeticaoAtual}/resultado`;
+
+            const publicar = () => {
+                try {
+                    clientMqttJogo.publish(topico, JSON.stringify(payload), { qos: 1 });
+                    elStatus.style.background = "rgba(16, 185, 129, 0.25)";
+                    elStatus.style.borderColor = "#10b981";
+                    elTexto.innerHTML = `🎉 <strong>Tempo registrado no Placar da Sala ${salaCompeticaoAtual}!</strong>`;
+                    if (elLinkPlacar) {
+                        elLinkPlacar.href = `host.html?sala=${salaCompeticaoAtual}`;
+                        elLinkPlacar.style.display = "inline-flex";
+                    }
+                } catch {}
+            };
+
+            if (clientMqttJogo.connected) {
+                publicar();
+            } else {
+                clientMqttJogo.once("connect", publicar);
+            }
+        }
+
+        // 2. Envio HTTP local (Fallback LAN)
         fetch("/api/ranking", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -3697,11 +3736,13 @@ function salvarResultado(dados) {
             elStatus.style.background = "rgba(16, 185, 129, 0.25)";
             elStatus.style.borderColor = "#10b981";
             elTexto.innerHTML = `🎉 <strong>Registrado no Placar da Sala!</strong><br>Sua equipe está em <strong>#${info.posicao}º lugar</strong>!`;
-            if (elLinkPlacar) elLinkPlacar.style.display = "inline-flex";
+            if (elLinkPlacar) {
+                if (salaCompeticaoAtual) elLinkPlacar.href = `host.html?sala=${salaCompeticaoAtual}`;
+                elLinkPlacar.style.display = "inline-flex";
+            }
         })
         .catch(() => {
-            // Em caso de modo local isolado ou sem host ativo, oculta aviso de envio
-            elStatus.style.display = "none";
+            if (!salaCompeticaoAtual) elStatus.style.display = "none";
         });
     }
 }
@@ -3727,6 +3768,58 @@ function mostrarResultado(dados) {
     const elDicas = document.getElementById("resultadoDicas");
     if (elDicas) elDicas.textContent = dados.dicas;
 }
+
+/* =====================================================
+   MODO COMPETIÇÃO ONLINE (SALA DE AULA PELA INTERNET VIA MQTT)
+===================================================== */
+let salaCompeticaoAtual = "";
+let clientMqttJogo = null;
+
+function inicializarSalaOnline() {
+    const params = new URLSearchParams(window.location.search);
+    const salaParam = params.get("sala") || localStorage.getItem("desafioCartesianoSala") || "";
+    if (salaParam) {
+        salaCompeticaoAtual = salaParam.toUpperCase().trim().replace(/[^A-Z0-9_-]/g, "");
+        localStorage.setItem("desafioCartesianoSala", salaCompeticaoAtual);
+
+        const badge = document.getElementById("badgeSalaOnline");
+        const label = document.getElementById("labelSalaOnline");
+        if (badge && label) {
+            label.textContent = salaCompeticaoAtual;
+            badge.style.display = "block";
+        }
+
+        conectarMqttJogo();
+    }
+}
+
+function conectarMqttJogo() {
+    if (!salaCompeticaoAtual || typeof mqtt === "undefined") return;
+    try {
+        const broker = "wss://broker.emqx.io:8084/mqtt";
+        const fallback = "wss://broker.hivemq.com:8884/mqtt";
+        const clientId = "aluno_" + Math.random().toString(36).substring(2, 9);
+
+        const iniciar = (url, isRetry = false) => {
+            clientMqttJogo = mqtt.connect(url, {
+                clientId,
+                clean: true,
+                connectTimeout: 5000,
+                reconnectPeriod: 4000
+            });
+            clientMqttJogo.on("error", () => {
+                if (!isRetry) {
+                    try { clientMqttJogo.end(true); } catch {}
+                    iniciar(fallback, true);
+                }
+            });
+        };
+        iniciar(broker);
+    } catch {}
+}
+
+// Inicializa a sala online ao carregar
+window.addEventListener("DOMContentLoaded", inicializarSalaOnline);
 
 /* =====================================================
    NOVO JOGO (APENAS NA TELA FINAL - SEÇÃO 20)
