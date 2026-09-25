@@ -7,3 +7,4 @@ $RECYCLE.BIN/
 # Temporários e backups de editores
 *.tmp
 *~
+.vercel
