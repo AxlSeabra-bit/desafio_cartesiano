@@ -35,13 +35,7 @@ echo  * Para encerrar a competicao, feche esta janela.
 echo =======================================================
 echo.
 
-where python >nul 2>nul
-if %errorlevel% equ 0 (
-    echo [OK] Executando servidor com motor Python...
-    python servidor_host.py
-) else (
-    echo [OK] Executando servidor nativo do Windows...
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0servidor_host.ps1"
-)
+echo [OK] Executando servidor nativo do Windows (sem precisar instalar nada)...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0servidor_host.ps1"
 
 pause

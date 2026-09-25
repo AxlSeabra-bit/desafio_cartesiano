@@ -1,4 +1,4 @@
-# Servidor Host da Competição em PowerShell Nativo (TcpListener - Sem necessidade de Admin)
+﻿# Servidor Host da Competicao em PowerShell Nativo (TcpListener - Sem necessidade de Admin)
 param(
     [int]$Port = 8080
 )
@@ -55,7 +55,7 @@ $urlHost = "http://localhost:$Port/host.html"
 $urlJogo = "http://$($localIP):$Port/index.html"
 
 Write-Host "=================================================================" -ForegroundColor Cyan
-Write-Host "   🏆 DESAFIO CARTESIANO — SERVIDOR HOST DA SALA (POWERSHELL)   " -ForegroundColor Green
+Write-Host "   [HOST] DESAFIO CARTESIANO - SERVIDOR DA SALA (POWERSHELL)    " -ForegroundColor Green
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host " * Painel do Host (Projetor/Tela): $urlHost" -ForegroundColor Yellow
 Write-Host " * Link para os Alunos (Mesmo Wi-Fi): $urlJogo" -ForegroundColor Yellow
@@ -84,7 +84,6 @@ try {
         $method = $parts[0]
         $rawUrl = $parts[1].Split("?")[0]
 
-        # Lê cabeçalhos
         $contentLength = 0
         while (($headerLine = $reader.ReadLine()) -and $headerLine.Trim().Length -gt 0) {
             if ($headerLine -match "Content-Length:\s*(\d+)") {
@@ -92,7 +91,6 @@ try {
             }
         }
 
-        # Lê corpo se houver
         $body = ""
         if ($contentLength -gt 0) {
             $buffer = New-Object char[] $contentLength
@@ -105,7 +103,6 @@ try {
             $body = -join $buffer
         }
 
-        # ROTA: GET /api/info
         if ($method -eq "GET" -and $rawUrl -eq "/api/info") {
             $infoObj = @{
                 host_ip = $localIP
@@ -125,7 +122,6 @@ try {
             $writer.Flush()
             $stream.Write($jsonBytes, 0, $jsonBytes.Length)
         }
-        # ROTA: GET /api/ranking
         elseif ($method -eq "GET" -and $rawUrl -eq "/api/ranking") {
             $ranking = @()
             if (Test-Path $rankingFile) {
@@ -150,7 +146,6 @@ try {
             $writer.Flush()
             $stream.Write($jsonBytes, 0, $jsonBytes.Length)
         }
-        # ROTA: POST /api/ranking
         elseif ($method -eq "POST" -and $rawUrl -eq "/api/ranking") {
             $ranking = @()
             if (Test-Path $rankingFile) {
@@ -163,8 +158,11 @@ try {
             }
             try {
                 $novoDado = ConvertFrom-Json $body
-                $reg = [ordered]@{
-                    grupo = if ($novoDado.grupo) { [string]$novoDado.grupo } else { "Equipe Anônima" }
+                $nomeGrupo = "Equipe Anonima"
+                if ($novoDado.grupo) { $nomeGrupo = [string]$novoDado.grupo }
+                
+                $reg = @{
+                    grupo = $nomeGrupo
                     pontuacao = [int]($novoDado.pontuacao)
                     tempo = [int]($novoDado.tempo)
                     erros = [int]($novoDado.erros)
@@ -184,7 +182,7 @@ try {
                         break
                     }
                 }
-                Write-Host "⚡ [NOVO RESULTADO] $($reg.grupo) terminou em $($reg.tempo)s -> #$pos lugar!" -ForegroundColor Green
+                Write-Host "[NOVO RESULTADO] $($reg.grupo) terminou em $($reg.tempo)s -> #$pos lugar!" -ForegroundColor Green
 
                 $respObj = @{ status = "ok"; posicao = $pos; total = $sorted.Count }
                 $respJson = ConvertTo-Json $respObj
@@ -204,10 +202,9 @@ try {
                 $writer.Flush()
             }
         }
-        # ROTA: POST /api/ranking/limpar
         elseif ($method -eq "POST" -and $rawUrl -eq "/api/ranking/limpar") {
             [System.IO.File]::WriteAllText($rankingFile, "[]", [System.Text.Encoding]::UTF8)
-            Write-Host "🗑️ [HOST] Placar zerado." -ForegroundColor Yellow
+            Write-Host "[HOST] Placar zerado." -ForegroundColor Yellow
             $respJson = '{"status":"cleared"}'
             $respBytes = [System.Text.Encoding]::UTF8.GetBytes($respJson)
             $writer.WriteLine("HTTP/1.1 200 OK")
@@ -217,7 +214,6 @@ try {
             $writer.Flush()
             $stream.Write($respBytes, 0, $respBytes.Length)
         }
-        # ARQUIVOS ESTÁTICOS
         else {
             $relPath = $rawUrl.TrimStart('/')
             if (-not $relPath -or $relPath -eq "") { $relPath = "host.html" }

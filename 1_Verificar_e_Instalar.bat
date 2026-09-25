@@ -46,7 +46,7 @@ if %ERRO_ARQUIVOS% neq 0 (
 echo.
 echo [2/3] Verificando compatibilidade com o sistema Windows...
 echo [OK] Sistema PowerShell nativo detectado com sucesso.
-where python >nul 2>nul
+py -3 -c "exit(0)" >nul 2>nul
 if %errorlevel% equ 0 (
     echo [OK] Python detectado como motor auxiliar opcional.
 )
