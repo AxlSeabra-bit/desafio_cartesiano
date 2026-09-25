@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Placar dos Participantes — Desafio Cartesiano</title>
-    <meta name="description" content="Placar em tempo real exclusivo para participantes do Desafio Cartesiano. Acompanhe sua equipe e os líderes da competição.">
+    <meta name="description" content="Placar em tempo real exclusivo para participantes do Desafio Cartesiano. Acompanhe os rankings de cada sala e o Ranking Global.">
     <style>
         :root {
             --bg-primary: #0a0f24;
@@ -92,7 +92,7 @@
             color: #38bdf8;
             font-size: 12px;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 9999px;
             cursor: pointer;
             transition: all 0.2s;
@@ -100,6 +100,18 @@
 
         .sala-pill:hover {
             background: #38bdf8;
+            color: #0f172a;
+            transform: scale(1.04);
+        }
+
+        .sala-pill.global {
+            background: rgba(245, 158, 11, 0.18);
+            border-color: #f59e0b;
+            color: #fbbf24;
+        }
+
+        .sala-pill.global:hover {
+            background: #f59e0b;
             color: #0f172a;
         }
 
@@ -398,6 +410,18 @@
             text-transform: uppercase;
         }
 
+        .tag-sala {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+
         .empty-box {
             padding: 60px 20px;
             text-align: center;
@@ -432,7 +456,7 @@
             border-radius: 16px;
             padding: 24px;
             width: 90%;
-            max-width: 360px;
+            max-width: 400px;
             text-align: center;
         }
 
@@ -447,7 +471,36 @@
             font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
-            margin: 14px 0;
+            margin: 14px 0 10px 0;
+        }
+
+        .atalhos-sala {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .btn-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-chip:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .btn-chip.chip-gold {
+            border-color: #f59e0b;
+            color: #fbbf24;
         }
 
         .btn-modal {
@@ -484,11 +537,11 @@
             <div class="header-brand">
                 <div class="icon-trophy">🏆</div>
                 <div>
-                    <h1>Placar da Competição</h1>
+                    <h1 id="tituloPlacar">Placar da Competição</h1>
                     <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; margin-top: 2px;">
                         <span>Desafio Cartesiano</span>
-                        <span class="sala-pill" onclick="abrirModalTrocarSala()" title="Clique para mudar de sala">
-                            🏷️ Sala <strong id="labelSala">9A</strong> ✏️
+                        <span class="sala-pill" id="pillSala" onclick="abrirModalTrocarSala()" title="Clique para mudar de sala ou ver o Ranking Global">
+                            🏷️ <strong id="labelSala">9A</strong> ✏️
                         </span>
                     </div>
                 </div>
@@ -593,9 +646,16 @@
         <div class="modal-box">
             <h3 style="color: #38bdf8; font-size: 18px;">🏷️ Alterar Sala da Turma</h3>
             <p style="color: #94a3b8; font-size: 13px; margin-top: 6px;">
-                Digite o código da sua sala (ex: 9A, 9B, TURMA1):
+                Digite o código da sala ou escolha um atalho:
             </p>
-            <input type="text" id="inputNovaSala" maxlength="12">
+            <input type="text" id="inputNovaSala" maxlength="12" placeholder="Ex: 9A, 7B, AXL, RANK">
+            <div class="atalhos-sala">
+                <button type="button" class="btn-chip chip-gold" onclick="preencherSalaAtalho('RANK')">🏆 RANK (Global)</button>
+                <button type="button" class="btn-chip" onclick="preencherSalaAtalho('9A')">9A</button>
+                <button type="button" class="btn-chip" onclick="preencherSalaAtalho('9B')">9B</button>
+                <button type="button" class="btn-chip" onclick="preencherSalaAtalho('7A')">7A</button>
+                <button type="button" class="btn-chip" onclick="preencherSalaAtalho('7B')">7B</button>
+            </div>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button class="btn-modal" style="background: rgba(255,255,255,0.1);" onclick="fecharModalTrocarSala()">Cancelar</button>
                 <button class="btn-modal" onclick="salvarNovaSala()">Confirmar</button>
@@ -621,13 +681,34 @@
 
             equipeFoco = (params.get("equipe") || localStorage.getItem("desafioNomeGrupo") || "").trim().toLowerCase();
 
-            document.getElementById("labelSala").textContent = salaAtual;
-            document.getElementById("btnJogar").href = `index.html?sala=${salaAtual}`;
+            atualizarVisualSala();
 
             carregarCacheLocal();
             buscarRankingHttp();
             conectarMQTT();
+
+            // Polling periódico a cada 4 segundos para manter o ranking 100% atualizado
+            setInterval(buscarRankingHttp, 4000);
         });
+
+        function atualizarVisualSala() {
+            const label = document.getElementById("labelSala");
+            const pill = document.getElementById("pillSala");
+            const titulo = document.getElementById("tituloPlacar");
+            const btnJogar = document.getElementById("btnJogar");
+
+            if (salaAtual === "RANK" || salaAtual === "GLOBAL") {
+                label.textContent = "RANK (Global)";
+                pill.classList.add("global");
+                titulo.textContent = "🏆 Placar Global da Competição";
+                btnJogar.href = `index.html?sala=RANK`;
+            } else {
+                label.textContent = `Sala ${salaAtual}`;
+                pill.classList.remove("global");
+                titulo.textContent = `Placar da Turma — Sala ${salaAtual}`;
+                btnJogar.href = `index.html?sala=${salaAtual}`;
+            }
+        }
 
         function formatarTempo(segundos) {
             if (segundos == null || isNaN(segundos)) return "--:--";
@@ -659,13 +740,14 @@
         }
 
         function buscarRankingHttp() {
-            // Tenta consultar API local ou na nuvem
-            fetch("/api/ranking")
+            const url = `/api/ranking?sala=${encodeURIComponent(salaAtual)}`;
+            fetch(url, { cache: "no-store" })
                 .then(r => r.ok ? r.json() : [])
                 .then(dados => {
-                    if (Array.isArray(dados) && dados.length > 0) {
-                        dados.forEach(d => mesclarResultado(d, false));
-                        ordenarERenderizar();
+                    if (Array.isArray(dados)) {
+                        listaRanking = dados;
+                        salvarCacheLocal();
+                        renderizar();
                     }
                 })
                 .catch(() => {});
@@ -681,7 +763,12 @@
                 try { mqttClient.end(true); } catch {}
             }
 
-            const topicoSala = `desafio_cartesiano/v1/sala_${salaAtual}/#`;
+            // Se for RANK, escuta todos os resultados de todas as salas!
+            // Se for uma sala específica (ex: 9A ou AXL), escuta apenas a sua própria sala
+            const topicoSala = (salaAtual === "RANK" || salaAtual === "GLOBAL")
+                ? `desafio_cartesiano/v1/#`
+                : `desafio_cartesiano/v1/sala_${salaAtual}/#`;
+
             const clientId = `placar_${Math.random().toString(36).substring(2, 9)}`;
 
             document.getElementById("statusRede").textContent = "Conectando...";
@@ -702,14 +789,23 @@
                 mqttClient.on("message", (topic, message) => {
                     try {
                         const payload = JSON.parse(message.toString());
+
                         if (topic.endsWith("/resultado")) {
+                            // Se for uma sala específica, rejeita resultados de outras salas
+                            if (salaAtual !== "RANK" && salaAtual !== "GLOBAL") {
+                                const salaMsg = (payload.sala || "9A").toUpperCase().trim();
+                                if (salaMsg !== salaAtual) return;
+                            }
                             mesclarResultado(payload, true);
                             ordenarERenderizar();
                         } else if (topic.endsWith("/limpar")) {
                             if (payload && payload.senha === "apagar 123") {
-                                listaRanking = [];
-                                salvarCacheLocal();
-                                renderizar();
+                                const salaAlvo = (payload.sala || "").toUpperCase().trim();
+                                if (!salaAlvo || salaAlvo === "RANK" || salaAlvo === "GLOBAL" || salaAlvo === salaAtual) {
+                                    listaRanking = [];
+                                    salvarCacheLocal();
+                                    renderizar();
+                                }
                             }
                         }
                     } catch (e) {}
@@ -727,9 +823,13 @@
         }
 
         function mesclarResultado(novo, tocarSom = false) {
-            const idx = listaRanking.findIndex(r => (r.grupo || '').trim().toLowerCase() === (novo.grupo || '').trim().toLowerCase());
+            const salaNovo = (novo.sala || "9A").toUpperCase().trim();
+            const idx = listaRanking.findIndex(r => 
+                (r.grupo || '').trim().toLowerCase() === (novo.grupo || '').trim().toLowerCase() &&
+                ((r.sala || '9A').toUpperCase().trim() === salaNovo || salaAtual !== "RANK")
+            );
+
             if (idx >= 0) {
-                // Atualiza se a pontuação for maior ou o tempo menor
                 if (novo.pontuacao > listaRanking[idx].pontuacao || (novo.pontuacao === listaRanking[idx].pontuacao && novo.tempo < listaRanking[idx].tempo)) {
                     listaRanking[idx] = novo;
                 }
@@ -778,7 +878,8 @@
             const p3 = listaRanking[2];
 
             if (p1) {
-                document.getElementById("podium1Team").textContent = p1.grupo;
+                const tagSala = (salaAtual === "RANK" && p1.sala) ? ` (${p1.sala})` : '';
+                document.getElementById("podium1Team").textContent = (p1.grupo || "Equipe") + tagSala;
                 document.getElementById("podium1Time").textContent = formatarTempo(p1.tempo);
                 document.getElementById("podium1Score").textContent = `⭐ ${p1.pontuacao} pts`;
             } else {
@@ -788,7 +889,8 @@
             }
 
             if (p2) {
-                document.getElementById("podium2Team").textContent = p2.grupo;
+                const tagSala = (salaAtual === "RANK" && p2.sala) ? ` (${p2.sala})` : '';
+                document.getElementById("podium2Team").textContent = (p2.grupo || "Equipe") + tagSala;
                 document.getElementById("podium2Time").textContent = formatarTempo(p2.tempo);
                 document.getElementById("podium2Score").textContent = `⭐ ${p2.pontuacao} pts`;
             } else {
@@ -798,7 +900,8 @@
             }
 
             if (p3) {
-                document.getElementById("podium3Team").textContent = p3.grupo;
+                const tagSala = (salaAtual === "RANK" && p3.sala) ? ` (${p3.sala})` : '';
+                document.getElementById("podium3Team").textContent = (p3.grupo || "Equipe") + tagSala;
                 document.getElementById("podium3Time").textContent = formatarTempo(p3.tempo);
                 document.getElementById("podium3Score").textContent = `⭐ ${p3.pontuacao} pts`;
             } else {
@@ -812,18 +915,23 @@
             const termo = (document.getElementById("inputBusca").value || "").trim().toLowerCase();
             const filtrados = listaRanking.filter(item => {
                 if (!termo) return true;
-                return (item.grupo || "").toLowerCase().includes(termo);
+                const matchGrupo = (item.grupo || "").toLowerCase().includes(termo);
+                const matchSala = (item.sala || "").toLowerCase().includes(termo);
+                return matchGrupo || matchSala;
             });
 
             const tbody = document.getElementById("corpoTabela");
             if (!filtrados || filtrados.length === 0) {
+                const msgVazio = listaRanking.length === 0
+                    ? `<h3>Nenhum resultado registrado nesta sala</h3><p>Assim que uma equipe concluir as 5 missões, o tempo aparecerá aqui instantaneamente!</p>`
+                    : `<h3>Nenhuma equipe encontrada</h3><p>Tente buscar por outro termo ou limpe a pesquisa.</p>`;
+
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="7">
                             <div class="empty-box">
-                                <div class="icon">🔍</div>
-                                <h3>Nenhuma equipe encontrada</h3>
-                                <p>Tente buscar por outro nome ou aguarde novos resultados.</p>
+                                <div class="icon">${listaRanking.length === 0 ? '⏱️' : '🔍'}</div>
+                                ${msgVazio}
                             </div>
                         </td>
                     </tr>
@@ -841,11 +949,12 @@
                 const ehMinhaEquipe = equipeFoco && (item.grupo || "").trim().toLowerCase() === equipeFoco;
                 const rowClass = ehMinhaEquipe ? 'class="minha-equipe"' : '';
                 const tagVoce = ehMinhaEquipe ? '<span class="tag-voce">Sua Equipe</span>' : '';
+                const tagSala = (salaAtual === "RANK" && item.sala) ? `<span class="tag-sala">Sala ${escapeHtml(item.sala)}</span>` : '';
 
                 return `
                     <tr ${rowClass}>
                         <td><span class="${badgeClass}">${pos}</span></td>
-                        <td><strong>${escapeHtml(item.grupo || "Equipe")}</strong> ${tagVoce}</td>
+                        <td><strong>${escapeHtml(item.grupo || "Equipe")}</strong> ${tagVoce} ${tagSala}</td>
                         <td><span class="time-cell">⏱️ ${formatarTempo(item.tempo)}</span></td>
                         <td><span class="score-cell">⭐ ${item.pontuacao || 0} pts</span></td>
                         <td style="color: #f87171;">${item.erros || 0}</td>
@@ -864,6 +973,11 @@
 
         function fecharModalTrocarSala() {
             document.getElementById("modalSala").style.display = "none";
+        }
+
+        function preencherSalaAtalho(nomeSala) {
+            document.getElementById("inputNovaSala").value = nomeSala;
+            salvarNovaSala();
         }
 
         function salvarNovaSala() {

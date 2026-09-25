@@ -27,11 +27,19 @@ PASSO A PASSO PARA APLICAR NA SALA:
    - O painel exibirá um QR CODE gigante e o link da sala.
    - Pressione o botão "⛶ Tela Cheia / Projetor" para ficar perfeito!
 
-4. ENTRADA DOS ALUNOS:
+4. ESCOLHA DA SALA OU TURMA (ISOLAMENTO DE RANKS):
+   - Você pode definir qualquer nome para a sua turma ou sala no campo "Sala"
+     (ex.: 9A, 9B, 7A, 7B, MATEMATICA, etc.).
+   - Cada sala possui o seu próprio placar totalmente isolado: os tempos
+     do 9ºA não misturam com os do 7ºB!
+   - RANKING GLOBAL: Para ver a classificação geral reunindo todas as turmas
+     e alunos de todas as salas, defina o nome da sala como "RANK".
+
+5. ENTRADA DOS ALUNOS:
    - Os alunos só precisam abrir a câmera do celular e escanear o QR Code.
    - Cada aluno ou dupla escolhe o nome do grupo e clica em "INICIAR MISSÃO".
 
-5. PLACAR EM TEMPO REAL:
+6. PLACAR EM TEMPO REAL:
    - Conforme cada equipe completa as 5 missões, o tempo e a pontuação
      entram AUTOMATICAMENTE no Placar da sua tela!
    - Há um Pódio de 1º, 2º e 3º lugar com coroa e medalhas, além de
@@ -39,13 +47,16 @@ PASSO A PASSO PARA APLICAR NA SALA:
    - Os alunos contam com uma TELA EXCLUSIVA DE PLACAR ("placar.html"),
      que eles podem acessar pelo celular antes de começar e logo após
      concluir o jogo, 100% livre de controles do professor!
+   - No placar do aluno, eles podem alternar entre a sala da turma e
+     o ranking global "RANK" clicando no botão da sala no topo.
 
-6. FINALIZAÇÃO E EXPORTAÇÃO:
+7. FINALIZAÇÃO E EXPORTAÇÃO:
    - Ao fim da aula, clique no botão "📥 Exportar CSV" no painel para
      baixar uma planilha com todos os tempos, erros e notas da turma.
    - Se for fazer uma nova rodada, clique em "🔒 Zerar Placar".
      Para evitar que alunos apaguem o placar por engano ou brincadeira,
      o sistema exigirá a senha do professor: apagar 123
+   - O botão zera apenas o placar da sala selecionada (ou todas se for "RANK").
 
 ------------------------------------------------------------------------
 DÚVIDAS FREQUENTES:

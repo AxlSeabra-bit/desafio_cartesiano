@@ -4,6 +4,7 @@ import json
 import socket
 import datetime
 import webbrowser
+import urllib.parse
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 # Garante suporte a UTF-8 no console do Windows
@@ -67,7 +68,16 @@ class HostCompeticaoHandler(SimpleHTTPRequestHandler):
 
         # Rota para buscar o ranking ao vivo
         if path == "/api/ranking":
+            query = ""
+            if "?" in self.path:
+                query = self.path.split("?")[1]
+            params = urllib.parse.parse_qs(query)
+            sala = params.get("sala", [""])[0].strip().upper()
+
             ranking = self.carregar_ranking()
+            if sala and sala not in ["RANK", "GLOBAL", "TODOS"]:
+                ranking = [r for r in ranking if str(r.get("sala", "9A")).upper() == sala]
+
             self.enviar_json(ranking)
             return
 
@@ -91,6 +101,7 @@ class HostCompeticaoHandler(SimpleHTTPRequestHandler):
                 return
 
             ranking = self.carregar_ranking()
+            sala = str(dados.get("sala", "9A")).strip().upper() or "9A"
 
             novo_registro = {
                 "grupo": str(dados.get("grupo", "Equipe Anônima")).strip() or "Equipe Anônima",
@@ -98,22 +109,27 @@ class HostCompeticaoHandler(SimpleHTTPRequestHandler):
                 "tempo": int(dados.get("tempo", 0)),
                 "erros": int(dados.get("erros", 0)),
                 "dicas": int(dados.get("dicas", 0)),
+                "sala": sala,
                 "hora": datetime.datetime.now().strftime("%H:%M:%S")
             }
 
+            # Remove pontuação anterior da mesma equipe na mesma sala
+            ranking = [r for r in ranking if not (
+                str(r.get("sala", "9A")).upper() == sala and
+                str(r.get("grupo", "")).strip().lower() == novo_registro["grupo"].lower()
+            )]
             ranking.append(novo_registro)
             self.salvar_ranking(ranking)
 
-            # Ordena: Maior pontuação, Menor tempo, Menor erro
-            ranking_ordenado = sorted(
-                ranking,
+            ranking_sala = sorted(
+                [r for r in ranking if str(r.get("sala", "9A")).upper() == sala],
                 key=lambda x: (-x.get("pontuacao", 0), x.get("tempo", 999999), x.get("erros", 999999))
             )
-            posicao = ranking_ordenado.index(novo_registro) + 1
+            posicao = ranking_sala.index(novo_registro) + 1
 
-            print(f"⚡ [NOVO RESULTADO] {novo_registro['grupo']} terminou em {novo_registro['tempo']}s ({novo_registro['pontuacao']} pts) -> #{posicao} lugar!")
+            print(f"⚡ [NOVO RESULTADO - SALA {sala}] {novo_registro['grupo']} terminou em {novo_registro['tempo']}s ({novo_registro['pontuacao']} pts) -> #{posicao} lugar!")
 
-            self.enviar_json({"status": "ok", "posicao": posicao, "total": len(ranking)})
+            self.enviar_json({"status": "ok", "posicao": posicao, "total": len(ranking_sala), "sala": sala})
             return
 
         # Rota para limpar ranking (nova rodada)
@@ -130,9 +146,17 @@ class HostCompeticaoHandler(SimpleHTTPRequestHandler):
                 self.send_error(403, "Senha incorreta. Apenas o professor pode zerar o placar.")
                 return
 
-            self.salvar_ranking([])
-            print("🔒 [HOST] O placar foi zerado com sucesso apos autenticacao com senha do professor.")
-            self.enviar_json({"status": "cleared"})
+            sala_limpar = str(dados.get("sala", "")).strip().upper()
+            if not sala_limpar or sala_limpar in ["RANK", "GLOBAL"]:
+                self.salvar_ranking([])
+                print("🔒 [HOST] Todas as salas foram zeradas.")
+            else:
+                ranking = self.carregar_ranking()
+                ranking = [r for r in ranking if str(r.get("sala", "9A")).upper() != sala_limpar]
+                self.salvar_ranking(ranking)
+                print(f"🔒 [HOST] Placar da sala {sala_limpar} foi zerado com sucesso.")
+
+            self.enviar_json({"status": "cleared", "sala": sala_limpar or "RANK"})
             return
 
         self.send_error(404, "Rota nao encontrada")

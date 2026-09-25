@@ -82,7 +82,12 @@ try {
 
         $parts = $requestLine.Split(" ")
         $method = $parts[0]
-        $rawUrl = $parts[1].Split("?")[0]
+        $fullUrl = $parts[1]
+        $rawUrl = $fullUrl.Split("?")[0]
+        $querySala = ""
+        if ($fullUrl -match "[\?&]sala=([^&]+)") {
+            $querySala = [System.Uri]::UnescapeDataString($matches[1]).ToUpper().Trim()
+        }
 
         $contentLength = 0
         while (($headerLine = $reader.ReadLine()) -and $headerLine.Trim().Length -gt 0) {
@@ -132,6 +137,9 @@ try {
                     elseif ($parsed) { $ranking = @($parsed) }
                 } catch {}
             }
+            if ($querySala -and $querySala -ne "RANK" -and $querySala -ne "GLOBAL" -and $querySala -ne "TODOS") {
+                $ranking = @($ranking | Where-Object { ($_.sala -as [string]).ToUpper() -eq $querySala })
+            }
             $sorted = $ranking | Sort-Object -Property @{Expression="pontuacao"; Descending=$true}, @{Expression="tempo"; Descending=$false}, @{Expression="erros"; Descending=$false}
             $json = ConvertTo-Json -InputObject @($sorted) -Compress
             if (-not $json) { $json = "[]" }
@@ -160,6 +168,9 @@ try {
                 $novoDado = ConvertFrom-Json $body
                 $nomeGrupo = "Equipe Anonima"
                 if ($novoDado.grupo) { $nomeGrupo = [string]$novoDado.grupo }
+                $salaReg = "9A"
+                if ($novoDado.sala) { $salaReg = [string]$novoDado.sala.ToString().ToUpper().Trim() }
+                elseif ($querySala) { $salaReg = $querySala }
                 
                 $reg = @{
                     grupo = $nomeGrupo
@@ -167,24 +178,27 @@ try {
                     tempo = [int]($novoDado.tempo)
                     erros = [int]($novoDado.erros)
                     dicas = [int]($novoDado.dicas)
+                    sala = $salaReg
                     hora = (Get-Date).ToString("HH:mm:ss")
                 }
-                $rankingList = [System.Collections.ArrayList]@($ranking)
+                $filtrados = @($ranking | Where-Object { -not (($_.sala -as [string]).ToUpper() -eq $salaReg -and ($_.grupo -as [string]).ToLower() -eq $reg.grupo.ToLower()) })
+                $rankingList = [System.Collections.ArrayList]@($filtrados)
                 $rankingList.Add($reg) | Out-Null
                 $saveJson = ConvertTo-Json -InputObject @($rankingList) -Depth 4
                 [System.IO.File]::WriteAllText($rankingFile, $saveJson, [System.Text.Encoding]::UTF8)
 
-                $sorted = $rankingList | Sort-Object -Property @{Expression="pontuacao"; Descending=$true}, @{Expression="tempo"; Descending=$false}, @{Expression="erros"; Descending=$false}
+                $rankingSala = @($rankingList | Where-Object { ($_.sala -as [string]).ToUpper() -eq $salaReg })
+                $sorted = $rankingSala | Sort-Object -Property @{Expression="pontuacao"; Descending=$true}, @{Expression="tempo"; Descending=$false}, @{Expression="erros"; Descending=$false}
                 $pos = 1
                 for ($i = 0; $i -lt $sorted.Count; $i++) {
-                    if ($sorted[$i].grupo -eq $reg.grupo -and $sorted[$i].tempo -eq $reg.tempo) {
+                    if ($sorted[$i].grupo -eq $reg.grupo) {
                         $pos = $i + 1
                         break
                     }
                 }
-                Write-Host "[NOVO RESULTADO] $($reg.grupo) terminou em $($reg.tempo)s -> #$pos lugar!" -ForegroundColor Green
+                Write-Host "[NOVO RESULTADO - SALA $salaReg] $($reg.grupo) terminou em $($reg.tempo)s -> #$pos lugar!" -ForegroundColor Green
 
-                $respObj = @{ status = "ok"; posicao = $pos; total = $sorted.Count }
+                $respObj = @{ status = "ok"; posicao = $pos; total = $sorted.Count; sala = $salaReg }
                 $respJson = ConvertTo-Json $respObj
                 $respBytes = [System.Text.Encoding]::UTF8.GetBytes($respJson)
 
@@ -204,6 +218,7 @@ try {
         }
         elseif ($method -eq "POST" -and $rawUrl -eq "/api/ranking/limpar") {
             $senhaValida = $false
+            $jsonBody = $null
             if ($body) {
                 try {
                     $jsonBody = ConvertFrom-Json $body
@@ -222,9 +237,31 @@ try {
                 $writer.Flush()
                 $stream.Write($errBytes, 0, $errBytes.Length)
             } else {
-                [System.IO.File]::WriteAllText($rankingFile, "[]", [System.Text.Encoding]::UTF8)
-                Write-Host "[HOST] Placar zerado com sucesso apos verificacao de senha do professor." -ForegroundColor Green
-                $respJson = '{"status":"cleared"}'
+                $salaLimpar = ""
+                if ($jsonBody.sala) { $salaLimpar = [string]$jsonBody.sala.ToString().ToUpper().Trim() }
+                elseif ($querySala) { $salaLimpar = $querySala }
+
+                if (-not $salaLimpar -or $salaLimpar -eq "RANK" -or $salaLimpar -eq "GLOBAL") {
+                    [System.IO.File]::WriteAllText($rankingFile, "[]", [System.Text.Encoding]::UTF8)
+                    Write-Host "[HOST] Todas as salas foram zeradas." -ForegroundColor Green
+                } else {
+                    $restantes = @()
+                    if (Test-Path $rankingFile) {
+                        try {
+                            $jsonRaw = [System.IO.File]::ReadAllText($rankingFile, [System.Text.Encoding]::UTF8)
+                            $parsed = ConvertFrom-Json $jsonRaw
+                            if ($parsed -is [array]) {
+                                $restantes = @($parsed | Where-Object { ($_.sala -as [string]).ToUpper() -ne $salaLimpar })
+                            }
+                        } catch {}
+                    }
+                    $saveJson = ConvertTo-Json -InputObject @($restantes) -Depth 4
+                    [System.IO.File]::WriteAllText($rankingFile, $saveJson, [System.Text.Encoding]::UTF8)
+                    Write-Host "[HOST] Placar da sala $salaLimpar foi zerado com sucesso." -ForegroundColor Green
+                }
+
+                $retSala = if ($salaLimpar) { $salaLimpar } else { "RANK" }
+                $respJson = '{"status":"cleared","sala":"' + $retSala + '"}'
                 $respBytes = [System.Text.Encoding]::UTF8.GetBytes($respJson)
                 $writer.WriteLine("HTTP/1.1 200 OK")
                 $writer.WriteLine("Content-Type: application/json; charset=utf-8")

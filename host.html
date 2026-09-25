@@ -792,9 +792,30 @@
                 const salvo = localStorage.getItem("ranking_sala_" + salaAtual);
                 if (salvo) {
                     listaAtual = JSON.parse(salvo);
-                    renderizarPodium(listaAtual);
-                    renderizarTabela(listaAtual);
-                    renderizarEstatisticas(listaAtual);
+                } else {
+                    listaAtual = [];
+                }
+            } catch {
+                listaAtual = [];
+            }
+            renderizarPodium(listaAtual);
+            renderizarTabela(listaAtual);
+            renderizarEstatisticas(listaAtual);
+
+            // Busca sincronização com o servidor
+            buscarRankingServidor();
+        }
+
+        async function buscarRankingServidor() {
+            try {
+                const url = `/api/ranking?sala=${encodeURIComponent(salaAtual)}&t=${Date.now()}`;
+                const resp = await fetch(url, { cache: "no-store" });
+                if (resp.ok) {
+                    const dados = await resp.json();
+                    if (Array.isArray(dados)) {
+                        listaAtual = dados;
+                        salvarERenderizar();
+                    }
                 }
             } catch {}
         }
@@ -805,8 +826,13 @@
             document.getElementById("inputSala").value = salaAtual;
             localStorage.setItem("desafioHostSala", salaAtual);
 
-            document.getElementById("subtituloQr").innerHTML = `Aponte a câmera do celular para entrar na competição da <strong>Sala ${salaAtual}</strong>!`;
+            const textoSala = (salaAtual === "RANK" || salaAtual === "GLOBAL")
+                ? "Ranking Geral Global (Todas as Salas)"
+                : `Sala ${salaAtual}`;
 
+            document.getElementById("subtituloQr").innerHTML = `Aponte a câmera do celular para entrar na competição da <strong>${textoSala}</strong>!`;
+
+            listaAtual = [];
             carregarRankingSalvo();
             atualizarUrlEQRCode();
             conectarMQTT(); // Reconecta no novo tópico da sala
@@ -851,7 +877,10 @@
                 try { mqttClient.end(true); } catch {}
             }
 
-            const topicoSala = `desafio_cartesiano/v1/sala_${salaAtual}/#`;
+            const ehRankGlobal = (salaAtual === "RANK" || salaAtual === "GLOBAL");
+            const topicoSala = ehRankGlobal
+                ? `desafio_cartesiano/v1/#`
+                : `desafio_cartesiano/v1/sala_${salaAtual}/#`;
             const clientId = `host_${Math.random().toString(36).substring(2, 9)}`;
 
             atualizarStatus("Conectando ao broker...", false);
@@ -870,7 +899,8 @@
                 });
 
                 mqttClient.on("connect", () => {
-                    atualizarStatus(`Sala ${salaAtual} Online (Tempo Real)`, true);
+                    const labelStatus = ehRankGlobal ? "Ranking Global (Todas as Salas)" : `Sala ${salaAtual}`;
+                    atualizarStatus(`${labelStatus} Online (Tempo Real)`, true);
                     mqttClient.subscribe(topicoSala, { qos: 1 }, (err) => {
                         if (err) console.error("Erro no subscribe MQTT:", err);
                     });
@@ -880,11 +910,18 @@
                     try {
                         const payload = JSON.parse(message.toString());
                         if (topic.endsWith("/resultado")) {
+                            if (!ehRankGlobal) {
+                                const salaMsg = (payload.sala || "9A").toUpperCase().trim();
+                                if (salaMsg !== salaAtual) return;
+                            }
                             processarNovoResultado(payload);
                         } else if (topic.endsWith("/limpar")) {
                             if (payload && payload.senha && payload.senha.toString().trim().toLowerCase() === "apagar 123") {
-                                listaAtual = [];
-                                salvarERenderizar();
+                                const salaAlvo = (payload.sala || "").toUpperCase().trim();
+                                if (!salaAlvo || salaAlvo === "RANK" || salaAlvo === "GLOBAL" || salaAlvo === salaAtual) {
+                                    listaAtual = [];
+                                    salvarERenderizar();
+                                }
                             }
                         }
                     } catch (e) {
@@ -912,9 +949,15 @@
 
         function processarNovoResultado(dado) {
             // Evita duplicatas da mesma equipe mantendo a melhor pontuação/tempo
-            const existenteIdx = listaAtual.findIndex(item => item.grupo === dado.grupo);
+            const existenteIdx = listaAtual.findIndex(item => 
+                (item.grupo || '').trim().toLowerCase() === (dado.grupo || '').trim().toLowerCase() &&
+                ((item.sala || '9A').toUpperCase().trim() === (dado.sala || '9A').toUpperCase().trim() || (salaAtual !== 'RANK' && salaAtual !== 'GLOBAL'))
+            );
             if (existenteIdx >= 0) {
-                listaAtual[existenteIdx] = dado;
+                if ((dado.pontuacao || 0) > (listaAtual[existenteIdx].pontuacao || 0) ||
+                    ((dado.pontuacao || 0) === (listaAtual[existenteIdx].pontuacao || 0) && (dado.tempo || 99999) < (listaAtual[existenteIdx].tempo || 99999))) {
+                    listaAtual[existenteIdx] = dado;
+                }
             } else {
                 listaAtual.push(dado);
             }
@@ -937,12 +980,12 @@
         }
 
         async function pollingLocalFallback() {
-            if (modoRede !== "local") return;
             try {
-                const resp = await fetch("/api/ranking");
+                const url = `/api/ranking?sala=${encodeURIComponent(salaAtual)}&t=${Date.now()}`;
+                const resp = await fetch(url, { cache: "no-store" });
                 if (resp.ok) {
                     const dados = await resp.json();
-                    if (dados && dados.length !== listaAtual.length) {
+                    if (Array.isArray(dados)) {
                         listaAtual = dados;
                         salvarERenderizar();
                     }
@@ -969,8 +1012,11 @@
         }
 
         function renderizarPodium(dados) {
+            const ehRankGlobal = (salaAtual === "RANK" || salaAtual === "GLOBAL");
+
             if (dados[0]) {
-                document.getElementById("podium1Team").textContent = dados[0].grupo || "Equipe";
+                const tagS = (ehRankGlobal && dados[0].sala) ? ` (Sala ${dados[0].sala})` : "";
+                document.getElementById("podium1Team").textContent = (dados[0].grupo || "Equipe") + tagS;
                 document.getElementById("podium1Time").textContent = formatarTempo(dados[0].tempo);
                 document.getElementById("podium1Score").textContent = `⭐ ${dados[0].pontuacao} pts`;
             } else {
@@ -980,7 +1026,8 @@
             }
 
             if (dados[1]) {
-                document.getElementById("podium2Team").textContent = dados[1].grupo || "Equipe";
+                const tagS = (ehRankGlobal && dados[1].sala) ? ` (Sala ${dados[1].sala})` : "";
+                document.getElementById("podium2Team").textContent = (dados[1].grupo || "Equipe") + tagS;
                 document.getElementById("podium2Time").textContent = formatarTempo(dados[1].tempo);
                 document.getElementById("podium2Score").textContent = `⭐ ${dados[1].pontuacao} pts`;
             } else {
@@ -990,7 +1037,8 @@
             }
 
             if (dados[2]) {
-                document.getElementById("podium3Team").textContent = dados[2].grupo || "Equipe";
+                const tagS = (ehRankGlobal && dados[2].sala) ? ` (Sala ${dados[2].sala})` : "";
+                document.getElementById("podium3Team").textContent = (dados[2].grupo || "Equipe") + tagS;
                 document.getElementById("podium3Time").textContent = formatarTempo(dados[2].tempo);
                 document.getElementById("podium3Score").textContent = `⭐ ${dados[2].pontuacao} pts`;
             } else {
@@ -1002,6 +1050,8 @@
 
         function renderizarTabela(dados) {
             const tbody = document.getElementById("corpoRanking");
+            const ehRankGlobal = (salaAtual === "RANK" || salaAtual === "GLOBAL");
+
             if (!dados || dados.length === 0) {
                 tbody.innerHTML = `
                     <tr>
@@ -1024,10 +1074,14 @@
                 else if (pos === 2) badgeClass += " pos-2";
                 else if (pos === 3) badgeClass += " pos-3";
 
+                const tagSalaHtml = (ehRankGlobal && item.sala)
+                    ? `<span style="display: inline-block; font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle;">Sala ${escapeHtml(item.sala)}</span>`
+                    : '';
+
                 return `
                     <tr>
                         <td><span class="${badgeClass}">${pos}</span></td>
-                        <td><strong>${escapeHtml(item.grupo || "Equipe")}</strong></td>
+                        <td><strong>${escapeHtml(item.grupo || "Equipe")}</strong>${tagSalaHtml}</td>
                         <td><span class="time-tag">⏱️ ${formatarTempo(item.tempo)}</span></td>
                         <td><span class="score-tag">⭐ ${item.pontuacao || 0} pts</span></td>
                         <td style="color: #f87171;">${item.erros || 0}</td>
@@ -1129,19 +1183,25 @@
             listaAtual = [];
             salvarERenderizar();
 
-            // Notifica via MQTT se conectado (com a senha)
+            // Notifica via MQTT se conectado (com a senha e a sala específica)
             if (mqttClient && mqttClient.connected) {
-                mqttClient.publish(`desafio_cartesiano/v1/sala_${salaAtual}/limpar`, JSON.stringify({ action: "limpar", senha: "apagar 123" }));
+                mqttClient.publish(`desafio_cartesiano/v1/sala_${salaAtual}/limpar`, JSON.stringify({ action: "limpar", sala: salaAtual, senha: "apagar 123" }));
+                if (salaAtual === "RANK" || salaAtual === "GLOBAL") {
+                    mqttClient.publish(`desafio_cartesiano/v1/limpar`, JSON.stringify({ action: "limpar", sala: "RANK", senha: "apagar 123" }));
+                }
             }
 
-            // Notifica servidor local se houver (com a senha)
+            // Notifica servidor (Vercel ou Python/PS1) com a senha e a sala
             fetch("/api/ranking/limpar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ senha: "apagar 123" })
+                body: JSON.stringify({ senha: "apagar 123", sala: salaAtual })
             }).catch(() => {});
 
-            alert("✅ Placar zerado com sucesso para uma nova rodada!");
+            const msgSucesso = (salaAtual === "RANK" || salaAtual === "GLOBAL")
+                ? "✅ Placar Geral (RANK) foi zerado com sucesso!"
+                : `✅ Placar da Sala ${salaAtual} foi zerado com sucesso!`;
+            alert(msgSucesso);
         }
 
         function tocarFanfarra() {

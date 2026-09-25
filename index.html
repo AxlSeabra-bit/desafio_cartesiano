@@ -3662,6 +3662,8 @@ function finalizarJogo(motivo) {
         dicas: game.dicasUsadas,
         tempo: tempo,
         motivo: motivo,
+        sala: salaCompeticaoAtual || "9A",
+        hora: new Date().toLocaleTimeString("pt-BR").slice(0, 5),
         data: new Date().toLocaleString("pt-BR")
     };
 
