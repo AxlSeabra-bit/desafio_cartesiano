@@ -29,6 +29,11 @@ export default function handler(req, res) {
     if (req.method === "POST") {
         const dados = req.body || {};
         if (req.url && req.url.includes("/limpar")) {
+            const senha = String(dados.senha || "").trim().toLowerCase();
+            if (senha !== "apagar 123") {
+                res.status(403).json({ error: "Senha incorreta. Não autorizado a zerar o placar." });
+                return;
+            }
             cacheRanking = [];
             res.status(200).json({ status: "cleared" });
             return;

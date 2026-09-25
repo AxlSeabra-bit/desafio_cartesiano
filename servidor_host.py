@@ -118,8 +118,20 @@ class HostCompeticaoHandler(SimpleHTTPRequestHandler):
 
         # Rota para limpar ranking (nova rodada)
         if path == "/api/ranking/limpar":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length) if content_length > 0 else b"{}"
+            try:
+                dados = json.loads(body.decode("utf-8")) if body else {}
+            except Exception:
+                dados = {}
+
+            senha = str(dados.get("senha", "")).strip().lower()
+            if senha != "apagar 123":
+                self.send_error(403, "Senha incorreta. Apenas o professor pode zerar o placar.")
+                return
+
             self.salvar_ranking([])
-            print("🗑️ [HOST] O placar foi zerado para uma nova rodada.")
+            print("🔒 [HOST] O placar foi zerado com sucesso apos autenticacao com senha do professor.")
             self.enviar_json({"status": "cleared"})
             return
 

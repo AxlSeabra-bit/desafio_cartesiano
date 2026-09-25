@@ -1,4 +1,4 @@
-﻿# Servidor Host da Competicao em PowerShell Nativo (TcpListener - Sem necessidade de Admin)
+# Servidor Host da Competicao em PowerShell Nativo (TcpListener - Sem necessidade de Admin)
 param(
     [int]$Port = 8080
 )
@@ -203,16 +203,37 @@ try {
             }
         }
         elseif ($method -eq "POST" -and $rawUrl -eq "/api/ranking/limpar") {
-            [System.IO.File]::WriteAllText($rankingFile, "[]", [System.Text.Encoding]::UTF8)
-            Write-Host "[HOST] Placar zerado." -ForegroundColor Yellow
-            $respJson = '{"status":"cleared"}'
-            $respBytes = [System.Text.Encoding]::UTF8.GetBytes($respJson)
-            $writer.WriteLine("HTTP/1.1 200 OK")
-            $writer.WriteLine("Content-Type: application/json; charset=utf-8")
-            $writer.WriteLine("Content-Length: $($respBytes.Length)")
-            $writer.WriteLine("")
-            $writer.Flush()
-            $stream.Write($respBytes, 0, $respBytes.Length)
+            $senhaValida = $false
+            if ($body) {
+                try {
+                    $jsonBody = ConvertFrom-Json $body
+                    if ($jsonBody.senha -and $jsonBody.senha.ToString().Trim().ToLower() -eq "apagar 123") {
+                        $senhaValida = $true
+                    }
+                } catch {}
+            }
+            if (-not $senhaValida) {
+                $errBytes = [System.Text.Encoding]::UTF8.GetBytes('{"error":"Senha incorreta. Apenas o professor pode zerar o placar."}')
+                $writer.WriteLine("HTTP/1.1 403 Forbidden")
+                $writer.WriteLine("Content-Type: application/json; charset=utf-8")
+                $writer.WriteLine("Access-Control-Allow-Origin: *")
+                $writer.WriteLine("Content-Length: $($errBytes.Length)")
+                $writer.WriteLine("")
+                $writer.Flush()
+                $stream.Write($errBytes, 0, $errBytes.Length)
+            } else {
+                [System.IO.File]::WriteAllText($rankingFile, "[]", [System.Text.Encoding]::UTF8)
+                Write-Host "[HOST] Placar zerado com sucesso apos verificacao de senha do professor." -ForegroundColor Green
+                $respJson = '{"status":"cleared"}'
+                $respBytes = [System.Text.Encoding]::UTF8.GetBytes($respJson)
+                $writer.WriteLine("HTTP/1.1 200 OK")
+                $writer.WriteLine("Content-Type: application/json; charset=utf-8")
+                $writer.WriteLine("Access-Control-Allow-Origin: *")
+                $writer.WriteLine("Content-Length: $($respBytes.Length)")
+                $writer.WriteLine("")
+                $writer.Flush()
+                $stream.Write($respBytes, 0, $respBytes.Length)
+            }
         }
         else {
             $relPath = $rawUrl.TrimStart('/')

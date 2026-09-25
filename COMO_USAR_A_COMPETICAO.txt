@@ -40,7 +40,9 @@ PASSO A PASSO PARA APLICAR NA SALA:
 6. FINALIZAÇÃO E EXPORTAÇÃO:
    - Ao fim da aula, clique no botão "📥 Exportar CSV" no painel para
      baixar uma planilha com todos os tempos, erros e notas da turma.
-   - Se for fazer uma 2ª rodada, clique em "🗑️ Zerar Placar".
+   - Se for fazer uma nova rodada, clique em "🔒 Zerar Placar".
+     Para evitar que alunos apaguem o placar por engano ou brincadeira,
+     o sistema exigirá a senha do professor: apagar 123
 
 ------------------------------------------------------------------------
 DÚVIDAS FREQUENTES:

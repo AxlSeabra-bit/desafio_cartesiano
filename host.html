@@ -615,7 +615,7 @@
                     📥 Exportar CSV
                 </button>
                 <button class="btn btn-danger" style="flex: 1; justify-content: center; font-size: 12px;" onclick="abrirModalLimpar()">
-                    🗑️ Zerar Placar
+                    🔒 Zerar Placar
                 </button>
             </div>
         </div>
@@ -699,16 +699,22 @@
 
     </div>
 
-    <!-- MODAL DE CONFIRMAÇÃO PARA ZERAR PLACAR -->
+    <!-- MODAL DE CONFIRMAÇÃO PARA ZERAR PLACAR COM SENHA -->
     <div class="modal-overlay" id="modalLimpar">
         <div class="modal-card">
-            <h3 style="color: #ef4444; font-size: 18px; margin-bottom: 10px;">⚠️ Zerar Placar da Rodada?</h3>
-            <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 18px;">
-                Esta ação apagará todos os tempos desta rodada na sala selecionada.
+            <div style="font-size: 38px; margin-bottom: 6px;">🔒</div>
+            <h3 style="color: #f87171; font-size: 18px; margin-bottom: 8px; font-weight: 800;">Zerar Placar da Competição</h3>
+            <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+                Esta ação apagará todos os tempos desta rodada. Para evitar que alunos apaguem por engano, digite a <strong>senha do professor</strong>:
             </p>
+            <div style="position: relative; max-width: 280px; margin: 0 auto 6px auto;">
+                <input type="password" id="inputSenhaZerar" class="room-input" placeholder="Digite a senha..." style="width: 100%; text-align: center; font-size: 15px; padding: 9px 36px 9px 12px; border: 1px solid #f87171; border-radius: 8px; background: rgba(0,0,0,0.5); color: #fff;" autocomplete="off" onkeydown="if(event.key==='Enter') confirmarLimparRanking()">
+                <button type="button" id="btnToggleSenha" onclick="alternarVisibilidadeSenha()" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 16px; cursor: pointer; color: #94a3b8;" title="Mostrar/Ocultar Senha">👁️</button>
+            </div>
+            <div id="msgErroSenha" style="color: #f87171; font-size: 12px; min-height: 18px; margin-bottom: 14px; font-weight: 600;"></div>
             <div style="display: flex; gap: 12px; justify-content: center;">
                 <button class="btn btn-secondary" onclick="fecharModalLimpar()">Cancelar</button>
-                <button class="btn btn-danger" onclick="confirmarLimparRanking()">Sim, Zerar Placar</button>
+                <button class="btn btn-danger" onclick="confirmarLimparRanking()">Confirmar e Zerar</button>
             </div>
         </div>
     </div>
@@ -871,8 +877,10 @@
                         if (topic.endsWith("/resultado")) {
                             processarNovoResultado(payload);
                         } else if (topic.endsWith("/limpar")) {
-                            listaAtual = [];
-                            salvarERenderizar();
+                            if (payload && payload.senha && payload.senha.toString().trim().toLowerCase() === "apagar 123") {
+                                listaAtual = [];
+                                salvarERenderizar();
+                            }
                         }
                     } catch (e) {
                         console.error("Erro ao processar mensagem MQTT:", e);
@@ -1067,25 +1075,68 @@
         }
 
         function abrirModalLimpar() {
-            document.getElementById("modalLimpar").style.display = "flex";
+            const modal = document.getElementById("modalLimpar");
+            const input = document.getElementById("inputSenhaZerar");
+            const msg = document.getElementById("msgErroSenha");
+            const btnEye = document.getElementById("btnToggleSenha");
+            if (input) {
+                input.value = "";
+                input.type = "password";
+                input.style.borderColor = "#f87171";
+            }
+            if (btnEye) btnEye.textContent = "👁️";
+            if (msg) msg.textContent = "";
+            modal.style.display = "flex";
+            setTimeout(() => { if (input) input.focus(); }, 150);
         }
 
         function fecharModalLimpar() {
-            document.getElementById("modalLimpar").style.display = "none";
+            const modal = document.getElementById("modalLimpar");
+            modal.style.display = "none";
+        }
+
+        function alternarVisibilidadeSenha() {
+            const input = document.getElementById("inputSenhaZerar");
+            const btn = document.getElementById("btnToggleSenha");
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "🙈";
+            } else {
+                input.type = "password";
+                btn.textContent = "👁️";
+            }
         }
 
         function confirmarLimparRanking() {
+            const input = document.getElementById("inputSenhaZerar");
+            const msg = document.getElementById("msgErroSenha");
+            const digitado = (input.value || "").trim().toLowerCase();
+
+            if (digitado !== "apagar 123") {
+                msg.textContent = "❌ Senha incorreta! O placar não foi alterado.";
+                input.style.borderColor = "#ef4444";
+                input.focus();
+                input.select();
+                return;
+            }
+
             fecharModalLimpar();
             listaAtual = [];
             salvarERenderizar();
 
-            // Notifica via MQTT se conectado
+            // Notifica via MQTT se conectado (com a senha)
             if (mqttClient && mqttClient.connected) {
-                mqttClient.publish(`desafio_cartesiano/v1/sala_${salaAtual}/limpar`, JSON.stringify({ action: "limpar" }));
+                mqttClient.publish(`desafio_cartesiano/v1/sala_${salaAtual}/limpar`, JSON.stringify({ action: "limpar", senha: "apagar 123" }));
             }
 
-            // Notifica servidor local se houver
-            fetch("/api/ranking/limpar", { method: "POST" }).catch(() => {});
+            // Notifica servidor local se houver (com a senha)
+            fetch("/api/ranking/limpar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senha: "apagar 123" })
+            }).catch(() => {});
+
+            alert("✅ Placar zerado com sucesso para uma nova rodada!");
         }
 
         function tocarFanfarra() {
