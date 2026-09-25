@@ -1,0 +1,26 @@
+========================================================================
+                  DESAFIO CARTESIANO - GUIA RÁPIDO
+========================================================================
+
+Olá! Para rodar o Desafio Cartesiano no seu computador, siga os passos:
+
+PASSO 1: CONFIGURAÇÃO (Apenas na primeira vez)
+---------------------------------------------
+1. Dê dois cliques no arquivo:
+   👉 "1_Verificar_e_Instalar.bat"
+2. O instalador vai checar a integridade de todos os mapas e arquivos
+   do jogo e preparar o ambiente do Windows.
+3. Quando aparecer a mensagem de sucesso, pode fechar a janela.
+
+
+PASSO 2: JOGAR
+--------------
+1. Dê dois cliques no arquivo:
+   👉 "2_Jogar_Desafio_Cartesiano.bat"
+2. O servidor local iniciará e seu navegador padrão abrirá automaticamente
+   com o jogo completo e pronto para jogar!
+3. Deixe a janelinha aberta enquanto joga. Para encerrar, basta fechar
+   a janelinha preta.
+
+Bom jogo e bons estudos!
+========================================================================

@@ -8,3 +8,5 @@ $RECYCLE.BIN/
 *.tmp
 *~
 .vercel
+ranking_sala.json
+*.zip

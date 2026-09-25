@@ -2313,19 +2313,29 @@ h2 {
         </div>
 
 
-        <p style="font-size: 13px; color: #94a3b8; margin-top: 14px;">
+        <div id="statusPlacarHost" style="display:none; margin: 14px auto 8px auto; max-width: 440px; padding: 10px 16px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #6ee7b7; font-size: 14px; text-align: center;">
+            <span id="textoPlacarHost">📡 Enviando seu tempo para o Placar da Sala...</span>
+        </div>
+
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 10px;">
             Resultado registrado com sucesso neste dispositivo.
         </p>
 
-
-        <button
-            class="btn"
-            onclick="solicitarNovoJogo()">
-
-            NOVO GRUPO
-
-        </button>
-
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+            <button
+                class="btn"
+                onclick="solicitarNovoJogo()">
+                NOVO GRUPO
+            </button>
+            <a
+                id="linkVerPlacarHost"
+                href="host.html#ranking"
+                target="_blank"
+                class="btn"
+                style="display: none; background: linear-gradient(135deg, #f59e0b, #d97706); text-decoration: none; align-items: center;">
+                🏆 VER PLACAR AO VIVO
+            </a>
+        </div>
     </div>
 
 </section>
@@ -3664,6 +3674,36 @@ function salvarResultado(dados) {
 
     resultados.push(dados);
     localStorage.setItem(chave, JSON.stringify(resultados));
+
+    // Envio automático para o Placar da Sala (Modo Competição Host LAN)
+    const elStatus = document.getElementById("statusPlacarHost");
+    const elTexto = document.getElementById("textoPlacarHost");
+    const elLinkPlacar = document.getElementById("linkVerPlacarHost");
+
+    if (elStatus && elTexto) {
+        elStatus.style.display = "block";
+        elTexto.textContent = "📡 Enviando seu tempo para o Placar da Sala...";
+
+        fetch("/api/ranking", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dados)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Servidor não respondeu");
+            return response.json();
+        })
+        .then(info => {
+            elStatus.style.background = "rgba(16, 185, 129, 0.25)";
+            elStatus.style.borderColor = "#10b981";
+            elTexto.innerHTML = `🎉 <strong>Registrado no Placar da Sala!</strong><br>Sua equipe está em <strong>#${info.posicao}º lugar</strong>!`;
+            if (elLinkPlacar) elLinkPlacar.style.display = "inline-flex";
+        })
+        .catch(() => {
+            // Em caso de modo local isolado ou sem host ativo, oculta aviso de envio
+            elStatus.style.display = "none";
+        });
+    }
 }
 
 function mostrarResultado(dados) {

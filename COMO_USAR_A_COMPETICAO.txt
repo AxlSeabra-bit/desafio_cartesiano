@@ -1,0 +1,55 @@
+========================================================================
+       🏆 GUIA DO PROFESSOR: MODO COMPETIÇÃO EM SALA DE AULA (LAN)
+                         DESAFIO CARTESIANO
+========================================================================
+
+Este guia explica como realizar uma competição em tempo real com a turma,
+onde o seu computador funciona como o HOST (Placar Geral com QR Code) e
+os alunos jogam em seus próprios celulares conectados ao mesmo Wi-Fi.
+
+------------------------------------------------------------------------
+PASSO A PASSO PARA APLICAR NA SALA:
+------------------------------------------------------------------------
+
+1. CONEXÃO DE REDE:
+   - Certifique-se de que o seu computador e os celulares dos alunos
+     estejam conectados na MESMA REDE WI-FI (pode ser o Wi-Fi da escola
+     ou o ponto de acesso/roteador do seu próprio celular).
+
+2. INICIAR A CENTRAL DA COMPETIÇÃO:
+   - Dê dois cliques no arquivo:
+     👉 "2_Iniciar_Host_Competicao.bat"
+   - Uma janela preta do servidor será iniciada e o seu navegador
+     abrirá automaticamente o "PAINEL DA COMPETIÇÃO".
+
+3. PROJETAR OU MOSTRAR O QR CODE:
+   - Projete a tela do navegador no quadro (ou deixe visível aos alunos).
+   - O painel exibirá um QR CODE gigante e o link da sala.
+   - Pressione o botão "⛶ Tela Cheia / Projetor" para ficar perfeito!
+
+4. ENTRADA DOS ALUNOS:
+   - Os alunos só precisam abrir a câmera do celular e escanear o QR Code.
+   - Cada aluno ou dupla escolhe o nome do grupo e clica em "INICIAR MISSÃO".
+
+5. PLACAR EM TEMPO REAL:
+   - Conforme cada equipe completa as 5 missões, o tempo e a pontuação
+     entram AUTOMATICAMENTE no Placar da sua tela!
+   - Há um Pódio de 1º, 2º e 3º lugar com coroa e medalhas, além de
+     uma fanfarra sonora a cada equipe que conclui.
+
+6. FINALIZAÇÃO E EXPORTAÇÃO:
+   - Ao fim da aula, clique no botão "📥 Exportar CSV" no painel para
+     baixar uma planilha com todos os tempos, erros e notas da turma.
+   - Se for fazer uma 2ª rodada, clique em "🗑️ Zerar Placar".
+
+------------------------------------------------------------------------
+DÚVIDAS FREQUENTES:
+------------------------------------------------------------------------
+* Precisa de internet?
+  Não! A rede só precisa ser local (LAN). O jogo, os mapas e o QR Code
+  funcionam 100% offline.
+
+* Posso jogar no meu computador também?
+  Sim! No próprio painel há o botão "🎮 Jogar Neste PC" ou você pode
+  abrir o arquivo "3_Jogar_Neste_Computador.bat".
+========================================================================
