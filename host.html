@@ -1195,7 +1195,13 @@
             fetch("/api/ranking/limpar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ senha: "apagar 123", sala: salaAtual })
+                body: JSON.stringify({ action: "limpar", senha: "apagar 123", sala: salaAtual })
+            }).catch(() => {});
+
+            fetch("/api/ranking", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "limpar", senha: "apagar 123", sala: salaAtual })
             }).catch(() => {});
 
             const msgSucesso = (salaAtual === "RANK" || salaAtual === "GLOBAL")

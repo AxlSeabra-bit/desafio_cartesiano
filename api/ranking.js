@@ -49,7 +49,7 @@ export default function handler(req, res) {
         const dados = req.body || {};
 
         // Rota para zerar placar (exige senha 'apagar 123' e apaga apenas a sala indicada, ou todas se RANK)
-        if (req.url && req.url.includes("/limpar")) {
+        if ((req.url && req.url.includes("/limpar")) || dados.action === "limpar" || dados.limpar) {
             const senha = String(dados.senha || "").trim().toLowerCase();
             if (senha !== "apagar 123") {
                 res.status(403).json({ error: "Senha incorreta. Não autorizado a zerar o placar." });

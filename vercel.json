@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/ranking/limpar",
+      "destination": "/api/ranking"
+    }
+  ]
+}
