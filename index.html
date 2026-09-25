@@ -139,7 +139,7 @@ h2 {
     border-radius: 18px;
     padding: 12px;
     display: grid;
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(4,1fr);
     gap: 8px;
     margin-bottom: 15px;
 }
@@ -314,8 +314,9 @@ h2 {
 
 .instrucoes-fase {
     font-size: 16px;
-    color: #e2e8f0;
-    margin-bottom: 12px;
+    color: #1e293b;
+    line-height: 1.55;
+    margin-bottom: 14px;
 }
 
 .missoes-status {
@@ -1372,7 +1373,7 @@ h2 {
 }
 
 /* =====================================================
-   BARRA DO TOPO (CONTROLE E REINÍCIO)
+   BARRA DO TOPO (CONTROLE E PROGRESSO)
 ===================================================== */
 
 .barra-topo-jogo {
@@ -1381,6 +1382,7 @@ h2 {
     align-items: center;
     margin-bottom: 12px;
     padding: 2px 6px;
+    gap: 10px;
 }
 
 .grupo-identificacao {
@@ -1400,168 +1402,186 @@ h2 {
     letter-spacing: 0.5px;
 }
 
-.btn-reiniciar-jogo {
-    background: rgba(255, 92, 92, 0.15);
-    color: #ff9999;
-    border: 1.5px solid rgba(255, 92, 92, 0.35);
-    padding: 8px 14px;
-    border-radius: 10px;
+.indicador-missao {
+    background: #06d6a0;
+    color: #0f172a;
+    font-weight: 900;
     font-size: 13px;
-    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(6, 214, 160, 0.35);
+    white-space: nowrap;
+}
+
+/* =====================================================
+   TELA NARRATIVA INTRODUTÓRIA
+===================================================== */
+
+.tela.narrativa {
+    align-items: center;
+    justify-content: center;
+}
+
+.card-narrativa {
+    width: 100%;
+    max-width: 680px;
+    background: linear-gradient(145deg, #1b2347, #131835);
+    border: 2.5px solid rgba(255, 209, 102, 0.5);
+    padding: 36px 30px;
+    border-radius: 26px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(255, 209, 102, 0.18);
+    animation: scaleUpModal 0.3s ease-out;
+}
+
+.alerta-icone-narrativa {
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 12px;
+    animation: pulsoAlertaModal 1.2s infinite alternate ease-in-out;
+}
+
+.titulo-narrativa {
+    font-size: 25px;
+    font-weight: 900;
+    color: #ff5c5c;
+    margin: 0 0 16px 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 10px rgba(255, 92, 92, 0.4);
+}
+
+.corpo-narrativa {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    margin-bottom: 24px;
+}
+
+.destaque-alerta {
+    font-size: 17.5px;
+    color: #ffd166;
+    font-weight: 600;
+    background: rgba(255, 209, 102, 0.12);
+    padding: 12px 16px;
+    border-radius: 12px;
+    border-left: 4px solid #ffd166;
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.badge-tempo-narrativa {
+    display: inline-block;
+    background: rgba(255, 92, 92, 0.2);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 92, 92, 0.5);
+    margin: 12px 0;
+}
+
+.regras-pontos-box {
+    background: rgba(0, 0, 0, 0.28);
+    border-radius: 12px;
+    padding: 10px 18px;
+    margin: 14px auto;
+    max-width: 440px;
+    text-align: left;
+}
+
+.regras-pontos-box p {
+    margin: 5px 0;
+    font-size: 14.5px;
+    color: #cbd5e1;
+}
+
+.chamada-final-missao {
+    font-size: 21px;
+    color: #06d6a0;
+    margin-top: 18px;
+    font-weight: 900;
+}
+
+.btn-iniciar-missao {
+    background: linear-gradient(135deg, #06d6a0, #05b586);
+    color: #0b132b;
+    font-size: 19px;
+    font-weight: 900;
+    padding: 16px 36px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4);
+    letter-spacing: 0.5px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.btn-iniciar-missao:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 26px rgba(6, 214, 160, 0.6);
+}
+
+/* =====================================================
+   SISTEMA DE DICAS (CRUZADINHA)
+===================================================== */
+
+.area-dica-cruzadinha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 16px auto;
+    max-width: 580px;
+}
+
+.btn-usar-dica {
+    background: linear-gradient(135deg, #ffd166, #f59e0b);
+    color: #1e293b;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 22px;
+    font-size: 15px;
+    font-weight: 800;
     cursor: pointer;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-.btn-reiniciar-jogo:hover {
-    background: rgba(255, 92, 92, 0.3);
-    color: #ffffff;
-    border-color: #ff5c5c;
-    transform: translateY(-1px);
-}
-
-.btn-reiniciar-jogo:active {
-    transform: translateY(0);
-}
-
-/* =====================================================
-   MODAL DE BLOQUEIO DE REINÍCIO ACIDENTAL
-===================================================== */
-
-.modal-bloqueio {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(8, 12, 28, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999999;
-    padding: 20px;
-    animation: fadeInModal 0.2s ease-out;
-}
-
-@keyframes fadeInModal {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-card {
-    background: linear-gradient(145deg, #1b2347, #131835);
-    border: 2.5px solid rgba(255, 92, 92, 0.65);
-    border-radius: 22px;
-    max-width: 460px;
-    width: 100%;
-    padding: 28px 24px;
-    text-align: center;
-    color: #ffffff;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 92, 92, 0.25);
-    animation: scaleUpModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes scaleUpModal {
-    from {
-        transform: scale(0.85);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.modal-icone-alerta {
-    font-size: 54px;
-    line-height: 1;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 4px 10px rgba(255, 92, 92, 0.5));
-    animation: pulsoAlertaModal 1.2s infinite alternate ease-in-out;
-}
-
-@keyframes pulsoAlertaModal {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.15); }
-}
-
-.modal-titulo {
-    font-size: 22px;
-    font-weight: 900;
-    color: #ff5c5c;
-    margin: 0 0 12px 0;
-    letter-spacing: 0.3px;
-}
-
-.modal-descricao {
-    font-size: 15px;
-    line-height: 1.55;
-    color: #cbd5e1;
-    margin: 0 0 24px 0;
-}
-
-.modal-destaque-pontos {
-    display: inline-block;
-    background: rgba(255, 92, 92, 0.25);
-    color: #ffd166;
-    font-weight: 800;
-    padding: 2px 9px;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 209, 102, 0.4);
-    font-size: 16px;
-}
-
-.modal-acoes {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.btn-modal-cancelar {
-    background: linear-gradient(135deg, #06d6a0, #05b586);
-    color: #0b132b;
-    border: none;
-    border-radius: 14px;
-    padding: 15px 20px;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(6, 214, 160, 0.35);
-    transition: transform 0.2s, box-shadow 0.2s;
-    width: 100%;
-}
-
-.btn-modal-cancelar:hover {
+.btn-usar-dica:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(6, 214, 160, 0.5);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.6);
 }
 
-.btn-modal-cancelar:active {
+.btn-usar-dica:active {
     transform: translateY(0);
 }
 
-.btn-modal-confirmar {
-    background: rgba(255, 92, 92, 0.12);
-    color: #ff9999;
-    border: 1.5px solid rgba(255, 92, 92, 0.4);
-    border-radius: 14px;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.box-dica-cruzadinha {
     width: 100%;
+    background: #fffbeb;
+    color: #92400e;
+    border: 1.5px solid #fcd34d;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.btn-modal-confirmar:hover {
-    background: rgba(255, 92, 92, 0.28);
-    color: #ffffff;
-    border-color: #ff5c5c;
+.pergunta-geografica-box {
+    background: #f8fafc;
+    border-left: 4px solid #118ab2;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin: 14px 0;
+    color: #0f172a;
+    font-size: 15.5px;
+    line-height: 1.55;
 }
 
 /* =====================================================
@@ -1706,6 +1726,9 @@ h2 {
      TELA INICIAL
 ===================================================== -->
 
+<!-- =====================================================
+     TELA INICIAL: IDENTIFICAÇÃO DO GRUPO
+===================================================== -->
 <section id="tela-inicial" class="tela inicial ativa">
 
     <div class="card-inicial">
@@ -1721,20 +1744,22 @@ h2 {
 
         <p>
             Trabalhem juntos, resolvam os desafios
-            e conquistem o maior número de pontos possível!
+            e recuperem os dados do sistema cartesiano!
         </p>
 
         <input
             id="nomeGrupo"
             type="text"
-            placeholder="Digite o nome ou número do grupo"
+            placeholder="Digite o nome ou número da equipe"
             autocomplete="off"
         >
 
         <button
-            id="btnIniciar"
-            class="btn">
-            COMEÇAR MISSÃO
+            id="btnAvancarNarrativa"
+            class="btn"
+            type="button"
+            onclick="avancarParaNarrativa()">
+            ACESSAR BRIEFING DA MISSÃO ➡️
         </button>
 
     </div>
@@ -1743,36 +1768,79 @@ h2 {
 
 
 <!-- =====================================================
-     TELA DO JOGO
+     TELA NARRATIVA: BRIEFING DE RECUPERAÇÃO DO SISTEMA
 ===================================================== -->
+<section id="tela-narrativa" class="tela narrativa">
 
+    <div class="card-narrativa">
+
+        <div class="alerta-icone-narrativa">⚠️ ALERTA DE SISTEMA</div>
+
+        <h1 class="titulo-narrativa">O SISTEMA DE NAVEGAÇÃO FOI DANIFICADO!</h1>
+
+        <p class="destaque-alerta">
+            O sistema de navegação cartesiana foi danificado e perdeu informações importantes.
+        </p>
+
+        <p>
+            Para restaurá-lo, sua equipe (<strong id="narrativaNomeGrupo">-</strong>) deverá recuperar os dados através de <strong>5 missões</strong>.
+        </p>
+
+        <div class="badge-tempo-narrativa">
+            ⏱️ Vocês terão <strong>18 minutos</strong> para completar a missão.
+        </div>
+
+        <p>
+            Trabalhem juntos, resolvam os desafios e conquistem o maior número de pontos possível!
+        </p>
+
+        <div class="regras-pontos-box">
+            <span>✅ Cada desafio concluído fornece pontos.</span>
+            <span>❌ Erros custam pontos.</span>
+            <span>💡 Dicas custam pontos.</span>
+        </div>
+
+        <p style="font-size: 19px; font-weight: bold; color: #ffd166; margin: 18px 0 10px 0;">
+            A missão começa agora!
+        </p>
+
+        <button
+            id="btnIniciarMissao"
+            class="btn btn-iniciar-missao"
+            type="button"
+            onclick="iniciarMissaoReal()">
+            🚀 A MISSÃO COMEÇA AGORA!
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TELA DO JOGO (MISSÕES 1 A 5)
+===================================================== -->
 <section id="tela-jogo" class="tela">
 
 <div class="container">
 
-    <!-- Barra do Topo com Nome do Grupo e Botão de Reinício Protegido -->
+    <!-- Barra do Topo: Equipe e Indicador de Progresso (Sem botão de reinício durante o jogo) -->
     <div class="barra-topo-jogo">
-        <span class="grupo-identificacao">👥 Grupo: <strong id="painelNomeGrupo">-</strong></span>
-        <button type="button" class="btn-reiniciar-jogo" onclick="solicitarReiniciarJogo()" title="Reiniciar a missão">
-            🔄 Reiniciar Jogo
-        </button>
+        <span class="grupo-identificacao">👥 Equipe: <strong id="painelNomeGrupo">-</strong></span>
+        <span class="indicador-missao" id="indicador-missao">MISSÃO 1 DE 5</span>
     </div>
 
+    <!-- Painel de Status (4 colunas: Tempo 18:00, Pontos, Erros, Dicas - SEM Tentativas) -->
     <div class="painel">
 
         <div class="status">
             ⏱️ Tempo
-            <strong id="cronometro">16:00</strong>
+            <strong id="cronometro">18:00</strong>
         </div>
 
         <div class="status">
             ⭐ Pontos
             <strong id="pontuacao">0</strong>
-        </div>
-
-        <div class="status">
-            🎯 Tentativas
-            <strong id="tentativas">0</strong>
         </div>
 
         <div class="status">
@@ -1796,20 +1864,20 @@ h2 {
 
 
     <!-- =================================================
-         FASE 1
+         MISSÃO 1 — DECIFRE O CÓDIGO
     ================================================= -->
-
     <div id="fase1" class="fase ativa">
 
         <div class="card-fase">
 
             <h2 class="titulo-fase">
-                🌸 Mini-game 1 — Palavra Oculta
+                🌸 MISSÃO 1 — DECIFRE O CÓDIGO
             </h2>
 
-            <p>
-                Descubram o conceito matemático.
-                Cada letra errada faz uma pétala cair.
+            <p style="font-size: 16px; line-height: 1.5; color: #1e293b; margin-bottom: 12px;">
+                Uma informação importante foi perdida do sistema.<br>
+                Descubram o conceito matemático para desbloquear o próximo desafio.<br>
+                <strong>Cada letra errada faz uma pétala cair.</strong>
             </p>
 
             <div class="flor-container">
@@ -1840,19 +1908,14 @@ h2 {
 
                     <!-- Grupo das 5 Pétalas individuais (72° de separação cada) -->
                     <g id="petalas-grupo">
-                        <!-- Pétala 1 (Topo - 0°) -->
                         <path class="petala petala-1" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
-                        <!-- Pétala 2 (72°) -->
                         <path class="petala petala-2" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
-                        <!-- Pétala 3 (144°) -->
                         <path class="petala petala-3" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
-                        <!-- Pétala 4 (216°) -->
                         <path class="petala petala-4" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
-                        <!-- Pétala 5 (288°) -->
                         <path class="petala petala-5" d="M 90 90 C 68 76 62 30 90 20 C 118 30 112 76 90 90 Z" fill="url(#grad-petala)" stroke="#ad1457" stroke-width="1.2" />
                     </g>
 
-                    <!-- Miolo da Flor com feições simpáticas -->
+                    <!-- Miolo da Flor -->
                     <circle cx="90" cy="90" r="22" fill="url(#grad-miolo)" stroke="#bf360c" stroke-width="2.5" />
                     <circle cx="90" cy="90" r="16" fill="none" stroke="#f57f17" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />
                     <circle cx="84" cy="86" r="2.5" fill="#3e2723" opacity="0.5" />
@@ -1861,11 +1924,8 @@ h2 {
                 </svg>
             </div>
 
-            <p>
-                <strong>
-                    Par de valores usado para localizar
-                    um ponto no plano cartesiano.
-                </strong>
+            <p style="font-size: 16px; margin: 12px 0;">
+                <strong>Pista: Par de valores usado para localizar um ponto no plano cartesiano.</strong>
             </p>
 
             <div id="palavra" class="palavra"></div>
@@ -1878,55 +1938,54 @@ h2 {
 
 
     <!-- =================================================
-         FASE 2
+         MISSÃO 2 — LOCALIZE O ALVO
     ================================================= -->
-
     <div id="fase2" class="fase">
 
         <div class="card-fase card-fase2">
 
             <h2 class="titulo-fase">
-                🗺️ Mini-game 2 — Onde está no Parque?
+                🗺️ MISSÃO 2 — LOCALIZE O ALVO
             </h2>
 
             <p class="instrucoes-fase">
                 A praça da cidade foi mapeada sobre um <strong>Plano Cartesiano</strong>.
-                Localize os elementos no mapa e descubra suas coordenadas <strong>(x, y)</strong>!
+                Localize os elementos no mapa e descubra suas coordenadas <strong>(x, y)</strong> para restaurar essas informações no sistema.
             </p>
 
-            <!-- Barra de Progresso das Missões -->
+            <!-- Barra de Progresso dos Alvos -->
             <div class="missoes-status">
-                <span class="missoes-contador" id="missoes-contador">Missão 1 de 5</span>
+                <span class="missoes-contador" id="missoes-contador">Alvo 1 de 5</span>
                 <div class="missoes-badges" id="missoes-badges"></div>
             </div>
 
-            <!-- Painel da Pergunta e Entrada de Coordenadas -->
+            <!-- Painel da Pergunta e Entrada Manual de Coordenadas -->
             <div class="pergunta-parque-card">
                 <div class="pergunta-enunciado">
                     <span class="pergunta-icone" id="pergunta-icone">⛲</span>
                     <div class="pergunta-texto">
-                        <h3 id="pergunta-titulo">Onde está a Fonte de Água?</h3>
-                        <p id="pergunta-dica">Observe o mapa e insira o par ordenado (x, y):</p>
+                        <h3 id="pergunta-titulo">Qual é a coordenada da Fonte de Água?</h3>
+                        <p id="pergunta-dica">Observe o elemento destacado no plano cartesiano e digite suas coordenadas:</p>
                     </div>
                 </div>
 
-                <!-- Formulário de Entrada (x, y) -->
+                <!-- Formulário de Entrada Manual (X, Y) -->
                 <form id="form-coordenadas" class="form-coordenadas" onsubmit="event.preventDefault(); submeterCoordenada();">
                     <div class="input-coordenada-grupo">
                         <span class="coord-parentese">(</span>
                         <div class="coord-campo">
-                            <label for="input-coord-x">Eixo X</label>
+                            <label for="input-coord-x">X</label>
                             <input type="number" id="input-coord-x" min="-5" max="5" placeholder="X" required />
                         </div>
                         <span class="coord-virgula">,</span>
                         <div class="coord-campo">
-                            <label for="input-coord-y">Eixo Y</label>
+                            <label for="input-coord-y">Y</label>
                             <input type="number" id="input-coord-y" min="-5" max="5" placeholder="Y" required />
                         </div>
                         <span class="coord-parentese">)</span>
                     </div>
                     <button type="submit" class="btn-confirmar-coord" id="btn-confirmar-coord">
-                        Confirmar Coordenadas 🚀
+                        CONFIRMAR 🚀
                     </button>
                 </form>
             </div>
@@ -1939,10 +1998,10 @@ h2 {
                 <!-- Overlay SVG com Linhas, Eixos, Números e Setas -->
                 <svg class="parque-svg-grid" id="parque-svg-grid" viewBox="0 0 500 500"></svg>
 
-                <!-- Grid interativo de pontos -->
-                <div class="parque-interativo-layer" id="parque-interativo-layer"></div>
+                <!-- Grid interativo estático -->
+                <div class="parque-interativo-layer" id="parque-interativo-layer" style="pointer-events: none;"></div>
 
-                <!-- Marcadores dos Elementos no Parque -->
+                <!-- Marcadores dos Elementos Estáticos no Parque -->
                 <div class="parque-marcadores" id="parque-marcadores"></div>
             </div>
 
@@ -1952,19 +2011,19 @@ h2 {
 
 
     <!-- =================================================
-         FASE 3
+         MISSÃO 3 — REORGANIZE OS DADOS
     ================================================= -->
-
     <div id="fase3" class="fase">
 
         <div class="card-fase card-fase3">
 
             <h2 class="titulo-fase">
-                🧩 Mini-game 3 — Agrupe nos Quadrantes
+                🧩 MISSÃO 3 — REORGANIZE OS DADOS
             </h2>
 
-            <p class="instrucoes">
-                Observe o ponto em destaque e <strong>toque no quadrante correto</strong> para arquivá-lo!
+            <p class="instrucoes-fase">
+                Alguns dados recuperados do sistema de localização estão misturados.<br>
+                Cada ponto precisa ser colocado no quadrante correto para reorganizar o sistema.
             </p>
 
             <!-- Barra de Progresso Mobile -->
@@ -1981,13 +2040,13 @@ h2 {
             <!-- Card da Coordenada Ativa (Uma por vez, em destaque) -->
             <div class="area-ponto-ativo">
                 <div class="card-ponto-ativo" id="card-ponto-ativo">
-                    <span class="tag-ponto-ativo">Ponto Atual</span>
+                    <span class="tag-ponto-ativo">Ponto a Reorganizar</span>
                     <div class="coordenada-destaque" id="coordenada-destaque">( 3 , 5 )</div>
                     <span class="instrucao-toque">👇 Toque no quadrante correspondente abaixo:</span>
                 </div>
             </div>
 
-            <!-- Grade 2x2 dos 4 Quadrantes Cartesianos -->
+            <!-- Grade 2x2 dos 4 Quadrantes Cartesianos (Sem as indicações (+x,+y)) -->
             <div class="quadrantes-grid">
 
                 <!-- 2º Quadrante (Superior Esquerdo) -->
@@ -1996,7 +2055,6 @@ h2 {
                         <span class="quadrante-sigla">Q2</span>
                         <h3>2º QUADRANTE</h3>
                     </div>
-                    <p class="quadrante-regra">(-x , +y)</p>
                     <div class="pontos-salvos" id="pontos-q2"></div>
                 </div>
 
@@ -2006,7 +2064,6 @@ h2 {
                         <span class="quadrante-sigla">Q1</span>
                         <h3>1º QUADRANTE</h3>
                     </div>
-                    <p class="quadrante-regra">(+x , +y)</p>
                     <div class="pontos-salvos" id="pontos-q1"></div>
                 </div>
 
@@ -2016,7 +2073,6 @@ h2 {
                         <span class="quadrante-sigla">Q3</span>
                         <h3>3º QUADRANTE</h3>
                     </div>
-                    <p class="quadrante-regra">(-x , -y)</p>
                     <div class="pontos-salvos" id="pontos-q3"></div>
                 </div>
 
@@ -2026,7 +2082,6 @@ h2 {
                         <span class="quadrante-sigla">Q4</span>
                         <h3>4º QUADRANTE</h3>
                     </div>
-                    <p class="quadrante-regra">(+x , -y)</p>
                     <div class="pontos-salvos" id="pontos-q4"></div>
                 </div>
 
@@ -2038,55 +2093,54 @@ h2 {
 
 
     <!-- =================================================
-         FASE 4
+         MISSÃO 4 — RECUPERE UMA INFORMAÇÃO GEOGRÁFICA
     ================================================= -->
-
     <div id="fase4" class="fase">
 
         <div class="card-fase card-fase4">
 
             <h2 class="titulo-fase">
-                🌎 Mini-game 4 — O Brasil no Plano Cartesiano
+                🌎 MISSÃO 4 — RECUPERE UMA INFORMAÇÃO GEOGRÁFICA
             </h2>
 
             <p class="instrucoes-fase">
-                Imagine o <strong>Planisfério Mundial</strong> mapeado como um plano cartesiano,
-                onde o <strong>Eixo X é a Linha do Equador</strong> e o <strong>Eixo Y é o Meridiano de Greenwich</strong>.
+                Agora vocês precisam aplicar o que descobriram no mundo real.<br>
+                Uma das informações perdidas relaciona o plano cartesiano à localização do Brasil.
             </p>
+
+            <div class="pergunta-geografica-box">
+                Imagine o Planisfério Mundial mapeado como um plano cartesiano, onde o eixo x é a Linha do Equador (que divide a parte Norte e a parte Sul do planeta) e o eixo y é o Meridiano de Greenwich (que divide o Oeste e o Leste do globo terrestre). Por essa lógica, o Brasil (destacado no mapa) pode ser encontrado em qual quadrante?
+            </div>
 
             <!-- Container do Mapa do Mundo com Plano Cartesiano -->
             <div class="mapa-mundo-container" id="mapa-mundo-container">
                 <!-- Eixo X (Linha do Equador) -->
                 <div class="eixo-mapa-x"></div>
-                <span class="tag-eixo tag-oeste">-x (Oeste)</span>
-                <span class="tag-eixo tag-leste">+x (Leste)</span>
+                <span class="tag-eixo tag-oeste">Oeste (-x)</span>
+                <span class="tag-eixo tag-leste">Leste (+x)</span>
 
                 <!-- Eixo Y (Meridiano de Greenwich) -->
                 <div class="eixo-mapa-y"></div>
-                <span class="tag-eixo tag-norte">+y (Norte)</span>
-                <span class="tag-eixo tag-sul">-y (Sul)</span>
+                <span class="tag-eixo tag-norte">Norte (+y)</span>
+                <span class="tag-eixo tag-sul">Sul (-y)</span>
 
                 <!-- 4 Zonas de Quadrantes no Mapa (Referência visual estática) -->
                 <div class="mapa-quadrantes-overlay">
-                    <!-- 2º Quadrante (Superior Esquerdo) -->
                     <div class="zona-mapa-quadrante q2" id="zona-q2">
-                        <span class="badge-quadrante-mapa">2º Quadrante (-x, +y)</span>
+                        <span class="badge-quadrante-mapa">2º Quadrante</span>
                     </div>
-                    <!-- 1º Quadrante (Superior Direito) -->
                     <div class="zona-mapa-quadrante q1" id="zona-q1">
-                        <span class="badge-quadrante-mapa">1º Quadrante (+x, +y)</span>
+                        <span class="badge-quadrante-mapa">1º Quadrante</span>
                     </div>
-                    <!-- 3º Quadrante (Inferior Esquerdo) -->
                     <div class="zona-mapa-quadrante q3" id="zona-q3">
-                        <span class="badge-quadrante-mapa">3º Quadrante (-x, -y)</span>
+                        <span class="badge-quadrante-mapa">3º Quadrante</span>
                     </div>
-                    <!-- 4º Quadrante (Inferior Direito) -->
                     <div class="zona-mapa-quadrante q4" id="zona-q4">
-                        <span class="badge-quadrante-mapa">4º Quadrante (+x, -y)</span>
+                        <span class="badge-quadrante-mapa">4º Quadrante</span>
                     </div>
                 </div>
 
-                <!-- Destaque do Brasil com Marcador Animado (Apenas visual) -->
+                <!-- Destaque do Brasil com Marcador Animado -->
                 <div class="marcador-brasil" id="marcador-brasil">
                     <div class="brasil-pin">
                         <span class="brasil-bandeira">🇧🇷</span>
@@ -2095,30 +2149,23 @@ h2 {
                 </div>
             </div>
 
-            <p style="text-align:center; font-size:18px; margin-top:14px; margin-bottom:4px;">
-                <strong>Em qual quadrante do plano cartesiano o Brasil fica?</strong>
-            </p>
-            <p style="text-align:center; font-size:14px; color:#ffd166; margin-top:0; margin-bottom:14px;">
-                👇 Observe o mapa acima e selecione o quadrante correto nos botões abaixo:
+            <p style="text-align:center; font-size:16px; margin-top:16px; margin-bottom:12px; color: #1e293b; font-weight: 600;">
+                👇 Observe o mapa e selecione o quadrante correspondente ao Brasil:
             </p>
 
-            <!-- Botões de Escolha em Grade 2x2 correspondendo aos quadrantes -->
+            <!-- Botões de Escolha (Sem as indicações (+x, +y) etc.) -->
             <div class="botoes-quadrantes-grid">
                 <button class="btn-quadrante-escolha btn-q2" onclick="responderMapa(2)">
                     <span>2º QUADRANTE</span>
-                    <small>Oeste / Norte (-x, +y)</small>
                 </button>
                 <button class="btn-quadrante-escolha btn-q1" onclick="responderMapa(1)">
                     <span>1º QUADRANTE</span>
-                    <small>Leste / Norte (+x, +y)</small>
                 </button>
                 <button class="btn-quadrante-escolha btn-q3" onclick="responderMapa(3)">
                     <span>3º QUADRANTE</span>
-                    <small>Oeste / Sul (-x, -y)</small>
                 </button>
                 <button class="btn-quadrante-escolha btn-q4" onclick="responderMapa(4)">
                     <span>4º QUADRANTE</span>
-                    <small>Leste / Sul (+x, -y)</small>
                 </button>
             </div>
 
@@ -2128,27 +2175,29 @@ h2 {
 
 
     <!-- =================================================
-         FASE 5
+         MISSÃO FINAL — RECONSTRUA O SISTEMA
     ================================================= -->
-
     <div id="fase5" class="fase">
 
         <div class="card-fase">
 
             <h2 class="titulo-fase">
-                🧩 Mini-game 5 — Cruzadinha Cartesiana
+                🧩 MISSÃO FINAL — RECONSTRUA O SISTEMA
             </h2>
 
-            <p>
-                Último desafio!
+            <p class="instrucoes-fase">
+                O sistema cartesiano está quase restaurado, mas parte dos dados do sistema ainda está faltando.<br>
+                Resolva a cruzadinha e recupere os últimos conceitos necessários para concluir a restauração.<br>
+                Use tudo o que você aprendeu nas missões anteriores.
             </p>
 
-            <p>
-                Resolva as pistas e complete a cruzadinha.
-                Trabalhem juntos e escolham quais pistas
-                resolver primeiro.
-            </p>
-
+            <!-- Área de Dica Real com Penalização de Pontos -->
+            <div class="area-dica-cruzadinha">
+                <button type="button" id="btn-usar-dica" class="btn-usar-dica" onclick="usarDicaCruzadinha()">
+                    💡 USAR DICA (-20 pts)
+                </button>
+                <div id="box-dica-cruzadinha" class="box-dica-cruzadinha" style="display: none;"></div>
+            </div>
 
             <div class="cruzadinha-area">
 
@@ -2186,9 +2235,8 @@ h2 {
 
 
 <!-- =====================================================
-     TELA FINAL
+     TELA FINAL: 🏆 SISTEMA RESTAURADO!
 ===================================================== -->
-
 <section id="tela-final" class="tela">
 
     <div class="final-card">
@@ -2197,10 +2245,18 @@ h2 {
             🏆
         </div>
 
-        <h1>MISSÃO CONCLUÍDA!</h1>
+        <h1>SISTEMA RESTAURADO!</h1>
+
+        <p style="font-size: 19px; font-weight: bold; color: #ffd166; margin: 8px 0 4px 0;">
+            Parabéns, equipe!
+        </p>
+
+        <p style="font-size: 15px; color: #e2e8f0; margin-bottom: 16px;">
+            Vocês recuperaram os dados perdidos e restauraram o sistema de navegação cartesiana.
+        </p>
 
         <h2 id="resultadoGrupo">
-            Grupo
+            Equipe
         </h2>
 
         <div class="resultado-numero">
@@ -2214,7 +2270,7 @@ h2 {
         </div>
 
 
-        <div class="resultados">
+        <div class="resultados" style="grid-template-columns: repeat(3, 1fr);">
 
             <div class="resultado-item">
 
@@ -2223,19 +2279,6 @@ h2 {
                 <strong>
                     <span id="resultadoTempo">
                         0:00
-                    </span>
-                </strong>
-
-            </div>
-
-
-            <div class="resultado-item">
-
-                🎯 Tentativas
-
-                <strong>
-                    <span id="resultadoTentativas">
-                        0
                     </span>
                 </strong>
 
@@ -2257,7 +2300,7 @@ h2 {
 
             <div class="resultado-item">
 
-                💡 Dicas
+                💡 Dicas Usadas
 
                 <strong>
                     <span id="resultadoDicas">
@@ -2270,14 +2313,14 @@ h2 {
         </div>
 
 
-        <p>
-            Resultado registrado neste dispositivo.
+        <p style="font-size: 13px; color: #94a3b8; margin-top: 14px;">
+            Resultado registrado com sucesso neste dispositivo.
         </p>
 
 
         <button
             class="btn"
-            onclick="solicitarReiniciarJogo(true)">
+            onclick="solicitarNovoJogo()">
 
             NOVO GRUPO
 
@@ -2293,697 +2336,340 @@ h2 {
     class="feedback">
 </div>
 
-<!-- =====================================================
-     MODAL DE CONFIRMAÇÃO / BLOQUEIO DE REINÍCIO ACIDENTAL
-===================================================== -->
-<div id="modal-confirmar-reiniciar" class="modal-bloqueio" style="display: none;" onclick="if(event.target === this) fecharModalReiniciar()">
-    <div class="modal-card">
-        <div class="modal-icone-alerta">⚠️</div>
-        <h3 class="modal-titulo">Deseja reiniciar a missão?</h3>
-        <p class="modal-descricao">
-            Atenção: Se você reiniciar o jogo agora, todo o progresso atual do grupo será cancelado e a sua pontuação de 
-            <span class="modal-destaque-pontos" id="modal-pontos-perdidos">0 pontos</span> será totalmente perdida!
-        </p>
-        <div class="modal-acoes">
-            <button type="button" class="btn-modal-cancelar" onclick="fecharModalReiniciar()">
-                🟢 Não, continuar jogando
-            </button>
-            <button type="button" class="btn-modal-confirmar" onclick="confirmarReiniciarJogo()">
-                🔴 Sim, reiniciar e zerar pontos
-            </button>
-        </div>
-    </div>
-</div>
-
 
 <script>
 
 /* =====================================================
-   ESTADO DO JOGO
+   CONFIGURAÇÃO CENTRALIZADA DE PONTUAÇÃO (SCORE_CONFIG)
 ===================================================== */
+const SCORE_CONFIG = {
+    acertoLetraPalavra: 20,
+    acertoPalavraCompleta: 100,
+    erroPalavra: 10,
 
-const game = {
+    acertoElementoParque: 100,
+    bonusParqueCompleto: 150,
+    erroParque: 15,
 
-    grupo: "",
+    acertoPontoQuadrante: 20,
+    bonusQuadrantesCompleto: 100,
+    erroQuadrante: 10,
 
-    fase: 1,
+    acertoMapaGeografico: 200,
+    erroMapaGeografico: 15,
 
-    pontuacao: 0,
-
-    tentativas: 0,
-
-    erros: 0,
-
-    dicasUsadas: 0,
-
-    inicio: null,
-
-    tempoLimite: 16 * 60,
-
-    timer: null,
-
-    finalizado: false,
-
-    progresso: {
-
-        palavra: false,
-
-        localizacao: false,
-
-        quadrantes: false,
-
-        mapa: false,
-
-        cruzadinha: false
-
-    }
-
+    acertoCruzadinhaCompleta: 150,
+    penalidadeDica: 20
 };
 
+/* =====================================================
+   ESTADO GLOBAL DO JOGO
+===================================================== */
+const game = {
+    grupo: "",
+    fase: 1,
+    pontuacao: 0,
+    erros: 0,
+    dicasUsadas: 0,
+    dicasPorPista: {},
+    inicio: null,
+    tempoLimite: 18 * 60, // 18 minutos conforme requisito
+    timer: null,
+    finalizado: false,
+    progresso: {
+        palavra: false,
+        localizacao: false,
+        quadrantes: false,
+        mapa: false,
+        cruzadinha: false
+    }
+};
 
 /* =====================================================
-   INICIAR
+   FLUXO DE ENTRADA: NARRATIVA E INÍCIO DA MISSÃO
 ===================================================== */
-
-document
-.getElementById("btnIniciar")
-.addEventListener("click", iniciarJogo);
-
-
-document
-.getElementById("nomeGrupo")
-.addEventListener("keydown", function(evento) {
-
+document.getElementById("nomeGrupo").addEventListener("keydown", function(evento) {
     if (evento.key === "Enter") {
-
-        iniciarJogo();
-
+        avancarParaNarrativa();
     }
-
 });
 
-
-function iniciarJogo() {
-
-    const campo =
-        document.getElementById("nomeGrupo");
-
-    const nome =
-        campo.value.trim();
+function avancarParaNarrativa() {
+    const campo = document.getElementById("nomeGrupo");
+    const nome = campo.value.trim();
 
     if (nome === "") {
-
-        alert(
-            "Digite o nome ou número do grupo."
-        );
-
+        alert("Por favor, digite o nome ou número da equipe para acessar o briefing.");
         campo.focus();
-
         return;
-
     }
-
 
     game.grupo = nome;
 
+    const elNarrativaGrupo = document.getElementById("narrativaNomeGrupo");
+    if (elNarrativaGrupo) elNarrativaGrupo.textContent = nome;
+
+    const elPainelGrupo = document.getElementById("painelNomeGrupo");
+    if (elPainelGrupo) elPainelGrupo.textContent = nome;
+
+    mostrarTela("tela-narrativa");
+}
+
+function iniciarMissaoReal() {
+    // Inicia o cronômetro estritamente aqui
     game.inicio = Date.now();
-
-    const elNomeGrupo = document.getElementById("painelNomeGrupo");
-    if (elNomeGrupo) {
-        elNomeGrupo.textContent = nome;
-    }
-
-
-    document
-        .getElementById("tela-inicial")
-        .classList
-        .remove("ativa");
-
-
-    document
-        .getElementById("tela-jogo")
-        .classList
-        .add("ativa");
-
-
     iniciarCronometro();
 
+    mostrarTela("tela-jogo");
     atualizarPainel();
-
     iniciarFase(1);
-
 }
 
-
 /* =====================================================
-   TELAS
+   CONTROLE DE TELAS
 ===================================================== */
-
 function mostrarTela(id) {
+    document.querySelectorAll(".tela").forEach(tela => {
+        tela.classList.remove("ativa");
+    });
 
-    document
-        .querySelectorAll(".tela")
-        .forEach(tela => {
-
-            tela.classList.remove("ativa");
-
-        });
-
-
-    document
-        .getElementById(id)
-        .classList
-        .add("ativa");
-
+    const telaAlvo = document.getElementById(id);
+    if (telaAlvo) {
+        telaAlvo.classList.add("ativa");
+    }
 }
-
 
 /* =====================================================
-   CRONÔMETRO
+   CRONÔMETRO REGRESSIVO (18:00)
 ===================================================== */
-
 function iniciarCronometro() {
+    if (game.timer) clearInterval(game.timer);
 
-    game.timer =
-        setInterval(function() {
+    atualizarCronometro(game.tempoLimite);
 
-            if (game.finalizado) {
-                return;
-            }
+    game.timer = setInterval(function() {
+        if (game.finalizado) return;
 
-            const decorrido =
-                Math.floor(
-                    (Date.now() - game.inicio) / 1000
-                );
+        const decorrido = Math.floor((Date.now() - game.inicio) / 1000);
+        const restante = Math.max(game.tempoLimite - decorrido, 0);
 
+        atualizarCronometro(restante);
 
-            const restante =
-                Math.max(
-                    game.tempoLimite - decorrido,
-                    0
-                );
-
-
-            atualizarCronometro(restante);
-
-
-            if (restante <= 0) {
-
-                finalizarJogo("tempo");
-
-            }
-
-        }, 1000);
-
+        if (restante <= 0) {
+            finalizarJogo("tempo");
+        }
+    }, 1000);
 }
-
 
 function atualizarCronometro(segundos) {
+    const minutos = Math.floor(segundos / 60);
+    const segundosRestantes = segundos % 60;
+    const texto = String(minutos).padStart(2, "0") + ":" + String(segundosRestantes).padStart(2, "0");
 
-    const minutos =
-        Math.floor(segundos / 60);
-
-
-    const segundosRestantes =
-        segundos % 60;
-
-
-    const texto =
-        String(minutos).padStart(2,"0")
-        + ":"
-        + String(segundosRestantes).padStart(2,"0");
-
-
-    const elemento =
-        document.getElementById("cronometro");
-
-
-    elemento.textContent =
-        texto;
-
-
-    if (segundos <= 60) {
-
-        elemento.classList.add("urgente");
-
+    const elemento = document.getElementById("cronometro");
+    if (elemento) {
+        elemento.textContent = texto;
+        if (segundos <= 60) {
+            elemento.classList.add("urgente");
+        } else {
+            elemento.classList.remove("urgente");
+        }
     }
-
 }
 
-
 /* =====================================================
-   PAINEL
+   PAINEL E PONTUAÇÃO CENTRALIZADA
 ===================================================== */
-
 function atualizarPainel() {
+    const elPontos = document.getElementById("pontuacao");
+    if (elPontos) elPontos.textContent = game.pontuacao;
 
-    document
-        .getElementById("pontuacao")
-        .textContent =
-        game.pontuacao;
+    const elErros = document.getElementById("erros");
+    if (elErros) elErros.textContent = game.erros;
 
+    const elDicas = document.getElementById("dicas");
+    if (elDicas) elDicas.textContent = game.dicasUsadas;
 
-    document
-        .getElementById("tentativas")
-        .textContent =
-        game.tentativas;
-
-
-    document
-        .getElementById("erros")
-        .textContent =
-        game.erros;
-
-
-    document
-        .getElementById("dicas")
-        .textContent =
-        game.dicasUsadas;
-
-
-    const concluidos =
-        Object
-            .values(game.progresso)
-            .filter(Boolean)
-            .length;
-
-
-    document
-        .getElementById("barraProgresso")
-        .style
-        .width =
-        ((concluidos / 5) * 100) + "%";
-
+    const concluidos = Object.values(game.progresso).filter(Boolean).length;
+    const barra = document.getElementById("barraProgresso");
+    if (barra) {
+        barra.style.width = ((concluidos / 5) * 100) + "%";
+    }
 }
 
+function adicionarPontos(valor) {
+    game.pontuacao += valor;
+    if (game.pontuacao < 0) {
+        game.pontuacao = 0;
+    }
+    atualizarPainel();
+}
+
+function registrarErro(penalidade) {
+    game.erros++;
+    adicionarPontos(-penalidade);
+}
+
+function registrarUsoDica(penalidade) {
+    game.dicasUsadas++;
+    adicionarPontos(-penalidade);
+}
 
 /* =====================================================
-   FASES
+   FEEDBACK VISUAL & TRANSIÇÃO DE MISSÕES
 ===================================================== */
+function feedback(mensagem, tipo) {
+    const elemento = document.getElementById("feedback");
+    if (!elemento) return;
 
+    elemento.textContent = mensagem;
+    elemento.className = "feedback " + tipo + " visivel";
+
+    setTimeout(function() {
+        elemento.classList.remove("visivel");
+    }, 2400);
+}
+
+function notificarMissaoConcluida(numeroMissao, resumo) {
+    feedback(`🎉 MISSÃO ${numeroMissao} CONCLUÍDA!\nDados recuperados com sucesso.\nPróxima etapa desbloqueada!`, "sucesso");
+}
+
+/* =====================================================
+   PROGRESSÃO DAS FASES
+===================================================== */
 function iniciarFase(numero) {
-
     game.fase = numero;
 
-
-    document
-        .querySelectorAll(".fase")
-        .forEach(fase => {
-
-            fase.classList.remove("ativa");
-
-        });
-
-
-    const fase =
-        document.getElementById(
-            "fase" + numero
-        );
-
-
-    if (!fase) {
-        return;
+    const indicador = document.getElementById("indicador-missao");
+    if (indicador) {
+        indicador.textContent = numero === 5 ? "MISSÃO FINAL (5 DE 5)" : `MISSÃO ${numero} DE 5`;
     }
 
+    document.querySelectorAll(".fase").forEach(fase => {
+        fase.classList.remove("ativa");
+    });
+
+    const fase = document.getElementById("fase" + numero);
+    if (!fase) return;
 
     fase.classList.add("ativa");
 
-
-    if (numero === 1) {
-
-        iniciarPalavra();
-
-    }
-
-
-    if (numero === 2) {
-
-        iniciarLocalizacao();
-
-    }
-
-
-    if (numero === 3) {
-
-        iniciarQuadrantes();
-
-    }
-
-
-    if (numero === 4) {
-
-        iniciarMapaFinal();
-
-    }
-
-
-    if (numero === 5) {
-
-        iniciarCruzadinha();
-
-    }
-
+    if (numero === 1) iniciarPalavra();
+    if (numero === 2) iniciarLocalizacao();
+    if (numero === 3) iniciarQuadrantes();
+    if (numero === 4) iniciarMapaFinal();
+    if (numero === 5) iniciarCruzadinha();
 
     atualizarPainel();
-
 }
-
 
 /* =====================================================
-   PONTUAÇÃO
+   MISSÃO 1 — DECIFRE O CÓDIGO (PALAVRA OCULTA)
 ===================================================== */
-
-function adicionarPontos(valor) {
-
-    game.pontuacao += valor;
-
-
-    if (game.pontuacao < 0) {
-
-        game.pontuacao = 0;
-
-    }
-
-
-    atualizarPainel();
-
-}
-
-
-function erro(penalidade) {
-
-    game.erros++;
-
-    adicionarPontos(-penalidade);
-
-}
-
-
-function tentativa() {
-
-    game.tentativas++;
-
-    atualizarPainel();
-
-}
-
-
-/* =====================================================
-   FEEDBACK
-===================================================== */
-
-function feedback(mensagem, tipo) {
-
-    const elemento =
-        document.getElementById("feedback");
-
-
-    elemento.textContent =
-        mensagem;
-
-
-    elemento.className =
-        "feedback "
-        + tipo
-        + " visivel";
-
-
-    setTimeout(function() {
-
-        elemento.classList.remove(
-            "visivel"
-        );
-
-    }, 2200);
-
-}
-
-
-/* =====================================================
-   MINI-GAME 1
-===================================================== */
-
-const palavra =
-    "PARORDENADO";
-
-
+const palavra = "PARORDENADO";
 let letrasEncontradas = [];
-
 let errosPalavra = 0;
 
-
 function iniciarPalavra() {
-
     letrasEncontradas = [];
-
     errosPalavra = 0;
 
+    document.querySelectorAll(".petala").forEach(petala => {
+        petala.classList.remove("caida");
+    });
 
-    document
-        .querySelectorAll(".petala")
-        .forEach(petala => {
-
-            petala.classList.remove("caida");
-
-        });
-
-
-    const container =
-        document.getElementById("palavra");
-
-
+    const container = document.getElementById("palavra");
+    if (!container) return;
     container.innerHTML = "";
 
-
-    for (
-        let i = 0;
-        i < palavra.length;
-        i++
-    ) {
-
-        const letra =
-            document.createElement("span");
-
-
-        letra.className =
-            "letra";
-
-
-        letra.textContent =
-            "_";
-
-
-        letra.dataset.indice =
-            i;
-
-
+    for (let i = 0; i < palavra.length; i++) {
+        const letra = document.createElement("span");
+        letra.className = "letra";
+        letra.textContent = "_";
+        letra.dataset.indice = i;
         container.appendChild(letra);
-
     }
-
 
     criarTeclado();
-
 }
-
 
 function criarTeclado() {
-
-    const teclado =
-        document.getElementById("teclado");
-
-
+    const teclado = document.getElementById("teclado");
+    if (!teclado) return;
     teclado.innerHTML = "";
 
-
-    const letras =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-
-    letras
-        .split("")
-        .forEach(letra => {
-
-            const botao =
-                document.createElement("button");
-
-
-            botao.textContent =
-                letra;
-
-
-            botao.addEventListener(
-                "click",
-                function() {
-
-                    escolherLetra(
-                        letra,
-                        botao
-                    );
-
-                }
-            );
-
-
-            teclado.appendChild(botao);
-
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    letras.split("").forEach(letra => {
+        const botao = document.createElement("button");
+        botao.textContent = letra;
+        botao.addEventListener("click", function() {
+            escolherLetra(letra, botao);
         });
-
+        teclado.appendChild(botao);
+    });
 }
 
-
 function escolherLetra(letra, botao) {
-
-    tentativa();
-
     botao.disabled = true;
-
-
     let acertou = false;
 
+    palavra.split("").forEach(function(item, indice) {
+        if (item === letra) {
+            acertou = true;
+            letrasEncontradas.push(indice);
 
-    palavra
-        .split("")
-        .forEach(function(item, indice) {
-
-            if (item === letra) {
-
-                acertou = true;
-
-                letrasEncontradas.push(
-                    indice
-                );
-
-
-                const casa =
-                    document.querySelector(
-                        `.letra[data-indice="${indice}"]`
-                    );
-
-
-                casa.textContent =
-                    letra;
-
-
-                casa.classList.add(
-                    "correta"
-                );
-
+            const casa = document.querySelector(`.letra[data-indice="${indice}"]`);
+            if (casa) {
+                casa.textContent = letra;
+                casa.classList.add("correta");
             }
-
-        });
-
+        }
+    });
 
     if (acertou) {
-
-        adicionarPontos(20);
-
-
-        feedback(
-            "🌸 Boa! Letra correta.",
-            "sucesso"
-        );
-
-
+        adicionarPontos(SCORE_CONFIG.acertoLetraPalavra);
+        feedback("🌸 Boa! Letra correta.", "sucesso");
         verificarPalavra();
-
-    }
-
-    else {
-
+    } else {
         errosPalavra++;
+        registrarErro(SCORE_CONFIG.erroPalavra);
 
-        erro(10);
-
-
-        const petalas =
-            document.querySelectorAll(
-                ".petala"
-            );
-
-
-        if (
-            petalas[
-                errosPalavra - 1
-            ]
-        ) {
-
-            petalas[
-                errosPalavra - 1
-            ].classList.add(
-                "caida"
-            );
-
+        const petalas = document.querySelectorAll(".petala");
+        if (petalas[errosPalavra - 1]) {
+            petalas[errosPalavra - 1].classList.add("caida");
         }
 
-
         if (errosPalavra >= 5) {
-            feedback(
-                "🥀 Todas as 5 pétalas caíram! Reiniciando a flor...",
-                "erro"
-            );
+            feedback("🥀 Todas as 5 pétalas caíram! Restaurando a flor...", "erro");
             setTimeout(function() {
                 iniciarPalavra();
             }, 1800);
         } else {
             const restantes = 5 - errosPalavra;
-            feedback(
-                `❌ Letra incorreta! Uma pétala caiu (restam ${restantes}).`,
-                "erro"
-            );
+            feedback(`❌ Letra incorreta! Uma pétala caiu (restam ${restantes}).`, "erro");
         }
-
     }
-
 }
-
 
 function verificarPalavra() {
+    const casas = document.querySelectorAll(".letra");
+    const completa = [...casas].every(casa => casa.textContent !== "_");
 
-    const casas =
-        document.querySelectorAll(
-            ".letra"
-        );
+    if (!completa) return;
 
+    game.progresso.palavra = true;
+    adicionarPontos(SCORE_CONFIG.acertoPalavraCompleta);
 
-    const completa =
-        [...casas].every(
-            casa =>
-                casa.textContent !== "_"
-        );
-
-
-    if (!completa) {
-        return;
-    }
-
-
-    game.progresso.palavra =
-        true;
-
-
-    adicionarPontos(100);
-
-
-    feedback(
-        "🌸 Palavra descoberta! +100 pontos!",
-        "sucesso"
-    );
-
+    notificarMissaoConcluida(1, "Código decifrado! Par ordenado restaurado.");
 
     setTimeout(function() {
-
         iniciarFase(2);
-
-    }, 1500);
-
+    }, 1800);
 }
 
-
 /* =====================================================
-   MINI-GAME 2: ONDE ESTÁ NO PARQUE?
+   MISSÃO 2 — LOCALIZE O ALVO (ELEMENTOS ESTÁTICOS)
 ===================================================== */
-
 const elementosParque = [
     {
         id: "fonte",
@@ -2991,44 +2677,44 @@ const elementosParque = [
         icone: "⛲",
         x: 4,
         y: 3,
-        pergunta: "Onde está a Fonte de Água ⛲ no parque?",
-        dica: "Dica: A fonte está no 1º Quadrante (à direita do eixo Y e acima do eixo X)."
+        pergunta: "Qual é a coordenada da Fonte de Água ⛲?",
+        dica: "Observe o 1º Quadrante: à direita do eixo Y e acima do eixo X."
     },
     {
-        id: "cachorro",
-        nome: "Cachorro",
-        icone: "🐶",
+        id: "banco",
+        nome: "Banco da Praça",
+        icone: "🪑",
         x: -2,
         y: 4,
-        pergunta: "Onde está o Cachorro 🐶 brincando no gramado?",
-        dica: "Dica: O cachorro está no 2º Quadrante (à esquerda do eixo Y e acima do eixo X)."
+        pergunta: "Qual é a coordenada do Banco da Praça 🪑?",
+        dica: "Observe o 2º Quadrante: à esquerda do eixo Y e acima do eixo X."
     },
     {
-        id: "gato",
-        nome: "Gato",
-        icone: "🐱",
-        x: 3,
-        y: -2,
-        pergunta: "Onde está o Gato 🐱 perto dos caminhos?",
-        dica: "Dica: O gato está no 4º Quadrante (à direita do eixo Y e abaixo do eixo X)."
-    },
-    {
-        id: "mulher",
-        nome: "Mulher",
-        icone: "🚶‍♀️",
+        id: "escorregador",
+        nome: "Escorregador",
+        icone: "🛝",
         x: -3,
         y: -3,
-        pergunta: "Onde está a Mulher 🚶‍♀️ caminhando na praça?",
-        dica: "Dica: A mulher está no 3º Quadrante (à esquerda do eixo Y e abaixo do eixo X)."
+        pergunta: "Qual é a coordenada do Escorregador 🛝?",
+        dica: "Observe o 3º Quadrante: à esquerda do eixo Y e abaixo do eixo X."
     },
     {
-        id: "bicicleta",
-        nome: "Bicicleta",
-        icone: "🚲",
+        id: "balanco",
+        nome: "Balanço",
+        icone: "🎠",
+        x: 3,
+        y: -2,
+        pergunta: "Qual é a coordenada do Balanço 🎠?",
+        dica: "Observe o 4º Quadrante: à direita do eixo Y e abaixo do eixo X."
+    },
+    {
+        id: "canteiro",
+        nome: "Canteiro de Flores",
+        icone: "🌺",
         x: -4,
         y: 1,
-        pergunta: "Onde está a Bicicleta 🚲 estacionada?",
-        dica: "Dica: Observe no 2º Quadrante (4 unidades para a esquerda e 1 para cima)."
+        pergunta: "Qual é a coordenada do Canteiro de Flores 🌺?",
+        dica: "Observe o 2º Quadrante: 4 unidades para a esquerda e 1 para cima."
     }
 ];
 
@@ -3036,7 +2722,6 @@ let indiceMissaoAtual = 0;
 
 function iniciarLocalizacao() {
     indiceMissaoAtual = 0;
-
     renderizarGridParque();
     renderizarMarcadoresParque();
     renderizarBadgesMissoes();
@@ -3045,8 +2730,6 @@ function iniciarLocalizacao() {
 
 function renderizarGridParque() {
     const svg = document.getElementById("parque-svg-grid");
-    const containerClicavel = document.getElementById("parque-interativo-layer");
-
     if (!svg) return;
 
     let svgHtml = `
@@ -3067,7 +2750,6 @@ function renderizarGridParque() {
         // Linha vertical (se não for o eixo Y)
         if (i !== 0) {
             svgHtml += `<line x1="${px}" y1="35" x2="${px}" y2="465" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-dasharray="3,3" />`;
-            // Número no eixo X com fundo legível
             svgHtml += `
                 <rect x="${px - 10}" y="258" width="20" height="16" rx="4" fill="rgba(15,20,44,0.92)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
                 <text x="${px}" y="270" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">${i}</text>
@@ -3078,7 +2760,6 @@ function renderizarGridParque() {
         if (i !== 0) {
             const py = 250 - i * 40;
             svgHtml += `<line x1="35" y1="${py}" x2="465" y2="${py}" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-dasharray="3,3" />`;
-            // Número no eixo Y com fundo legível
             svgHtml += `
                 <rect x="222" y="${py - 8}" width="20" height="16" rx="4" fill="rgba(15,20,44,0.92)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
                 <text x="232" y="${py + 4}" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">${i}</text>
@@ -3086,14 +2767,14 @@ function renderizarGridParque() {
         }
     }
 
-    // Eixo Y principal (Vertical com sombra e seta)
+    // Eixo Y principal
     svgHtml += `
         <line x1="250" y1="465" x2="250" y2="25" stroke="#ffffff" stroke-width="3" marker-end="url(#seta-y)" />
         <rect x="238" y="10" width="24" height="20" rx="5" fill="#171c45" stroke="#ffd166" stroke-width="1.5" />
         <text x="250" y="24" fill="#ffd166" font-size="13" font-weight="bold" text-anchor="middle">Y</text>
     `;
 
-    // Eixo X principal (Horizontal com sombra e seta)
+    // Eixo X principal
     svgHtml += `
         <line x1="35" y1="250" x2="475" y2="250" stroke="#ffffff" stroke-width="3" marker-end="url(#seta-x)" />
         <rect x="478" y="239" width="20" height="22" rx="5" fill="#171c45" stroke="#ffd166" stroke-width="1.5" />
@@ -3108,27 +2789,6 @@ function renderizarGridParque() {
     `;
 
     svg.innerHTML = svgHtml;
-
-    // Grid interativo de pontos clicáveis
-    if (containerClicavel) {
-        containerClicavel.innerHTML = "";
-        for (let y = 5; y >= -5; y--) {
-            for (let x = -5; x <= 5; x++) {
-                const btnPonto = document.createElement("button");
-                btnPonto.type = "button";
-                btnPonto.className = "ponto-clicavel";
-                btnPonto.dataset.x = x;
-                btnPonto.dataset.y = y;
-                btnPonto.title = `Ponto (${x}, ${y})`;
-
-                btnPonto.addEventListener("click", function() {
-                    selecionarPontoMapa(x, y);
-                });
-
-                containerClicavel.appendChild(btnPonto);
-            }
-        }
-    }
 }
 
 function renderizarMarcadoresParque() {
@@ -3158,9 +2818,8 @@ function renderizarMarcadoresParque() {
             <div class="marcador-tag">${elem.nome}</div>
         `;
 
-        marcador.addEventListener("click", function() {
-            selecionarPontoMapa(elem.x, elem.y);
-        });
+        // NÃO adicionar evento de clique para revelar coordenadas!
+        // O aluno deve ler o plano cartesiano e digitar os valores nos campos.
 
         container.appendChild(marcador);
     });
@@ -3192,13 +2851,11 @@ function atualizarMissaoAtiva() {
 
     const elem = elementosParque[indiceMissaoAtual];
 
-    // Atualiza contador
     const contador = document.getElementById("missoes-contador");
     if (contador) {
-        contador.textContent = `Missão ${indiceMissaoAtual + 1} de ${elementosParque.length}`;
+        contador.textContent = `Alvo ${indiceMissaoAtual + 1} de ${elementosParque.length}`;
     }
 
-    // Atualiza enunciado
     const icone = document.getElementById("pergunta-icone");
     if (icone) icone.textContent = elem.icone;
 
@@ -3208,7 +2865,6 @@ function atualizarMissaoAtiva() {
     const dica = document.getElementById("pergunta-dica");
     if (dica) dica.textContent = elem.dica;
 
-    // Limpa os campos de entrada
     const inputX = document.getElementById("input-coord-x");
     const inputY = document.getElementById("input-coord-y");
     if (inputX) {
@@ -3217,7 +2873,6 @@ function atualizarMissaoAtiva() {
     }
     if (inputY) inputY.value = "";
 
-    // Atualiza destaques nas badges e marcadores
     elementosParque.forEach((e, idx) => {
         const badge = document.getElementById(`badge-${e.id}`);
         const marcador = document.getElementById(`marcador-${e.id}`);
@@ -3235,37 +2890,21 @@ function atualizarMissaoAtiva() {
     });
 }
 
-function selecionarPontoMapa(x, y) {
-    const inputX = document.getElementById("input-coord-x");
-    const inputY = document.getElementById("input-coord-y");
-
-    if (inputX && inputY) {
-        inputX.value = x;
-        inputY.value = y;
-    }
-
-    feedback(`📍 Coordenadas selecionadas: (${x}, ${y}). Clique em Confirmar ou aperte Enter!`, "aviso");
-}
-
 function submeterCoordenada() {
     const inputX = document.getElementById("input-coord-x");
     const inputY = document.getElementById("input-coord-y");
 
-    if (!inputX || !inputY || inputX.value === "" || inputY.value === "") {
-        feedback("⚠️ Por favor, informe as coordenadas X e Y.", "erro");
+    if (!inputX || !inputY || inputX.value.trim() === "" || inputY.value.trim() === "") {
+        feedback("⚠️ Por favor, digite os valores de X e Y nos campos.", "erro");
         return;
     }
 
     const x = parseInt(inputX.value, 10);
     const y = parseInt(inputY.value, 10);
-
     const elem = elementosParque[indiceMissaoAtual];
 
-    tentativa();
-
     if (x === elem.x && y === elem.y) {
-        // Acerto da coordenada
-        adicionarPontos(100);
+        adicionarPontos(SCORE_CONFIG.acertoElementoParque);
 
         const marcador = document.getElementById(`marcador-${elem.id}`);
         if (marcador) {
@@ -3279,7 +2918,7 @@ function submeterCoordenada() {
             badge.classList.add("concluida");
         }
 
-        feedback(`🎉 Excelente! Você localizou ${elem.nome} em (${elem.x}, ${elem.y})! +100 pontos!`, "sucesso");
+        feedback(`🎉 Excelente! ${elem.nome} recuperado em (${elem.x}, ${elem.y})! +${SCORE_CONFIG.acertoElementoParque} pts!`, "sucesso");
 
         indiceMissaoAtual++;
 
@@ -3288,16 +2927,15 @@ function submeterCoordenada() {
         }, 1300);
 
     } else {
-        // Erro com dica orientadora
-        erro(15);
+        registrarErro(SCORE_CONFIG.erroParque);
 
-        let msgErro = `❌ Não é o ponto (${x}, ${y}). `;
+        let msgErro = `❌ Coordenada (${x}, ${y}) incorreta. `;
         if (x !== elem.x && y !== elem.y) {
-            msgErro += `Revise a posição nos eixos horizontal (X) e vertical (Y).`;
+            msgErro += `Revise a projeção nos eixos horizontal (X) e vertical (Y).`;
         } else if (x !== elem.x) {
-            msgErro += `A coordenada Y (${y}) está certa! Verifique o valor no eixo X.`;
+            msgErro += `O eixo Y (${y}) está correto! Ajuste o valor no eixo X.`;
         } else {
-            msgErro += `A coordenada X (${x}) está certa! Verifique o valor no eixo Y.`;
+            msgErro += `O eixo X (${x}) está correto! Ajuste o valor no eixo Y.`;
         }
 
         feedback(msgErro, "erro");
@@ -3306,20 +2944,18 @@ function submeterCoordenada() {
 
 function finalizarFase2() {
     game.progresso.localizacao = true;
-    adicionarPontos(150);
+    adicionarPontos(SCORE_CONFIG.bonusParqueCompleto);
 
-    feedback("🏆 Fantástico! Você dominou o mapa cartesiano do parque! +150 pontos bônus!", "sucesso");
+    notificarMissaoConcluida(2, "Todos os alvos estáticos foram localizados com precisão!");
 
     setTimeout(function() {
         iniciarFase(3);
-    }, 2000);
+    }, 1800);
 }
 
-
 /* =====================================================
-   MINI-GAME 3: AGRUPE NOS QUADRANTES
+   MISSÃO 3 — REORGANIZE OS DADOS (QUADRANTES)
 ===================================================== */
-
 const cartas = [
     { id:1, x:3, y:5, q:1 },
     { id:2, x:2, y:1, q:1 },
@@ -3347,7 +2983,6 @@ let indiceCartaAtual = 0;
 let cartasCorretas = 0;
 
 function iniciarQuadrantes() {
-    // 1. Embaralha aleatoriamente as coordenadas (Fisher-Yates)
     cartasEmbaralhadas = [...cartas];
     for (let i = cartasEmbaralhadas.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -3357,13 +2992,11 @@ function iniciarQuadrantes() {
     indiceCartaAtual = 0;
     cartasCorretas = 0;
 
-    // Limpa os pontos salvos dentro dos 4 quadrantes
     for (let q = 1; q <= 4; q++) {
         const containerQ = document.getElementById(`pontos-q${q}`);
         if (containerQ) containerQ.innerHTML = "";
     }
 
-    // Vincula os cliques diretamente aos 4 quadrantes
     document.querySelectorAll(".quadrante").forEach(area => {
         area.onclick = function() {
             const quadranteEscolhido = Number(area.dataset.quadrante);
@@ -3371,7 +3004,6 @@ function iniciarQuadrantes() {
         };
     });
 
-    // Exibe o primeiro ponto sorteado
     exibirCartaAtual();
 }
 
@@ -3383,7 +3015,6 @@ function exibirCartaAtual() {
 
     const carta = cartasEmbaralhadas[indiceCartaAtual];
 
-    // Atualiza a coordenada em destaque
     const elCoordenada = document.getElementById("coordenada-destaque");
     if (elCoordenada) {
         elCoordenada.textContent = `( ${carta.x} , ${carta.y} )`;
@@ -3392,7 +3023,6 @@ function exibirCartaAtual() {
         elCoordenada.style.animation = "popIn 0.3s ease-out";
     }
 
-    // Atualiza contador e progresso
     const elContador = document.getElementById("contador-quadrantes");
     if (elContador) {
         elContador.textContent = `Ponto ${indiceCartaAtual + 1} de ${cartasEmbaralhadas.length}`;
@@ -3409,18 +3039,14 @@ function processarEscolhaQuadrante(quadranteEscolhido, areaElemento) {
     if (indiceCartaAtual >= cartasEmbaralhadas.length) return;
 
     const carta = cartasEmbaralhadas[indiceCartaAtual];
-    tentativa();
 
     if (carta.q === quadranteEscolhido) {
-        // Acerto!
         cartasCorretas++;
-        adicionarPontos(20);
+        adicionarPontos(SCORE_CONFIG.acertoPontoQuadrante);
 
-        // Feedback de pulso no quadrante correto
         areaElemento.classList.add("acerto-pulse");
         setTimeout(() => areaElemento.classList.remove("acerto-pulse"), 350);
 
-        // Salva o ponto dentro do quadrante escolhido
         const containerSalvos = document.getElementById(`pontos-q${quadranteEscolhido}`);
         if (containerSalvos) {
             const badge = document.createElement("span");
@@ -3429,9 +3055,8 @@ function processarEscolhaQuadrante(quadranteEscolhido, areaElemento) {
             containerSalvos.appendChild(badge);
         }
 
-        feedback(`✅ Muito bem! (${carta.x}, ${carta.y}) pertence ao ${carta.q}º Quadrante! +20 pontos`, "sucesso");
+        feedback(`✅ Ponto (${carta.x}, ${carta.y}) organizado no ${carta.q}º Quadrante! +${SCORE_CONFIG.acertoPontoQuadrante} pts`, "sucesso");
 
-        // Passa automaticamente para o próximo ponto
         indiceCartaAtual++;
 
         if (indiceCartaAtual >= cartasEmbaralhadas.length) {
@@ -3441,26 +3066,24 @@ function processarEscolhaQuadrante(quadranteEscolhido, areaElemento) {
         }
 
     } else {
-        // Erro
-        erro(10);
+        registrarErro(SCORE_CONFIG.erroQuadrante);
 
-        // Efeito de tremor no quadrante incorreto
         areaElemento.classList.add("erro-shake");
         setTimeout(() => areaElemento.classList.remove("erro-shake"), 450);
 
         let explicacao = "";
-        if (carta.x > 0 && carta.y > 0) explicacao = "x é positivo e y é positivo (1º Quadrante)";
-        else if (carta.x < 0 && carta.y > 0) explicacao = "x é negativo e y é positivo (2º Quadrante)";
-        else if (carta.x < 0 && carta.y < 0) explicacao = "x é negativo e y é negativo (3º Quadrante)";
-        else if (carta.x > 0 && carta.y < 0) explicacao = "x é positivo e y é negativo (4º Quadrante)";
+        if (carta.x > 0 && carta.y > 0) explicacao = "x > 0 e y > 0 (1º Quadrante)";
+        else if (carta.x < 0 && carta.y > 0) explicacao = "x < 0 e y > 0 (2º Quadrante)";
+        else if (carta.x < 0 && carta.y < 0) explicacao = "x < 0 e y < 0 (3º Quadrante)";
+        else if (carta.x > 0 && carta.y < 0) explicacao = "x > 0 e y < 0 (4º Quadrante)";
 
-        feedback(`❌ Atenção! Em (${carta.x}, ${carta.y}), ${explicacao}. Toque no quadrante correto!`, "erro");
+        feedback(`❌ Em (${carta.x}, ${carta.y}), ${explicacao}. Toque no quadrante correto!`, "erro");
     }
 }
 
 function finalizarFase3() {
     game.progresso.quadrantes = true;
-    adicionarPontos(100);
+    adicionarPontos(SCORE_CONFIG.bonusQuadrantesCompleto);
 
     const elPorcentagem = document.getElementById("porcentagem-quadrantes");
     const elBarra = document.getElementById("barra-progresso-fill");
@@ -3470,18 +3093,16 @@ function finalizarFase3() {
     const elCoordenada = document.getElementById("coordenada-destaque");
     if (elCoordenada) elCoordenada.textContent = "🎉 Concluído!";
 
-    feedback("🏆 Excelente! Todos os 16 pontos foram corretamente classificados nos quadrantes! +100 bônus!", "sucesso");
+    notificarMissaoConcluida(3, "Todos os 16 pontos foram reorganizados com sucesso nos 4 quadrantes!");
 
     setTimeout(function() {
         iniciarFase(4);
-    }, 2000);
+    }, 1800);
 }
 
-
 /* =====================================================
-   MINI-GAME 4: O BRASIL NO PLANO CARTESIANO
+   MISSÃO 4 — RECUPERE UMA INFORMAÇÃO GEOGRÁFICA
 ===================================================== */
-
 function iniciarMapaFinal() {
     for (let q = 1; q <= 4; q++) {
         const zona = document.getElementById(`zona-q${q}`);
@@ -3496,10 +3117,8 @@ function iniciarMapaFinal() {
 }
 
 function responderMapa(resposta) {
-    tentativa();
-
     if (resposta === 3) {
-        adicionarPontos(200);
+        adicionarPontos(SCORE_CONFIG.acertoMapaGeografico);
         game.progresso.mapa = true;
 
         const zonaQ3 = document.getElementById("zona-q3");
@@ -3507,7 +3126,6 @@ function responderMapa(resposta) {
             zonaQ3.classList.add("acerto-destaque");
         }
 
-        // Destaca visualmente o botão do 3º Quadrante selecionado embaixo
         const btnQ3 = document.querySelector(".btn-quadrante-escolha.btn-q3");
         if (btnQ3) {
             btnQ3.style.background = "#06d6a0";
@@ -3515,17 +3133,14 @@ function responderMapa(resposta) {
             btnQ3.style.color = "#0f172a";
         }
 
-        feedback(
-            "🎉 Parabéns! O Brasil fica a Oeste de Greenwich (x < 0) e ao Sul do Equador (y < 0), portanto fica no 3º QUADRANTE! +200 pontos!",
-            "sucesso"
-        );
+        notificarMissaoConcluida(4, "Informação geográfica restaurada! O Brasil localiza-se no 3º Quadrante.");
 
         setTimeout(function() {
             iniciarFase(5);
-        }, 2200);
+        }, 2000);
 
     } else {
-        erro(15);
+        registrarErro(SCORE_CONFIG.erroMapaGeografico);
 
         let dicaGeografica = "";
         if (resposta === 1) {
@@ -3540,22 +3155,9 @@ function responderMapa(resposta) {
     }
 }
 
-
 /* =====================================================
-   MINI-GAME 5 — CRUZADINHA
+   MISSÃO FINAL — RECONSTRUA O SISTEMA (CRUZADINHA + DICAS)
 ===================================================== */
-
-/*
-   Cruzadinha do Plano Cartesiano
-   As respostas:
-   1 - COORDENADA (Horizontal)
-   2 - EIXO (Horizontal)
-   3 - ABSCISSA (Vertical)
-   4 - ORDENADA (Vertical)
-   5 - QUADRANTE (Horizontal)
-   6 - ORIGEM (Vertical)
-*/
-
 const cruzadinhaDados = {
     linhas: 10,
     colunas: 11,
@@ -3566,7 +3168,8 @@ const cruzadinhaDados = {
             coluna: 0,
             direcao: "H",
             numero: 1,
-            pista: "Valores numéricos que determinam a localização exata de um ponto no plano."
+            pista: "Valores numéricos que determinam a localização exata de um ponto no plano.",
+            dica: "Começa com a letra 'C'. É o par ordenado (x, y) que identifica a posição de qualquer ponto."
         },
         {
             palavra: "EIXO",
@@ -3574,7 +3177,8 @@ const cruzadinhaDados = {
             coluna: 6,
             direcao: "H",
             numero: 2,
-            pista: "Linha reta de referência usada para a construção do plano cartesiano."
+            pista: "Linha reta de referência usada para a construção do plano cartesiano.",
+            dica: "Palavra de 4 letras que começa com 'E'. Reta perpendicular de referência (como o eixo X ou o eixo Y)."
         },
         {
             palavra: "ABSCISSA",
@@ -3582,7 +3186,8 @@ const cruzadinhaDados = {
             coluna: 7,
             direcao: "V",
             numero: 3,
-            pista: "Nome dado à coordenada x (primeiro elemento de um par ordenado)."
+            pista: "Nome dado à coordenada x (primeiro elemento de um par ordenado).",
+            dica: "Começa com 'A' e possui 8 letras. É a coordenada horizontal do par ordenado (eixo horizontal)."
         },
         {
             palavra: "ORDENADA",
@@ -3590,7 +3195,8 @@ const cruzadinhaDados = {
             coluna: 4,
             direcao: "V",
             numero: 4,
-            pista: "Nome dado à coordenada y (segundo elemento de um par ordenado)."
+            pista: "Nome dado à coordenada y (segundo elemento de um par ordenado).",
+            dica: "Começa com 'O' e rima com coordenada. É a coordenada vertical do par ordenado (eixo vertical)."
         },
         {
             palavra: "QUADRANTE",
@@ -3598,7 +3204,8 @@ const cruzadinhaDados = {
             coluna: 2,
             direcao: "H",
             numero: 5,
-            pista: "Cada uma das quatro regiões delimitadas pelos eixos no plano cartesiano."
+            pista: "Cada uma das quatro regiões delimitadas pelos eixos no plano cartesiano.",
+            dica: "Começa com 'Q'. É cada uma das quatro divisões numeradas no sentido anti-horário (Q1 a Q4)."
         },
         {
             palavra: "ORIGEM",
@@ -3606,7 +3213,8 @@ const cruzadinhaDados = {
             coluna: 1,
             direcao: "V",
             numero: 6,
-            pista: "Ponto central de encontro dos eixos, representado pelo par (0, 0)."
+            pista: "Ponto central de encontro dos eixos, representado pelo par (0, 0).",
+            dica: "Começa com 'O' e tem 6 letras. É o ponto zero central de interseção das retas cartesianas (0, 0)."
         }
     ]
 };
@@ -3617,10 +3225,53 @@ function iniciarCruzadinha() {
     palavraAtivaCruzadinha = cruzadinhaDados.palavras[0];
     criarGradeCruzadinha();
     criarPistasCruzadinha();
+    destacarPalavra(palavraAtivaCruzadinha);
+}
+
+function usarDicaCruzadinha() {
+    if (!palavraAtivaCruzadinha) {
+        feedback("ℹ️ Selecione uma palavra ou pista na cruzadinha primeiro!", "aviso");
+        return;
+    }
+
+    const item = palavraAtivaCruzadinha;
+    const boxDica = document.getElementById("box-dica-cruzadinha");
+
+    // Desconta pontos pela penalidade e registra a dica
+    registrarUsoDica(SCORE_CONFIG.penalidadeDica);
+
+    // Revela a primeira letra vazia ou incorreta dessa palavra
+    let letraRevelada = "";
+    for (let i = 0; i < item.palavra.length; i++) {
+        const l = item.linha + (item.direcao === "V" ? i : 0);
+        const c = item.coluna + (item.direcao === "H" ? i : 0);
+        const input = document.querySelector(`#cruzadinha input[data-linha="${l}"][data-coluna="${c}"]`);
+        if (input && input.value.toUpperCase() !== item.palavra[i]) {
+            input.value = item.palavra[i];
+            input.parentElement.classList.add("correta");
+            input.parentElement.classList.remove("errada");
+            letraRevelada = `Letra '${item.palavra[i]}' revelada na posição ${i + 1}!`;
+            break;
+        }
+    }
+
+    // Exibe a dica formatada na caixa de dicas
+    if (boxDica) {
+        boxDica.style.display = "block";
+        boxDica.innerHTML = `
+            <strong>💡 Dica para a Palavra ${item.numero} (${item.direcao === "H" ? "Horizontal" : "Vertical"}):</strong><br>
+            ${item.dica}<br>
+            <span style="font-size: 12px; color: #b45309;">${letraRevelada ? "✨ " + letraRevelada + " | " : ""}-20 pontos aplicados.</span>
+        `;
+    }
+
+    feedback(`💡 Dica ativada (-${SCORE_CONFIG.penalidadeDica} pts)! Dica exibida abaixo.`, "aviso");
+    verificarCruzadinha();
 }
 
 function criarGradeCruzadinha() {
     const grade = document.getElementById("cruzadinha");
+    if (!grade) return;
     grade.innerHTML = "";
 
     const totalLinhas = cruzadinhaDados.linhas;
@@ -3776,6 +3427,15 @@ function destacarPalavra(item) {
             pista.classList.remove("ativa");
         }
     });
+
+    // Se a dica já estava aberta, atualiza a dica para a nova palavra selecionada
+    const boxDica = document.getElementById("box-dica-cruzadinha");
+    if (boxDica && boxDica.style.display !== "none") {
+        boxDica.innerHTML = `
+            <strong>💡 Dica para a Palavra ${item.numero} (${item.direcao === "H" ? "Horizontal" : "Vertical"}):</strong><br>
+            ${item.dica}
+        `;
+    }
 }
 
 function avancarProximaCelula(linha, coluna) {
@@ -3813,10 +3473,7 @@ function recuarCelulaAnterior(linha, coluna) {
 }
 
 function normalizarLetra(valor) {
-    if (!valor) {
-        return "";
-    }
-
+    if (!valor) return "";
     return valor
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -3840,6 +3497,7 @@ function moverCruzadinha(linha, coluna, deltaLinha, deltaColuna) {
 
 function criarPistasCruzadinha() {
     const container = document.getElementById("pistasCruzadinha");
+    if (!container) return;
     container.innerHTML = "";
 
     const horizontais = cruzadinhaDados.palavras
@@ -3852,25 +3510,17 @@ function criarPistasCruzadinha() {
 
     const colunaH = document.createElement("div");
     colunaH.className = "coluna-pistas";
-
     const tituloH = document.createElement("h3");
     tituloH.textContent = "➡️ Horizontais";
     colunaH.appendChild(tituloH);
-
-    horizontais.forEach(item => {
-        adicionarPista(colunaH, item);
-    });
+    horizontais.forEach(item => adicionarPista(colunaH, item));
 
     const colunaV = document.createElement("div");
     colunaV.className = "coluna-pistas";
-
     const tituloV = document.createElement("h3");
     tituloV.textContent = "⬇️ Verticais";
     colunaV.appendChild(tituloV);
-
-    verticais.forEach(item => {
-        adicionarPista(colunaV, item);
-    });
+    verticais.forEach(item => adicionarPista(colunaV, item));
 
     container.appendChild(colunaH);
     container.appendChild(colunaV);
@@ -3947,7 +3597,7 @@ function verificarCruzadinha() {
             concluirCruzadinha();
         } else {
             if (mensagem) {
-                mensagem.textContent = "🔎 Há letras incorretas. Revisem as respostas!";
+                mensagem.textContent = "🔎 Há letras incorretas na cruzadinha. Revisem as respostas!";
                 mensagem.style.color = "#ef476f";
             }
         }
@@ -3959,266 +3609,98 @@ function verificarCruzadinha() {
 }
 
 function concluirCruzadinha() {
-    if (game.progresso.cruzadinha) {
-        return;
-    }
+    if (game.progresso.cruzadinha) return;
 
     game.progresso.cruzadinha = true;
-    adicionarPontos(150);
+    adicionarPontos(SCORE_CONFIG.acertoCruzadinhaCompleta);
 
     const mensagem = document.getElementById("mensagemCruzadinha");
     if (mensagem) {
-        mensagem.textContent = "🏆 Cruzadinha concluída! +150 pontos!";
+        mensagem.textContent = "🏆 Cruzadinha concluída com sucesso! +150 pontos!";
         mensagem.style.color = "#06a77d";
     }
 
-    feedback("🧩 Cruzadinha completa! +150 pontos!", "sucesso");
+    feedback("🏆 SISTEMA RESTAURADO! Missão final concluída com sucesso!", "sucesso");
 
     setTimeout(function() {
         finalizarJogo("concluido");
     }, 1800);
 }
 
-
 /* =====================================================
-   FINAL
+   FINALIZAÇÃO DA MISSÃO E RESULTADOS
 ===================================================== */
-
 function finalizarJogo(motivo) {
+    if (game.finalizado) return;
 
-    if (
-        game.finalizado
-    ) {
+    game.finalizado = true;
+    clearInterval(game.timer);
 
-        return;
-
-    }
-
-
-    game.finalizado =
-        true;
-
-
-    clearInterval(
-        game.timer
-    );
-
-
-    const tempo =
-        Math.floor(
-            (Date.now() - game.inicio) / 1000
-        );
-
+    const tempo = Math.floor((Date.now() - game.inicio) / 1000);
 
     const dados = {
-
-        grupo:
-            game.grupo,
-
-        pontuacao:
-            game.pontuacao,
-
-        tentativas:
-            game.tentativas,
-
-        erros:
-            game.erros,
-
-        dicas:
-            game.dicasUsadas,
-
-        tempo:
-            tempo,
-
-        motivo:
-            motivo,
-
-        data:
-            new Date()
-                .toLocaleString(
-                    "pt-BR"
-                )
-
+        grupo: game.grupo,
+        pontuacao: game.pontuacao,
+        erros: game.erros,
+        dicas: game.dicasUsadas,
+        tempo: tempo,
+        motivo: motivo,
+        data: new Date().toLocaleString("pt-BR")
     };
 
-
-    salvarResultado(
-        dados
-    );
-
-
-    mostrarResultado(
-        dados
-    );
-
+    salvarResultado(dados);
+    mostrarResultado(dados);
 }
-
-
-/* =====================================================
-   SALVAR RESULTADO
-===================================================== */
 
 function salvarResultado(dados) {
-
-    const chave =
-        "desafioCartesianoResultados";
-
-
+    const chave = "desafioCartesianoResultados";
     let resultados = [];
 
-
     try {
-
-        resultados =
-            JSON.parse(
-                localStorage.getItem(
-                    chave
-                ) || "[]"
-            );
-
-    }
-
-    catch {
-
+        resultados = JSON.parse(localStorage.getItem(chave) || "[]");
+    } catch {
         resultados = [];
-
     }
 
-
-    resultados.push(
-        dados
-    );
-
-
-    localStorage.setItem(
-        chave,
-        JSON.stringify(
-            resultados
-        )
-    );
-
+    resultados.push(dados);
+    localStorage.setItem(chave, JSON.stringify(resultados));
 }
-
-
-/* =====================================================
-   MOSTRAR RESULTADO
-===================================================== */
 
 function mostrarResultado(dados) {
+    mostrarTela("tela-final");
 
-    mostrarTela(
-        "tela-final"
-    );
+    const minutos = Math.floor(dados.tempo / 60);
+    const segundos = dados.tempo % 60;
 
+    const elGrupo = document.getElementById("resultadoGrupo");
+    if (elGrupo) elGrupo.textContent = dados.grupo;
 
-    const minutos =
-        Math.floor(
-            dados.tempo / 60
-        );
+    const elPontos = document.getElementById("resultadoPontos");
+    if (elPontos) elPontos.textContent = dados.pontuacao;
 
+    const elTempo = document.getElementById("resultadoTempo");
+    if (elTempo) elTempo.textContent = `${minutos}:${String(segundos).padStart(2, "0")}`;
 
-    const segundos =
-        dados.tempo % 60;
+    const elErros = document.getElementById("resultadoErros");
+    if (elErros) elErros.textContent = dados.erros;
 
-
-    document
-        .getElementById(
-            "resultadoGrupo"
-        )
-        .textContent =
-        dados.grupo;
-
-
-    document
-        .getElementById(
-            "resultadoPontos"
-        )
-        .textContent =
-        dados.pontuacao;
-
-
-    document
-        .getElementById(
-            "resultadoTempo"
-        )
-        .textContent =
-        `${minutos}:${String(segundos).padStart(2,"0")}`;
-
-
-    document
-        .getElementById(
-            "resultadoTentativas"
-        )
-        .textContent =
-        dados.tentativas;
-
-
-    document
-        .getElementById(
-            "resultadoErros"
-        )
-        .textContent =
-        dados.erros;
-
-
-    document
-        .getElementById(
-            "resultadoDicas"
-        )
-        .textContent =
-        dados.dicas;
-
+    const elDicas = document.getElementById("resultadoDicas");
+    if (elDicas) elDicas.textContent = dados.dicas;
 }
-
 
 /* =====================================================
-   BLOQUEIO E CONFIRMAÇÃO DE REINÍCIO DE JOGO
+   NOVO JOGO (APENAS NA TELA FINAL - SEÇÃO 20)
 ===================================================== */
-
-function solicitarReiniciarJogo(diretoSemPerguntar = false) {
-    // Se o jogo nem iniciou ou se foi chamado na tela final sem pontos ativos
-    if (!game.inicio || game.finalizado || diretoSemPerguntar) {
-        confirmarReiniciarJogo();
-        return;
-    }
-
-    // Atualiza a quantidade atual de pontos na mensagem de alerta
-    const elPontos = document.getElementById("modal-pontos-perdidos");
-    if (elPontos) {
-        elPontos.textContent = `${game.pontuacao} pontos`;
-    }
-
-    const modal = document.getElementById("modal-confirmar-reiniciar");
-    if (modal) {
-        modal.style.display = "flex";
-    }
-}
-
-function fecharModalReiniciar() {
-    const modal = document.getElementById("modal-confirmar-reiniciar");
-    if (modal) {
-        modal.style.display = "none";
-    }
-}
-
-function confirmarReiniciarJogo() {
-    // Remove o interceptador para permitir o reload imediato sem alerta extra
+function solicitarNovoJogo() {
     window.onbeforeunload = null;
     location.reload();
 }
-
-// Fechar modal caso o aluno aperte ESC no teclado
-window.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") {
-        fecharModalReiniciar();
-    }
-});
 
 // Prevenção contra recarregamento ou fechamento acidental da aba no navegador
 window.addEventListener("beforeunload", function (e) {
     if (game.inicio && !game.finalizado && game.pontuacao > 0) {
         e.preventDefault();
-        e.returnValue = "Atenção: Ao sair ou recarregar a página, todos os seus pontos serão perdidos!";
+        e.returnValue = "Atenção: Ao sair ou recarregar a página, todo o progresso da equipe será perdido!";
         return e.returnValue;
     }
 });
